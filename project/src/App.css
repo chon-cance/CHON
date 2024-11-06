@@ -1,0 +1,13 @@
+.check-in-tile {
+  background-color: #4caf50 !important;
+  color: white !important;
+}
+
+.check-out-tile {
+  background-color: #f44336 !important;
+  color: white !important;
+}
+
+.in-range-tile {
+  background-color: #e8f5e9 !important;
+}
