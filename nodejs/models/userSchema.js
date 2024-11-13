@@ -33,19 +33,22 @@ const userSchema = new Schema(
     // 회원 삭제 여부 (기본값:false)
     deleted: {
       type: Boolean,
+      default: false,
     },
     // 회원 가입일
     create_date: {
       type: Date,
-      require: true,
+      default: Date.now,
     },
-    // 회원 삭제일 (기본값 : 0)
+    // 회원 삭제일 (기본값 : null)
     delete_date: {
       type: Number,
+      default: null,
     },
-    // 회원 수정일 (기본값 : 0)
+    // 회원 수정일 (기본값 : null)
     update_date: {
       type: Number,
+      default: null,
     },
   },
   { versionKey: false }
