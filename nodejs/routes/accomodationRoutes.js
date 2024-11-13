@@ -5,7 +5,7 @@ const router = express.Router();
 const accomodationSchema = require("../models/accomodationSchema.js");
 
 /**
- * 로그인
+ * 숙소 검색
  */
 router.post("/login", async (req, res) => {
   try {
@@ -27,7 +27,7 @@ router.post("/login", async (req, res) => {
 });
 
 /**
- * 회원가입
+ * 숙소 입력
  */
 router.post("/join", async (req, res) => {
   try {
