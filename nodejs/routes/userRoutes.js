@@ -5,6 +5,18 @@ const router = express.Router();
 const userSchema = require("../models/userSchema.js");
 
 /**
+ * 회원 목록
+ */
+router.get("/userList", async (req, res) => {
+  try {
+    const userData = await userSchema.find();
+    res.status(200).json(userData);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+/**
  * 로그인
  */
 router.post("/login", async (req, res) => {

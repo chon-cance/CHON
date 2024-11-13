@@ -15,6 +15,11 @@ const accomodationSchema = new Schema(
       type: String,
       require: true,
     },
+    // 지역
+    region: {
+      type: String,
+      require: true,
+    },
     // 기준인원
     person: {
       type: Number,
@@ -57,4 +62,4 @@ const accomodationSchema = new Schema(
   { versionKey: false }
 );
 
-module.exports = mongoose.model("Accomodation", userSchema);
+module.exports = mongoose.model("Accomodation", accomodationSchema);
