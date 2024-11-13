@@ -1,25 +1,44 @@
-import express from "express";
-import cors from "cors";
+// src/routes/server.js
+const dotenv = require("dotenv");
+dotenv.config();
 
 const express = require("express");
 const cors = require("cors");
 const morgan = require("morgan");
+const mongoose = require("mongoose");
+const solapiRoutes = require("./routes/solapiRoutes.js");
+const userRoutes = require("./routes/userRoutes.js");
 
 const app = express();
-const PORT = 5000;
+const url = `mongodb+srv://choncance:tmakxmdnpqdoq5!@choncance.nr4zf.mongodb.net/mydb?retryWrites=true&w=majority&appName=choncance`;
 
-app.use(
-  cors({
-    origin: `http://localhost:5173`,
-    methods: ["GET"],
-    credentials: true,
-  })
-);
+// 몽구스 라이브러리를 이용하여 몽고DB 연결
+mongoose.connect(url);
 
-app.get("/api/reserved-dates", (req, res) => {
-  res.send(reservedDates);
+// 미들웨어 설정
+app.use(cors());
+app.use(morgan("dev"));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+
+// Solapi 라우트
+app.use("/", solapiRoutes);
+
+// User 라우트
+app.use("/user", userRoutes);
+
+// 404 처리
+// app.use((req, res) => {
+//   res.status(404).json({ message: "Not Found" });
+// });
+
+// 에러 핸들러
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ message: "Internal Server Error" });
 });
 
+const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
-  console.log(`Server is running on port 5000`);
+  console.log(`Server is running on port ${PORT}, http://localhost:${PORT}`);
 });
