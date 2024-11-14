@@ -23,13 +23,13 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 // Solapi 라우트
-app.use("/", solapiRoutes);
+app.use("/kakaotalk", solapiRoutes);
 
 // User 라우트
 app.use("/user", userRoutes);
 
 // accomodation 라우트
-app.use("/accomodation", accomodationRoutes);
+app.use("/accomodations", accomodationRoutes);
 
 // 404 처리
 // app.use((req, res) => {
