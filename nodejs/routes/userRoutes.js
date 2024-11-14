@@ -2,7 +2,7 @@
 
 const express = require("express");
 const router = express.Router();
-const userSchema = require("../models/userSchema.js");
+const userSchema = require("../schema/userSchema.js");
 
 /**
  * 회원 목록
