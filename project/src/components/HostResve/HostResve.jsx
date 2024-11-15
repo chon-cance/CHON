@@ -31,6 +31,7 @@ export default function HostResve() {
         <div className={styles.hostResve_box}>
           <div className={styles.guest_info}>
             <div>게스트</div>
+            <div></div>
             <div>체크인</div>
             <div>체크아웃</div>
             <div>인원수</div>
@@ -38,6 +39,7 @@ export default function HostResve() {
           </div>
           <div className={styles.guest_infoValue}>
             <div>홍길동</div>
+            <div></div>
             <div>2024.11.11</div>
             <div>2024.11.12</div>
             <div>2명</div>
@@ -45,8 +47,8 @@ export default function HostResve() {
           </div>
         </div>
         <div className={styles.hostResve_btn}>
-          <a href="">승인</a>
-          <a href="">거절</a>
+          <div>승인</div>
+          <div>거절</div>
         </div>
       </div>
     </div>
