@@ -36,7 +36,7 @@
 .form_group {
   display: flex;
   flex-direction: column;
-  margin-bottom: 0 45px;
+  margin-bottom: 45px;
 }
 .NameFont {
   font-weight: bold;

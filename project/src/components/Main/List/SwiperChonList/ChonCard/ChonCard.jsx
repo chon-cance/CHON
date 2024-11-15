@@ -29,7 +29,7 @@ export default function ChonCard({ accommodations }) {
         onError={handleImageError}
       ></div>
       <div className={styles.chon_address}>
-        <div>{accommodations.address}</div>
+        <div className={styles.address}>{accommodations.address}</div>
         <div>
           <span>
             <img src="/img/star.png" alt="star" />
