@@ -1,0 +1,47 @@
+.card {
+  /* width: 262px; */
+  /* border: 1px solid black; */
+  overflow: hidden;
+  margin: 15px 0;
+}
+.card_img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.chon_address {
+  color: #606060;
+  font-weight: 100;
+  font-size: 14px;
+  margin-top: 8px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.chon_address div:nth-of-type(2) {
+  display: flex;
+  align-items: center;
+}
+
+.chon_name {
+  font-size: 26px;
+}
+
+/* @media (max-width: 868px) {
+  .card {
+    width: 230px;
+    border: 1px solid black;
+  }
+  .card_img {
+    height: 240px;
+  }
+}
+@media (max-width: 500px) {
+  .card {
+    width: 180px;
+    border: 1px solid black;
+  }
+  .card_img {
+    height: 200px;
+  }
+} */

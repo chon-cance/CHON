@@ -1,0 +1,112 @@
+/*=====================*/
+/* 예약 header */
+/*=====================*/
+
+.hostResve {
+  margin: 0 auto;
+  max-width: 400px;
+
+  border: 1px solid black;
+}
+
+.hostResve_header {
+  background-color: #394a4b;
+  padding: 17px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.exit {
+  font-size: 20px;
+}
+.exit a {
+  color: white;
+  display: flex;
+}
+.exit a p {
+  padding-right: 10px;
+}
+
+/*=====================*/
+/* 예약 main */
+/*=====================*/
+
+.hostResve_main {
+  padding: 20px;
+}
+.userName {
+  color: #253334;
+  text-align: right;
+  font-size: 16px;
+  padding-bottom: 33px;
+}
+.userName b {
+  font-size: 22px;
+}
+
+.hostResve_title {
+  display: flex;
+  align-items: center;
+}
+.hostResve_title p {
+  font-size: 25px;
+  margin-left: 15px;
+  color: #394a4b;
+}
+
+/* 승인 */
+.approvalResult {
+  background-color: #f3f3f3;
+  padding: 10px;
+  text-align: center;
+  font-weight: bold;
+  margin: 20px 0;
+  color: red;
+  border-radius: 5px;
+}
+
+/* 예약자 정보 */
+.hostResve_box {
+  border: 1px solid #394a4b;
+  border-radius: 5px;
+  display: flex;
+  padding: 20px;
+}
+
+.guest_info {
+  min-width: 73px;
+}
+.guest_info div {
+  color: #394a4b;
+  font-size: 18px;
+  margin-right: 10px;
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+.guest_infoValue div {
+  font-size: 18px;
+  margin-bottom: 20px;
+}
+.guest_infoValue div:last-of-type {
+  margin-bottom: 0;
+}
+.hostResve_btn {
+  margin: 80px 0;
+  display: flex;
+  justify-content: space-between;
+}
+.hostResve_btn a {
+  font-size: 24px;
+  font-weight: bold;
+  padding: 13px 65px;
+  border: 1px solid #394a4b;
+  border-radius: 5px;
+}
+.hostResve_btn a:first-of-type {
+  background-color: white;
+  color: #394a4b;
+}
+.hostResve_btn a:last-of-type {
+  background-color: #394a4b;
+  color: white;
+}

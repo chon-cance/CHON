@@ -1,12 +1,17 @@
-import "react-calendar/dist/Calendar.css";
-import "./App.css";
+import Footer from "./components/Footer/Footer";
+import Header from "./components/Header/Header";
+import HostResve from "./components/HostResve/HostResve";
+import Main from "./components/Main/Main";
 
-function App() {
+import "./index.css";
+
+export default function App() {
   return (
     <>
-      <h1>Hello World</h1>
+      <HostResve />
+      <Header />
+      <Main />
+      <Footer />
     </>
   );
 }
-
-export default App;

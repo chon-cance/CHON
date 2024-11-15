@@ -1,0 +1,128 @@
+/*======================*/
+/* 촌캉스 검색 */
+/*======================*/
+.search {
+  background-color: #e4dbcd;
+  padding: 100px 0;
+}
+
+.search_title {
+  text-align: center;
+  font-size: 38px;
+  font-weight: bold;
+  padding-bottom: 25px;
+  color: #394a4b;
+}
+.search_warp {
+  max-width: 1000px;
+  border-radius: 100px;
+  background-color: white;
+  padding: 15px 15px 15px 80px;
+  display: flex;
+  flex-direction: row;
+  margin: 0 auto;
+  align-items: center;
+}
+.search_category_warp {
+  margin-left: 10px;
+  width: 170px;
+  height: 59px;
+  border-right: 1px solid #d3bead;
+}
+.search_category {
+  font-size: 16px;
+  color: #394a4b;
+}
+.search_value {
+  font-size: 18px;
+  color: #b0b0b0;
+  padding-top: 10px;
+}
+.search_category_warp:nth-of-type(4) {
+  border: none;
+}
+
+.search_Btn_warp1 {
+  width: 165px;
+  display: flex;
+  justify-content: flex-end;
+}
+.search_Btn_warp2 {
+  display: none;
+}
+
+.search_Btn1 {
+  width: 80px;
+  height: 80px;
+  background-color: #394a4b;
+  border-radius: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.search_Btn1:hover {
+  background-color: #2c3b3b;
+}
+
+/* 촌캉스 검색  반응형*/
+
+@media (max-width: 1000px) {
+  .search {
+    padding: 50px 0;
+  }
+  .search_conteiner {
+    margin: 0 23px;
+  }
+
+  .search_warp {
+    max-width: 580px;
+    border-radius: 10px;
+    padding: 10px;
+    flex-wrap: wrap;
+  }
+  .search_category_warp {
+    border: none;
+    padding: 10px 0;
+    height: 70px;
+  }
+  .search_category_warp:first-of-type {
+    width: 100%;
+    border-bottom: 1px solid #e4dbcd;
+  }
+  .search_category_warp:nth-of-type(2) {
+    width: 45%;
+    border-right: 1px solid #e4dbcd;
+  }
+  .search_category_warp:nth-of-type(3) {
+    width: 45%;
+  }
+  .search_category_warp:nth-of-type(4) {
+    width: 100%;
+    border-top: 1px solid #e4dbcd;
+  }
+  .search_Btn_warp1 {
+    display: none;
+  }
+  .search_Btn_warp2 {
+    text-align: center;
+    display: block;
+    max-width: 580px;
+    background-color: #394a4b;
+    font-size: 18px;
+    padding: 12px;
+    border-radius: 10px;
+    margin: 0 auto;
+    margin-top: 15px;
+    color: white;
+    cursor: pointer;
+  }
+  .search_Btn_warp2:hover {
+    background-color: #2c3b3b;
+  }
+}
+
+@media (max-width: 520px) {
+  .search_title {
+    font-size: 28px;
+  }
+}
