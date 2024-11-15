@@ -5,12 +5,13 @@ import HostResve from "./components/HostResve/HostResve";
 import Main from "./components/Main/Main";
 
 import "./index.css";
+import Login from "./pages/Login/Login";
+import Register from "./pages/Register/Register";
 
 export default function App() {
   return (
     <>
-      <GuestResve />
-      <HostResve />
+      <Register />
       <Header />
       <Main />
       <Footer />

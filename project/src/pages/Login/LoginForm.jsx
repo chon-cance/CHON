@@ -16,7 +16,9 @@ const LoginForm = () => {
         placeholder="비밀번호를 입력해주세요"
       />
       <ResisterTag />
-      <button type="submit">로그인</button>
+      <button type="submit" className={styles.loginForm_Btn}>
+        로그인
+      </button>
     </form>
   );
 };

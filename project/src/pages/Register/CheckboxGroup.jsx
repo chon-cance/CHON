@@ -6,7 +6,7 @@ const CheckboxGroup = ({ label }) => {
     <div className={styles.checkbox_group}>
       <label className={styles.checkbox_label}>
         <input type="checkbox" />
-        <span>{label}</span>
+        <span className={styles.checkbox_text}>{label}</span>
       </label>
     </div>
   );

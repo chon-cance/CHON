@@ -28,7 +28,9 @@ const RegisterForm = () => {
         placeholder="휴대폰 번호를 - 없이 입력해주세요"
       />
       <CheckboxGroup label="개인정보 처리 및 카카오톡을 통한 알림톡 전송에 동의합니다." />
-      <button type="submit">회원가입</button>
+      <button type="submit" className={styles.resisterForm_Btn}>
+        회원가입
+      </button>
     </form>
   );
 };
