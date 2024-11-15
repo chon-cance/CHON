@@ -5,7 +5,6 @@
 .hostResve {
   margin: 0 auto;
   max-width: 400px;
-
   border: 1px solid black;
 }
 
@@ -87,26 +86,32 @@
   font-size: 18px;
   margin-bottom: 20px;
 }
+.guest_info div:last-of-type,
 .guest_infoValue div:last-of-type {
   margin-bottom: 0;
 }
+
+/* 버튼 */
 .hostResve_btn {
-  margin: 80px 0;
+  width: 100%;
+  margin: 50px 0 80px 0;
   display: flex;
   justify-content: space-between;
 }
-.hostResve_btn a {
+.hostResve_btn div {
   font-size: 24px;
   font-weight: bold;
-  padding: 13px 65px;
+  text-align: center;
+  padding: 13px 0;
+  width: 48%;
   border: 1px solid #394a4b;
   border-radius: 5px;
 }
-.hostResve_btn a:first-of-type {
+.hostResve_btn div:first-of-type {
   background-color: white;
   color: #394a4b;
 }
-.hostResve_btn a:last-of-type {
+.hostResve_btn div:last-of-type {
   background-color: #394a4b;
   color: white;
 }
