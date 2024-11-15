@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const TimeSlot = require("../Schema/timeSlot");
+const TimeSlot = require("../schema/timeSlot");
 
 // 모든 TimeSlot 조회
 router.get("/timeslots", async (req, res) => {
