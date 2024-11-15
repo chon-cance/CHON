@@ -3,10 +3,10 @@ const mongoose = require("mongoose");
 // 스키마 생성 객체 가져오기
 const { Schema } = mongoose;
 
-const accomodationSchema = new Schema(
+const accommodationSchema = new Schema(
   {
     // 숙소번호
-    accomodation_num: {
+    accommodation_num: {
       type: String,
       require: true,
     },
@@ -62,6 +62,7 @@ const accomodationSchema = new Schema(
     // 숙소입력일
     create_date: {
       type: Date,
+      default: Date.now,
     },
     // 숙소후기
     review: {
@@ -72,7 +73,7 @@ const accomodationSchema = new Schema(
 );
 
 // 인덱스 추가
-accomodationSchema.index({ region: 1 });
-accomodationSchema.index({ person: 1, max_person: 1 });
+accommodationSchema.index({ region: 1 });
+accommodationSchema.index({ person: 1, max_person: 1 });
 
-module.exports = mongoose.model("Accomodation", accomodationSchema);
+module.exports = mongoose.model("Accommodation", accommodationSchema);
