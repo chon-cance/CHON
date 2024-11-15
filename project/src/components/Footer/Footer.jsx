@@ -1,6 +1,6 @@
 import styles from "./Footer.module.css";
-import textImg1 from "../../assets/img/footer_text1.png";
-import textImg2 from "../../assets/img/footer_text2.png";
+import textImg1 from "/img/footer_text1.png";
+import textImg2 from "/img/footer_text2.png";
 
 export default function Footer() {
   return (

@@ -1,6 +1,6 @@
 import styles from "./Header.module.css";
-import logo1 from "../../assets/img/logo1.png";
-import logo2 from "../../assets/img/logo2.png";
+import logo1 from "/img/logo1.png";
+import logo2 from "/img/logo2.png";
 
 import { useEffect } from "react";
 import gsap from "gsap";

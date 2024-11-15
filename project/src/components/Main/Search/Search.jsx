@@ -1,5 +1,5 @@
 import styles from "./Search.module.css";
-import searchIcon from "../../../assets/img/searchIcon.png";
+import searchIcon from "/img/searchIcon.png";
 
 export default function Search() {
   return (

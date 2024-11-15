@@ -1,6 +1,6 @@
 import { useState } from "react";
 import styles from "./Faq.module.css";
-import faqIcon from "../../../assets/img/chevron-down.png";
+import faqIcon from "/img/chevron-down.png";
 
 export default function Faq() {
   // 각 FAQ 항목의 열림/닫힘 상태를 관리

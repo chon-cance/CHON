@@ -1,7 +1,7 @@
 import styles from "./HostResve.module.css";
-import logo3 from "../../assets/img/logo3.png";
-import exit from "../../assets/img/exit.png";
-import resve from "../../assets/img/resve.png";
+import logo3 from "/img/logo3.png";
+import exit from "/img/exit.png";
+import resve from "/img/resve.png";
 
 export default function HostResve() {
   return (
