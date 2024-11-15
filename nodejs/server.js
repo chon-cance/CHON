@@ -8,7 +8,8 @@ const morgan = require("morgan");
 const mongoose = require("mongoose");
 const solapiRoutes = require("./routes/solapiRoutes.js");
 const userRoutes = require("./routes/userRoutes.js");
-const accomodationRoutes = require("./routes/accomodationRoutes.js");
+const accommodationRoutes = require("./routes/accommodationRoutes.js");
+const reservationRoutes = require("./routes/reservationRoute.js");
 
 const app = express();
 const url = `mongodb+srv://choncance:tmakxmdnpqdoq5!@choncance.nr4zf.mongodb.net/mydb?retryWrites=true&w=majority&appName=choncance`;
@@ -28,8 +29,11 @@ app.use("/kakaotalk", solapiRoutes);
 // User 라우트
 app.use("/user", userRoutes);
 
-// accomodation 라우트
-app.use("/accomodations", accomodationRoutes);
+// accommodation 라우트
+app.use("/accommodations", accommodationRoutes);
+
+// reservation 라우트
+app.use("/reservations", reservationRoutes);
 
 // 404 처리
 // app.use((req, res) => {

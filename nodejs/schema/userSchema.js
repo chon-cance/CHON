@@ -29,6 +29,7 @@ const userSchema = new Schema(
     user_type: {
       type: Number,
       require: true,
+      default: 0,
     },
     // 회원 삭제 여부 (기본값:false)
     deleted: {

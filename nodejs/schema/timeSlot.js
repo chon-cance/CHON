@@ -1,32 +1,26 @@
 const mongoose = require("mongoose");
 
-const timeSlotSchema = new mongoose.Schema({
-  date: {
-    type: Date,
-    required: true,
-  },
-  am: {
-    isReserved: {
-      type: Boolean,
-      default: false,
+const timeSlotSchema = new mongoose.Schema(
+  {
+    date: {
+      type: Date,
+      required: true,
     },
     reservationId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Reservation",
       default: null,
     },
-  },
-  pm: {
-    isReserved: {
+    am: {
       type: Boolean,
       default: false,
     },
-    reservationId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Reservation",
-      default: null,
+    pm: {
+      type: Boolean,
+      default: false,
     },
   },
-});
+  { versionKey: false }
+);
 
 module.exports = mongoose.model("TimeSlot", timeSlotSchema);
