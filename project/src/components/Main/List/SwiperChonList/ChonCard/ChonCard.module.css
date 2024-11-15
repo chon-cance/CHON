@@ -8,6 +8,7 @@
   width: 100%;
   height: 262px;
   object-fit: cover;
+  border-radius: 5px;
 }
 
 .chon_address {
@@ -18,6 +19,12 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+}
+.address {
+  height: 16px;
+  white-space: nowrap; /* 텍스트 줄바꿈 방지 */
+  overflow: hidden; /* 넘치는 텍스트 숨기기 */
+  text-overflow: ellipsis; /* 텍스트 끝에 ... 추가 */
 }
 .chon_address div:nth-of-type(2) {
   display: flex;

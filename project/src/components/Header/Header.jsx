@@ -66,10 +66,10 @@ export default function Header() {
         <nav>
           <ul>
             <li>
-              <a href="#">회원가입</a>
+              <a href="/register">회원가입</a>
             </li>
             <li>
-              <a href="#">로그인</a>
+              <a href="/login">로그인</a>
             </li>
           </ul>
         </nav>
