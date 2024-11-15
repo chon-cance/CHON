@@ -1,10 +1,10 @@
 import React from "react";
-import "./App.css";
+import styles from "./Register.module.css";
 
 const CheckboxGroup = ({ label }) => {
   return (
-    <div className="checkbox-group">
-      <label className="checkbox-label">
+    <div className={styles.checkbox_group}>
+      <label className={styles.checkbox_label}>
         <input type="checkbox" />
         <span>{label}</span>
       </label>

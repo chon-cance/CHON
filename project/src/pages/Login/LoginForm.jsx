@@ -1,10 +1,10 @@
 import FormGroup from "./FormGroup";
 import ResisterTag from "./ResisterTag";
-import "./App.css";
+import styles from "./Login.module.css";
 
 const LoginForm = () => {
   return (
-    <form className="resisterForm">
+    <form className={styles.resisterForm}>
       <FormGroup
         label="아이디"
         type="text"

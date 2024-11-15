@@ -1,11 +1,11 @@
 import React from "react";
 import FormGroup from "./FormGroup";
 import CheckboxGroup from "./CheckboxGroup";
-import "./App.css";
+import styles from "./Register.module.css";
 
 const RegisterForm = () => {
   return (
-    <form className="resisterForm">
+    <form className={styles.resisterForm}>
       <FormGroup label="이름" type="text" placeholder="이름을 입력해주세요" />
       <FormGroup
         label="아이디"

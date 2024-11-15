@@ -1,15 +1,15 @@
 import React from "react";
-import "./App.css";
 import FormHeader from "./FormHeader";
+import styles from "./Login.module.css";
 import LoginForm from "./LoginForm";
 
-function App() {
+function Login() {
   return (
-    <div className="form-container">
+    <div className={styles.form_container}>
       <FormHeader />
       <LoginForm />
     </div>
   );
 }
 
-export default App;
+export default Login;
