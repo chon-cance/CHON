@@ -12,7 +12,9 @@ const TimeSlot = require("../schema/timeSlot.js");
  */
 router.get("/list", async (req, res) => {
   try {
-    const accomodations = await Accomodation.find().select("name address region person max_person explain price grade photo").sort({ create_date: -1 });
+    const accomodations = await Accomodation.find()
+      .select("name address region person max_person explain price grade photo")
+      .sort({ create_date: -1 });
     res.status(200).json(accomodations);
   } catch (e) {
     res.status(500).json({ message: e.message });
@@ -26,7 +28,9 @@ router.get("/detail", async (req, res) => {
   try {
     const accomodation_num = req.body.accomodation_num;
 
-    const accomodationData = await Accomodation.findOne({ accomodation_num: accomodation_num });
+    const accomodationData = await Accomodation.findOne({
+      accomodation_num: accomodation_num,
+    });
     if (accomodationData) {
       res.status(200).json(accomodationData);
     } else {
@@ -45,7 +49,10 @@ router.get("/reservation", async (req, res) => {
     const accomodationId = req.query.accomodationId;
 
     // 1. 숙소의 모든 예약 조회
-    const reservationData = await Reservation.find({ accommodationId: accomodationId, endDate: { $gte: new Date() } });
+    const reservationData = await Reservation.find({
+      accommodationId: accomodationId,
+      endDate: { $gte: new Date() },
+    });
     console.log(`숙소 ${accomodationId}의 예약 수:`, reservationData.length);
     // let timeSlotData = [];
 
@@ -54,7 +61,10 @@ router.get("/reservation", async (req, res) => {
       const reservationIds = reservationData.map((res) => res._id.toString());
       // 3. TimeSlots에서 해당 예약들의 타임슬롯 조회
       const timeSlots = await TimeSlot.find({
-        $or: [{ "am.reservationId": { $in: reservationIds } }, { "pm.reservationId": { $in: reservationIds } }],
+        $or: [
+          { "am.reservationId": { $in: reservationIds } },
+          { "pm.reservationId": { $in: reservationIds } },
+        ],
       }).sort({ date: 1 });
 
       console.log("조회된 타임슬롯 수:", timeSlots.length);
@@ -73,17 +83,28 @@ router.get("/reservation", async (req, res) => {
         }
 
         // AM 예약 확인
-        if (slot.am.isReserved && reservationIds.includes(slot.am.reservationId.toString())) {
+        if (
+          slot.am.isReserved &&
+          reservationIds.includes(slot.am.reservationId.toString())
+        ) {
           dateAvailability[dateStr].checkOut = false; // AM이 예약되어 있으면 체크아웃 불가
         }
 
         // PM 예약 확인
-        if (slot.pm.isReserved && reservationIds.includes(slot.pm.reservationId.toString())) {
+        if (
+          slot.pm.isReserved &&
+          reservationIds.includes(slot.pm.reservationId.toString())
+        ) {
           dateAvailability[dateStr].checkIn = false; // PM이 예약되어 있으면 체크인 불가
         }
 
         // 둘 다 예약된 경우 모두 불가능 처리
-        if (slot.am.isReserved && slot.pm.isReserved && reservationIds.includes(slot.am.reservationId.toString()) && reservationIds.includes(slot.pm.reservationId.toString())) {
+        if (
+          slot.am.isReserved &&
+          slot.pm.isReserved &&
+          reservationIds.includes(slot.am.reservationId.toString()) &&
+          reservationIds.includes(slot.pm.reservationId.toString())
+        ) {
           dateAvailability[dateStr].checkIn = false;
           dateAvailability[dateStr].checkOut = false;
         }
@@ -186,12 +207,16 @@ router.get("/search", async (req, res) => {
       _id: { $in: Array.from(reservationIds) },
     });
 
-    const bookedAccomodationIds = new Set(reservations.map((res) => res.accomodationId.toString()));
+    const bookedAccomodationIds = new Set(
+      reservations.map((res) => res.accomodationId.toString())
+    );
 
     console.log("예약된 숙소 IDs:", Array.from(bookedAccomodationIds));
 
     // 5. 예약된 숙소 제외하고 결과 반환
-    const availableAccomodations = accomodations.filter((acc) => !bookedAccomodationIds.has(acc._id.toString()));
+    const availableAccomodations = accomodations.filter(
+      (acc) => !bookedAccomodationIds.has(acc._id.toString())
+    );
 
     console.log("최종 이용 가능한 숙소 수:", availableAccomodations.length);
     res.status(200).json(availableAccomodations);

@@ -1,8 +1,24 @@
 import styles from "./List.module.css";
-
+import { useState, useEffect } from "react";
 import SwiperChonList from "./SwiperChonList/SwiperChonList";
 
 export default function List() {
+  const [recentAccommodations, setRecentAccommodations] = useState([]);
+  const [topGradeAccommodations, setTopGradeAccommodations] = useState([]);
+
+  useEffect(() => {
+    fetch("http://192.168.0.72:8080/accommodations/top_date")
+      .then((res) => res.json())
+      .then((data) => setRecentAccommodations(data));
+
+    // 평점 높은 숙소 API 호출
+    fetch("http://192.168.0.72:8080/accommodations/top_grade")
+      .then((res) => res.json())
+      .then((data) => setTopGradeAccommodations(data));
+
+    // 최신 숙소 API 호출
+  }, []);
+
   return (
     <>
       <div className="w1200">
@@ -12,7 +28,7 @@ export default function List() {
             <p>촌스럽게 신규 입점한 숙소를 만나보세요.</p>
           </div>
           <div className={styles.card_conteiner}>
-            <SwiperChonList />
+            <SwiperChonList accommodations={recentAccommodations} />
           </div>
         </div>
         <div className={styles.chon_list}>
@@ -21,7 +37,7 @@ export default function List() {
             <p>이벤트 진행중인 숙소를 만나보세요.</p>
           </div>
           <div className={styles.card_conteiner}>
-            <SwiperChonList />
+            <SwiperChonList accommodations={topGradeAccommodations} />
           </div>
         </div>
       </div>

@@ -11,7 +11,9 @@ import "swiper/css/pagination";
 // Import required modules
 import { Navigation, Pagination } from "swiper/modules";
 
-export default function SwiperChonList() {
+export default function SwiperChonList({ accommodations }) {
+  console.log("전달할 숙소 데이터:", accommodations); // 데이터 확인용
+
   return (
     <>
       <Swiper
@@ -57,30 +59,11 @@ export default function SwiperChonList() {
           },
         }}
       >
-        <SwiperSlide>
-          <ChonCard />
-        </SwiperSlide>
-        <SwiperSlide>
-          <ChonCard />
-        </SwiperSlide>
-        <SwiperSlide>
-          <ChonCard />
-        </SwiperSlide>
-        <SwiperSlide>
-          <ChonCard />
-        </SwiperSlide>
-        <SwiperSlide>
-          <ChonCard />
-        </SwiperSlide>
-        <SwiperSlide>
-          <ChonCard />
-        </SwiperSlide>
-        <SwiperSlide>
-          <ChonCard />
-        </SwiperSlide>
-        <SwiperSlide>
-          <ChonCard />
-        </SwiperSlide>
+        {accommodations?.map((accommodation) => (
+          <SwiperSlide key={accommodation._id}>
+            <ChonCard accommodations={accommodation} />
+          </SwiperSlide>
+        ))}
       </Swiper>
     </>
   );

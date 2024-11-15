@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const Reservation = require("../Schema/reservation");
-const TimeSlot = require("../Schema/timeSlot");
+const Reservation = require("../schema/reservation");
+const TimeSlot = require("../schema/timeSlot");
 const mongoose = require("mongoose");
 
 // 예약 조회
