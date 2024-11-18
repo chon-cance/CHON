@@ -62,12 +62,12 @@ router.post("/create", async (req, res) => {
  * 예약확정 (timeSlots에 데이터 추가)
  * 예약번호(reservationId),체크인 날짜(startDate),체크아웃 날짜(endDate)
  */
-router.get("/confirm", async (req, res) => {
+router.put("/confirm/:id", async (req, res) => {
   const session = await mongoose.startSession();
   session.startTransaction();
 
   try {
-    const reservationId = req.query.reservationId;
+    const reservationId = req.params.id;
 
     // reservations 컬렉션에서 해당 예약의 state를 "comfirm" 으로 변경
     const updateReservation = await Reservation.findOneAndUpdate({ _id: new ObjectId(reservationId) }, { $set: { state: "confirm" } });
@@ -146,7 +146,7 @@ router.put("/decline/:id", async (req, res) => {
 /**
  * 예약 취소 (삭제)
  */
-router.delete("/delete/:id", async (req, res) => {
+router.put("/delete/:id", async (req, res) => {
   const session = await mongoose.startSession();
   session.startTransaction();
 
