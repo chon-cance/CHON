@@ -9,12 +9,6 @@ export default function ChonCard({ accommodations }) {
     backgroundPosition: "center center",
   };
 
-  console.log(
-    "🖼️ 이미지 경로:",
-    `/img/${accommodations.accommodation_num}/${accommodations.photo[0]}`
-  );
-  console.log("💅 스타일 객체:", backgroundStyle);
-
   const handleImageError = (e) => {
     const element = e.target;
     element.style.backgroundImage = "url(/img/default.jpg)";
