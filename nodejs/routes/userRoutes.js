@@ -23,7 +23,7 @@ router.get("/userList", async (req, res) => {
 router.post("/login", async (req, res) => {
   try {
     const id = req.body.id;
-    // const password = req.body.password;
+    const password = req.body.password;
 
     const user = await userSchema.findOne({ id: id });
 
@@ -37,7 +37,7 @@ router.post("/login", async (req, res) => {
         console.log("비밀번호가 일치하지 않습니다.");
         return res.status(401).json({ success: false, message: "비밀번호가 일치하지 않습니다." });
       } else {
-        res.json({ id: data.id, name: data.name, phone: data.phone, user_type: data.user_type });
+        res.json({ id: user.id, name: user.name, phone: user.phone, user_type: user.user_type });
       }
     } else {
       // 회원이 존재하지 않을 경우
