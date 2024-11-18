@@ -36,7 +36,8 @@ router.post("/send-message", async (req, res) => {
     console.error("Failed to send message:", error);
     res.status(error.response?.status || 500).json({
       success: false,
-      message: error.response?.status === 401 ? "인증 실패" : "메시지 전송 실패",
+      message:
+        error.response?.status === 401 ? "인증 실패" : "메시지 전송 실패",
       error: error.message,
     });
   }

@@ -9,7 +9,9 @@ const RegisterFormHeader = () => {
       <h1 className={styles.resister}>회원가입</h1>
       <p className={styles.subtitle}>
         이미 촌스럽게에 회원가입 되어있다면?{" "}
-        <a className={styles.loginBtn}>로그인</a>
+        <a href="/login" className={styles.loginBtn}>
+          로그인
+        </a>
       </p>
     </div>
   );
