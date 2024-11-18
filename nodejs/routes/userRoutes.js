@@ -3,6 +3,7 @@
 const express = require("express");
 const router = express.Router();
 const userSchema = require("../schema/userSchema.js");
+const bcrypt = require("bcrypt");
 
 /**
  * 회원 목록
@@ -56,7 +57,7 @@ router.post("/join", async (req, res) => {
     const password = req.body.password;
     const name = req.body.name;
     const phone = req.body.phone;
-    const create_date = new Date();
+    const create_date = new Date(new Date().getTime() + 9 * 60 * 60 * 1000);
 
     // 2. 비밀번호 해시화
     const saltRounds = 10;
