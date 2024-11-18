@@ -1,0 +1,49 @@
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.cardContainer {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  list-style: none;
+  padding: 0;
+  margin: 20px 0;
+}
+
+.pageItem {
+  margin: 0 5px;
+  cursor: pointer;
+}
+
+.pageItem a {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.active a {
+  background-color: #007bff;
+  color: white;
+  border-color: #007bff;
+}
+
+.navButton a {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.disabled a {
+  color: #ccc;
+  cursor: not-allowed;
+}

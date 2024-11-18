@@ -3,7 +3,8 @@ import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import styles from "./Search.module.css";
 import searchIcon from "/img/searchIcon.png";
-import { searchAccommodations } from "../../../api/searchApi";
+import { searchAccommodations } from "../../../api/accommodationSearch";
+import AccomSearchTest from "../../AccomSearchTest/AccomSearchTest";
 
 // 지역 데이터
 const REGIONS = [
@@ -32,6 +33,7 @@ export default function Search() {
   const [checkOut, setCheckOut] = useState(null);
   const [guests, setGuests] = useState(1);
   const [error, setError] = useState("");
+  const [searchResults, setSearchResults] = useState(null);
 
   // 검색 처리
   const handleSearch = async () => {
@@ -58,6 +60,7 @@ export default function Search() {
 
       // API 호출
       const results = await searchAccommodations(searchParams);
+      setSearchResults(results); // 검색 결과 저장
       console.log("검색 결과:", results);
 
       // 여기서 검색 결과를 처리 (예: 상태 업데이트 또는 페이지 이동)
@@ -204,6 +207,7 @@ export default function Search() {
           </button>
         </div>
       </div>
+      {searchResults && <AccomSearchTest accommodations={searchResults} />}
     </div>
   );
 }
