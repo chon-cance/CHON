@@ -7,16 +7,17 @@ const { ObjectId } = mongoose.Types;
 // const moment = require("moment");
 
 /**
- * 예약 조회
+ * 예약 조회 (게스트 예약확인)
  */
 router.get("/", async (req, res) => {
   try {
-    // 숙소의 id를 조회해서 예약 내역을 가져옴
-    const accommodationId = req.query.accommodationId;
-    const reservations = await Reservation.find({ accommodationId: accommodationId }).populate("accommodationId", "name address price region").populate("userId", "name phone").sort({ startDate: -1 });
+    // 예약 id를 조회해서 예약 내역을 가져옴
+    const reservationId = req.query.reservationId;
+    const reservation = await Reservation.findOne({ _id: reservationId }).populate("accommodationId", "name address price region").populate("userId", "name phone").sort({ startDate: -1 });
+    // const reservations = await Reservation.find({ accommodationId: accommodationId }).populate("accommodationId", "name address price region").populate("userId", "name phone").sort({ startDate: -1 });
 
-    if (reservations.length > 0) {
-      res.status(200).json(reservations);
+    if (reservation) {
+      res.status(200).json(reservation);
     } else {
       res.status(500).json({ message: "예약 내역이 없습니다." });
     }
@@ -26,16 +27,15 @@ router.get("/", async (req, res) => {
 });
 
 /**
- * 예약 생성
+ * 예약 생성 (예약신청) (timeSlots에 false로 데이터 추가)
  */
 router.post("/create", async (req, res) => {
   const session = await mongoose.startSession();
   session.startTransaction();
 
   try {
-    // const reservationIds = await Reservation.find({ accommodationId: accommodationId }, "reservationId");
     const { accommodationId, userId, startDate, endDate, person } = req.body;
-    const nowDate = new Date(new Date().getTime() + 9 * 60 * 60 * 1000);
+    const nowDate = new Date(new Date().getTime() + 9 * 60 * 60 * 1000); // 대한민국 시간
 
     // 2. 예약 생성(reservation 에 insert)
     const reservation = await Reservation.create({
@@ -48,6 +48,28 @@ router.post("/create", async (req, res) => {
       createdAt: nowDate,
     });
 
+    // timeSlots 컬렉션에 예약추가
+    const start = reservation.startDate;
+    const end = reservation.endDate;
+
+    // 해당 기간의 모든 날짜 생성
+    const dates = [];
+    let currentDate = new Date(start);
+    while (currentDate <= end) {
+      dates.push(new Date(currentDate));
+      currentDate.setDate(currentDate.getDate() + 1);
+    }
+
+    // TimeSlot 생성
+    for (const date of dates) {
+      const timeSlot = new TimeSlot({ reservationId: reservation._id, date });
+
+      timeSlot.am = false;
+      timeSlot.pm = false;
+
+      await timeSlot.save();
+    }
+
     await session.commitTransaction();
     res.status(200).json(reservation);
   } catch (error) {
@@ -59,7 +81,7 @@ router.post("/create", async (req, res) => {
 });
 
 /**
- * 예약확정 (timeSlots에 데이터 추가)
+ * 예약승인(확정)
  * 예약번호(reservationId),체크인 날짜(startDate),체크아웃 날짜(endDate)
  */
 router.put("/confirm/:id", async (req, res) => {
@@ -87,21 +109,21 @@ router.put("/confirm/:id", async (req, res) => {
         currentDate.setDate(currentDate.getDate() + 1);
       }
 
-      // TimeSlot 생성 또는 업데이트
+      // TimeSlot 업데이트
       for (const date of dates) {
-        // let timeSlot = await TimeSlot.findOne({ reservationId: reservationId, date });
+        let timeSlot = await TimeSlot.findOne({ reservationId: reservationId, date });
 
-        // if (!timeSlot) {
-        const timeSlot = new TimeSlot({ reservationId: reservationId, date });
-        // }
-
-        if (date.getTime() === start.getTime()) {
-          timeSlot.pm = true;
-        } else if (date.getTime() === end.getTime()) {
-          timeSlot.am = true;
+        if (timeSlot) {
+          if (date.getTime() === start.getTime()) {
+            timeSlot.pm = true;
+          } else if (date.getTime() === end.getTime()) {
+            timeSlot.am = true;
+          } else {
+            timeSlot.am = true;
+            timeSlot.pm = true;
+          }
         } else {
-          timeSlot.am = true;
-          timeSlot.pm = true;
+          return res.status(404).json({ message: "예약을 찾을 수 없습니다." });
         }
 
         await timeSlot.save();
