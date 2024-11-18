@@ -22,13 +22,22 @@ router.get("/userList", async (req, res) => {
 router.post("/login", async (req, res) => {
   try {
     const id = req.body.id;
-    const password = req.body.password;
+    // const password = req.body.password;
 
-    const data = await userSchema.findOne({ id: id, password: password });
+    const user = await userSchema.findOne({ id: id });
 
-    if (data) {
+    if (user) {
       // 조회한 회원이 존재할 경우
-      res.json({ id: data.id, name: data.name, phone: data.phone, user_type: data.user_type });
+
+      // 비밀번호 검증
+      const isPasswordValid = await bcrypt.compare(password, user.password);
+
+      if (!isPasswordValid) {
+        console.log("비밀번호가 일치하지 않습니다.");
+        return res.status(401).json({ success: false, message: "비밀번호가 일치하지 않습니다." });
+      } else {
+        res.json({ id: data.id, name: data.name, phone: data.phone, user_type: data.user_type });
+      }
     } else {
       // 회원이 존재하지 않을 경우
       res.json({ message: "회원 정보를 찾을 수 없습니다." });
@@ -49,12 +58,16 @@ router.post("/join", async (req, res) => {
     const phone = req.body.phone;
     const create_date = new Date();
 
+    // 2. 비밀번호 해시화
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+
     const idCheck = await userSchema.findOne({ id: id });
     if (!idCheck) {
       // 중복되는 id 없음 - 회원가입
       const data = await userSchema.create({
         id: id,
-        password: password,
+        password: hashedPassword,
         name: name,
         phone: phone,
         user_type: 0,
