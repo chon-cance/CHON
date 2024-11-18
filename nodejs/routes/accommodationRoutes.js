@@ -166,12 +166,7 @@ router.get("/search", async (req, res) => {
     }
 
     // 2. 해당 기간의 타임슬롯 검색
-    const timeSlots = await TimeSlot.find({
-      date: {
-        $gte: new Date(checkIn),
-        $lte: new Date(checkOut),
-      },
-    });
+    const timeSlots = await TimeSlot.find({ date: { $gte: new Date(checkIn), $lte: new Date(checkOut) } });
     console.log("검색된 타임슬롯 수:", timeSlots.length);
 
     // 3. 예약된 reservationId 수집
@@ -182,23 +177,23 @@ router.get("/search", async (req, res) => {
 
       // 체크인 날짜는 PM만 확인
       if (slotDate === checkIn) {
-        if (slot.pm.isReserved) {
-          reservationIds.add(slot.pm.reservationId.toString());
+        if (slot.pm) {
+          reservationIds.add(slot.reservationId.toString());
         }
       }
       // 체크아웃 날짜는 AM만 확인
       else if (slotDate === checkOut) {
-        if (slot.am.isReserved) {
-          reservationIds.add(slot.am.reservationId.toString());
+        if (slot.am) {
+          reservationIds.add(slot.reservationId.toString());
         }
       }
       // 중간 날짜는 AM, PM 모두 확인
       else {
-        if (slot.am.isReserved) {
-          reservationIds.add(slot.am.reservationId.toString());
+        if (slot.am) {
+          reservationIds.add(slot.reservationId.toString());
         }
-        if (slot.pm.isReserved) {
-          reservationIds.add(slot.pm.reservationId.toString());
+        if (slot.pm) {
+          reservationIds.add(slot.reservationId.toString());
         }
       }
     });
@@ -206,9 +201,7 @@ router.get("/search", async (req, res) => {
     console.log("예약된 reservationIds:", Array.from(reservationIds));
 
     // 4. 예약된 숙소 ID 찾기
-    const reservations = await Reservation.find({
-      _id: { $in: Array.from(reservationIds) },
-    });
+    const reservations = await Reservation.find({ _id: { $in: Array.from(reservationIds) } });
 
     const bookedAccommodationIds = new Set(reservations.map((res) => res.accommodationId.toString()));
 
