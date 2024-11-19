@@ -13,7 +13,7 @@ router.get("/", async (req, res) => {
   try {
     // 예약 id를 조회해서 예약 내역을 가져옴
     const reservationId = req.query.reservationId;
-    const reservation = await Reservation.findOne({ _id: reservationId }).populate("accommodationId", "name address price region").populate("userId", "name phone").sort({ startDate: -1 });
+    const reservation = await Reservation.findOne({ _id: reservationId }).populate("accommodationId", "name address phone price region").populate("userId", "name phone").sort({ startDate: -1 });
     // const reservations = await Reservation.find({ accommodationId: accommodationId }).populate("accommodationId", "name address price region").populate("userId", "name phone").sort({ startDate: -1 });
 
     if (reservation) {

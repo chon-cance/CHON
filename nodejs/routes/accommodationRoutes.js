@@ -24,9 +24,7 @@ router.get("/list", async (req, res) => {
  */
 router.get("/top_date", async (req, res) => {
   try {
-    const accommodations = await Accommodation.find()
-      .sort({ create_date: -1 })
-      .limit(8);
+    const accommodations = await Accommodation.find().sort({ create_date: -1 }).limit(8);
 
     res.status(200).json(accommodations);
   } catch (error) {
@@ -39,9 +37,7 @@ router.get("/top_date", async (req, res) => {
  */
 router.get("/top_grade", async (req, res) => {
   try {
-    const accommodations = await Accommodation.find()
-      .sort({ grade: -1 })
-      .limit(8);
+    const accommodations = await Accommodation.find().sort({ grade: -1 }).limit(8);
 
     res.status(200).json(accommodations);
   } catch (error) {
@@ -77,19 +73,19 @@ router.get("/reservation", async (req, res) => {
     const accommodationId = req.query.accommodationId;
 
     // 1. 숙소의 모든 예약 조회
-
     const reservationData = await Reservation.find({
       accommodationId: accommodationId,
-      endDate: { $gte: new Date() },
+      // endDate: { $gte: new Date() },
     });
+
     console.log(`숙소 ${accommodationId}의 예약 수:`, reservationData.length);
     // let timeSlotData = [];
 
     if (reservationData.length > 0) {
       // 2. 예약 ID 목록 생성
       const reservationIds = reservationData.map((res) => res._id.toString());
-      // 3. TimeSlots에서 해당 예약들의 타임슬롯 조회
 
+      // 3. TimeSlots에서 해당 예약들의 타임슬롯 조회
       const timeSlots = await TimeSlot.find({
         reservationId: { $in: reservationIds },
       }).sort({ date: 1 });
@@ -110,32 +106,24 @@ router.get("/reservation", async (req, res) => {
         }
 
         // AM 예약 확인
-
         if (slot.am && reservationIds.includes(slot.reservationId.toString())) {
           dateAvailability[dateStr].checkOut = false; // AM이 예약되어 있으면 체크아웃 불가
         }
 
         // PM 예약 확인
-
         if (slot.pm && reservationIds.includes(slot.reservationId.toString())) {
           dateAvailability[dateStr].checkIn = false; // PM이 예약되어 있으면 체크인 불가
         }
 
         // 둘 다 예약된 경우 모두 불가능 처리
-
-        if (
-          slot.am &&
-          slot.pm &&
-          reservationIds.includes(slot.reservationId.toString()) &&
-          reservationIds.includes(slot.reservationId.toString())
-        ) {
+        if (slot.am && slot.pm && reservationIds.includes(slot.reservationId.toString()) && reservationIds.includes(slot.reservationId.toString())) {
           dateAvailability[dateStr].checkOut = false;
           dateAvailability[dateStr].checkIn = false;
         }
       });
 
       console.log("날짜별 예약 상태:", dateAvailability);
-      res.status(200).json(dateAvailability);
+      res.status(200).json({ reservationIds: reservationIds, dateAvailability: dateAvailability });
 
       // // 모든 reservationId에 대해 timeSlot을 조회
       // const timeSlotPromises = reservationData.map(async (i) => {
@@ -224,17 +212,13 @@ router.get("/search", async (req, res) => {
     // 4. 예약된 숙소 ID 찾기
     const reservations = await Reservation.find({ _id: { $in: Array.from(reservationIds) } });
 
-    const bookedAccommodationIds = new Set(
-      reservations.map((res) => res.accommodationId.toString())
-    );
+    const bookedAccommodationIds = new Set(reservations.map((res) => res.accommodationId.toString()));
 
     console.log("예약된 숙소 IDs:", Array.from(bookedAccommodationIds));
 
     // 5. 예약된 숙소 제외하고 결과 반환
 
-    const availableAccommodations = accommodations.filter(
-      (acc) => !bookedAccommodationIds.has(acc._id.toString())
-    );
+    const availableAccommodations = accommodations.filter((acc) => !bookedAccommodationIds.has(acc._id.toString()));
     console.log("최종 이용 가능한 숙소 수:", availableAccommodations.length);
     res.status(200).json(availableAccommodations);
   } catch (error) {
