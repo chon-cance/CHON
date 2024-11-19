@@ -3,6 +3,7 @@ import logo3 from "/img/logo3.png";
 import exit from "/img/exit.png";
 import resve from "/img/resve.png";
 import { useState, useEffect } from "react";
+import { ShowAlert, ShowConfirm, ShowLoading } from "../../AlertUtils.js";
 
 export default function HostResve({ id }) {
   const [reservationData, setReservationData] = useState(null);
@@ -13,9 +14,6 @@ export default function HostResve({ id }) {
     color: { color: "red" },
     view: true,
   });
-  // const [state, setState] = useState("승인대기");
-  // const [color, setColor] = useState({ color: "red" });
-  // const [view, setView] = useState(true);
 
   const fetchReservationData = async () => {
     try {
@@ -25,14 +23,12 @@ export default function HostResve({ id }) {
 
       if (data.state == "confirm") {
         setReservation({ state: "승인완료", color: { color: "#394A4B" }, view: false });
-        // setColor({ color: "#394A4B" });
-        // setView(false);
       } else if (data.state == "decline") {
         setReservation({ state: "승인거절", color: { color: "#a6a6a6" }, view: false });
-        // setState("승인거절");
-        // setColor({ color: "#a6a6a6" });
-        // setView(false);
+      } else if (data.state == "delete") {
+        setReservation({ state: "취소된 예약", color: { color: "red" }, view: false });
       }
+
       setReservationData(data); // 예약 정보 저장
     } catch (err) {
       setError("예약 정보를 불러오는 데 실패했습니다."); // 오류 처리
@@ -41,7 +37,7 @@ export default function HostResve({ id }) {
     }
   };
 
-  // 컴포넌트 실행이 완료된 후(JSX코드가 실행된 후) useEffect 실행
+  // 컴포넌트 실행이 완료된 후 useEffect 실행
   useEffect(() => {
     fetchReservationData();
   }, []);
@@ -55,14 +51,15 @@ export default function HostResve({ id }) {
       if (!response.ok) {
         throw new Error("네트워크 응답이 좋지 않습니다.");
       }
+
       const data = await response.json();
+
       setReservation({ state: "승인완료", color: { color: "#394A4B" }, view: false });
-      // setState("승인완료");
-      // setColor({ color: "#394A4B" });
-      // setView(false);
-      alert(data.message); // 받은 메시지를 alert로 표시
+      ShowAlert("success", "성공", data.message);
+      // alert(data.message); // 받은 메시지를 alert로 표시
     } catch (e) {
-      alert("예약 승인 요청에 실패했습니다."); // 오류 처리
+      ShowAlert("fail", "실패", "예약 승인 요청에 실패했습니다.");
+      // alert("예약 승인 요청에 실패했습니다."); // 오류 처리
     }
   }
 
@@ -75,14 +72,15 @@ export default function HostResve({ id }) {
       if (!response.ok) {
         throw new Error("네트워크 응답이 좋지 않습니다.");
       }
+
       const data = await response.json();
+
       setReservation({ state: "승인거절", color: { color: "#a6a6a6" }, view: false });
-      // setState("승인거절");
-      // setColor({ color: "#a6a6a6" });
-      // setView(false);
-      alert(data.message); // 받은 메시지를 alert로 표시
+      ShowAlert("success", "성공", data.message);
+      // alert(data.message); // 받은 메시지를 alert로 표시
     } catch (e) {
-      alert("예약 거절 요청에 실패했습니다."); // 오류 처리
+      ShowAlert("fail", "실패", "예약 거절 요청에 실패했습니다.");
+      // alert("예약 거절 요청에 실패했습니다."); // 오류 처리
     }
   }
 
@@ -116,7 +114,7 @@ export default function HostResve({ id }) {
           <div className={styles.hostResve_box}>
             <div className={styles.guest_info}>
               <div>게스트</div>
-              {reservationData.state == "confirm" && !reservation.view && <div>전화번호</div>}
+              {reservation.state == "승인완료" && !reservation.view && <div>전화번호</div>}
               <div>체크인</div>
               <div>체크아웃</div>
               <div>인원수</div>
@@ -124,7 +122,7 @@ export default function HostResve({ id }) {
             </div>
             <div className={styles.guest_infoValue}>
               <div>{reservationData.userId.name}</div>
-              {reservationData.state == "confirm" && !reservation.view && <div>{reservationData.userId.phone}</div>}
+              {reservation.state == "승인완료" && !reservation.view && <div>{reservationData.userId.phone.replace(/(\d{3})(\d{4})(\d{4})/, "$1-$2-$3")}</div>}
               <div>{reservationData.startDate.split("T")[0]}</div>
               <div>{reservationData.endDate.split("T")[0]}</div>
               <div>{reservationData.person}</div>

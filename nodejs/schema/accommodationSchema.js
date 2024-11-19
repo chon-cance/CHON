@@ -15,6 +15,11 @@ const accommodationSchema = new Schema(
       type: String,
       require: true,
     },
+    // 연락처
+    phone: {
+      type: String,
+      require: true,
+    },
     // 주소
     address: {
       type: String,
