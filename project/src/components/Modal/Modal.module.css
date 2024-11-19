@@ -13,55 +13,269 @@
 
 .modalContent {
   background-color: white;
-  padding: 20px;
-  border-radius: 8px;
-  max-width: 800px;
-  width: 90%;
+  padding: 40px;
+  border-radius: 16px;
+  width: 95%;
+  max-width: 900px;
   max-height: 90vh;
-  overflow-y: auto;
   position: relative;
+  overflow-y: scroll;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.modalContent::-webkit-scrollbar {
+  display: none;
 }
 
 .closeButton {
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: 20px;
+  right: 20px;
   background: none;
   border: none;
   font-size: 24px;
   cursor: pointer;
+  z-index: 10;
+  color: #333;
+}
+
+.headerSection {
+  margin-bottom: 32px;
 }
 
 .imageSection {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 10px;
-  margin-bottom: 20px;
+  position: relative;
+  width: 100%;
 }
 
-.imageSection img {
+.mainImage {
   width: 100%;
-  height: 200px;
+  height: 420px;
   object-fit: cover;
-  border-radius: 4px;
+  border-radius: 12px;
+}
+
+.thumbnailWrapper {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.thumbnail {
+  width: 100px;
+  height: 75px;
+  object-fit: cover;
+  border-radius: 8px;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+.thumbnail:hover,
+.activeThumbnail {
+  opacity: 1;
+  border: 2px solid #333;
+}
+
+.contentWrapper {
+  display: flex;
+  gap: 40px;
+  margin-top: 32px;
 }
 
 .infoSection {
-  padding: 20px 0;
+  flex: 1;
+}
+
+.infoSection h2 {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 12px;
+  color: #333;
 }
 
 .address {
   color: #666;
-  margin: 10px 0;
+  margin-bottom: 12px;
+  font-size: 15px;
+}
+
+.details {
+  color: #666;
+  margin-bottom: 16px;
+  font-size: 15px;
 }
 
 .price {
-  font-size: 1.2em;
+  text-align: right;
+  font-size: 24px;
   font-weight: bold;
-  margin: 10px 0;
+  color: #333;
+  margin-top: 16px;
 }
 
-.description {
-  line-height: 1.6;
-  margin: 15px 0;
+.reservationSection {
+  width: 100%;
+  max-width: 50%; /* 화면 너비 초과 방지 */
+
+  border-radius: 12px;
+  padding: 24px;
+  box-sizing: border-box;
+  overflow-x: auto; /* 가로 스크롤 추가 */
+}
+
+.dateSection {
+  display: flex;
+
+  margin-bottom: 16px;
+  padding: 16px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #fff;
+  align-items: center;
+  overflow-x: auto; /* 자식 요소가 크기를 초과할 경우 스크롤 */
+}
+
+.dateSection .inputGroup {
+  flex: 1; /* 가변 너비 */
+  min-width: 50px; /* 최소 너비 */
+  max-width: 100px; /* 최대 너비 */
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+.dateSection .inputGroup:not(:last-child) {
+  border-right: 1px solid #ddd; /* 마지막 요소는 경계선 없음 */
+  padding-right: 16px;
+  margin-right: 16px;
+}
+
+.inputGroup label {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.inputGroup input,
+.inputGroup textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 15px;
+  box-sizing: border-box;
+}
+
+.inputGroup textarea {
+  resize: vertical;
+  min-height: 100px;
+  margin-bottom: 16px;
+}
+
+.reserveButton {
+  width: 100%;
+  background-color: #333;
+  color: white;
+  padding: 16px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.reserveButton:hover {
+  background-color: #444;
+}
+
+.reviewSection {
+  margin-top: 48px;
+  padding-top: 32px;
+  border-top: 1px solid #eee;
+}
+
+.reviewSection h3 {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.reviewSection ul {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.reviewSection li {
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-radius: 12px;
+  color: #666;
+  font-size: 15px;
+}
+
+.reviewItem {
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-radius: 12px;
+  color: #666;
+  font-size: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.starRating {
+  font-size: 16px;
+  color: #ffc107; /* 활성화된 별 색 */
+}
+
+.star {
+  font-size: 16px;
+  color: #ddd; /* 기본 별 색 */
+}
+
+.activeStar {
+  color: #ffc107;
+}
+.slideImage {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+@media (max-width: 768px) {
+  .modalContent {
+    padding: 20px;
+    width: 100%;
+    height: 100vh;
+    max-height: none;
+    border-radius: 0;
+  }
+
+  .contentWrapper {
+    flex-direction: column;
+  }
+
+  .reservationSection {
+    width: 100%;
+  }
+
+  .mainImage {
+    height: 300px;
+  }
+
+  .thumbnail {
+    width: 80px;
+    height: 60px;
+  }
 }
