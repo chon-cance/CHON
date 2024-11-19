@@ -1,22 +1,35 @@
-import React from "react";
-import "./Modal.css";
+import styles from "./Modal.module.css";
+import { createPortal } from "react-dom";
 
-const Modal = ({ isOpen, onClose, children }) => {
-  if (!isOpen) return null;
-
-  return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div
-        className="modal-container"
-        onClick={(e) => e.stopPropagation()} // 클릭 이벤트 전파 방지
-      >
-        <button className="modal-close" onClick={onClose}>
-          ×
+export default function Modal({ accommodation, onClose }) {
+  return createPortal(
+    <div className={styles.modalOverlay} onClick={onClose}>
+      <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
+        <button className={styles.closeButton} onClick={onClose}>
+          ✕
         </button>
-        {children}
-      </div>
-    </div>
-  );
-};
 
-export default Modal;
+        <div className={styles.imageSection}>
+          {accommodation.photo.map((photo, index) => (
+            <img
+              key={index}
+              src={`/img/${accommodation.accommodation_num}/${photo}`}
+              alt={`숙소 이미지 ${index + 1}`}
+            />
+          ))}
+        </div>
+
+        <div className={styles.infoSection}>
+          <h2>{accommodation.name}</h2>
+          <p className={styles.address}>{accommodation.address}</p>
+          <p className={styles.price}>
+            가격: {accommodation.price.toLocaleString()}원
+          </p>
+          <div className={styles.description}>{accommodation.description}</div>
+          {/* 추가 정보들 */}
+        </div>
+      </div>
+    </div>,
+    document.getElementById("modal-root")
+  );
+}
