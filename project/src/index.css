@@ -24,6 +24,9 @@
   font-family: "Pretendard-Regular";
   text-decoration: none;
 }
+button {
+  border: 0px;
+}
 
 /* 1200 */
 .w1200 {

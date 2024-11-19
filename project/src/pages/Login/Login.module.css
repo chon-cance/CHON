@@ -80,4 +80,8 @@ input::placeholder {
   border-radius: 10px;
   background-color: #394a4b;
   margin: 35px 0;
+  cursor: pointer;
+}
+.loginForm_Btn:hover {
+  background-color: #2c3b3b;
 }
