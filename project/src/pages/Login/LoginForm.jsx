@@ -3,6 +3,7 @@ import ResisterTag from "./ResisterTag";
 import styles from "./Login.module.css";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 
 const LoginForm = () => {
   const [formData, setFormData] = useState({
@@ -11,6 +12,8 @@ const LoginForm = () => {
   });
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  const { login } = useAuth();
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -22,10 +25,9 @@ const LoginForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+    console.log("🔑 Login attempt...", formData);
 
     try {
-      console.log("로그인 시도:", formData);
-
       const response = await fetch("http://192.168.0.72:8080/user/login", {
         method: "POST",
         headers: {
@@ -34,26 +36,25 @@ const LoginForm = () => {
         body: JSON.stringify(formData),
       });
 
-      console.log("서버 응답:", response);
-
       const data = await response.json();
-      console.log("응답 데이터:", data);
+      console.log("📡 Server response:", data);
 
       if (response.ok) {
         if (data.id) {
-          console.log("로그인 성공:", data);
-          localStorage.setItem("user", JSON.stringify(data));
+          console.log("✅ Login successful:", data);
+          login(data);
           navigate("/");
+          console.log("🏠 Redirected to home page");
         } else {
-          console.log("로그인 실패:", data.message);
+          console.error("❌ Login failed:", data.message);
           setError(data.message);
         }
       } else {
-        console.log("로그인 에러:", data.message);
+        console.error("❌ Login error:", data.message);
         setError(data.message || "로그인에 실패했습니다.");
       }
     } catch (error) {
-      console.error("API 호출 에러:", error);
+      console.error("💥 API call error:", error);
       setError("서버 연결에 실패했습니다.");
     }
   };
@@ -76,6 +77,7 @@ const LoginForm = () => {
         onChange={handleChange}
         name="password"
       />
+      {error && <div className={styles.error}>{error}</div>}
       <ResisterTag />
       <button type="submit" className={styles.loginForm_Btn}>
         로그인

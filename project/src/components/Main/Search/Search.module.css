@@ -14,6 +14,7 @@
   color: #394a4b;
 }
 .search_warp {
+  position: relative;
   max-width: 1000px;
   border-radius: 100px;
   background-color: white;
@@ -40,9 +41,6 @@
   font-size: 18px;
   color: #b0b0b0;
   padding-top: 10px;
-}
-.search_category_warp:nth-of-type(4) {
-  border: none;
 }
 
 .search_Btn_warp1 {
@@ -100,7 +98,7 @@
   .search_category_warp:nth-of-type(3) {
     width: 45%;
   }
-  .search_category_warp:nth-of-type(4) {
+  .search_category_warp.guests_warp {
     width: 100%;
     border-top: 1px solid #e4dbcd;
   }
@@ -182,12 +180,20 @@
 .calendar_wrapper {
   position: absolute;
   top: 100%;
-  left: 0;
+  left: 50%;
+  transform: translateX(-50%);
   z-index: 1000;
-  background: white;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  margin-top: 12px;
+}
+
+@media screen and (max-width: 768px) {
+  .calendar_wrapper {
+    left: 0;
+    transform: none;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
 }
 
 .guests_selector {

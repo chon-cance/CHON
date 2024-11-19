@@ -4,7 +4,7 @@ import "../../StyledCalender/StyledCalender.css";
 import styles from "./Search.module.css";
 import searchIcon from "/img/searchIcon.png";
 import { searchAccommodations } from "../../../api/accommodationSearch";
-import AccomSearchTest from "../../AccomSearchTest/AccomSearchTest";
+import AccomSearch from "./AccomSearch/AccomSearch";
 
 // 지역 데이터
 const REGIONS = [
@@ -29,8 +29,7 @@ export default function Search() {
   // 상태 관리
   const [activeField, setActiveField] = useState(null); // 현재 활성화된 필드
   const [selectedRegion, setSelectedRegion] = useState("");
-  const [checkIn, setCheckIn] = useState(null);
-  const [checkOut, setCheckOut] = useState(null);
+  const [dateRange, setDateRange] = useState([null, null]);
   const [guests, setGuests] = useState(1);
   const [error, setError] = useState("");
   const [searchResults, setSearchResults] = useState(null);
@@ -54,8 +53,8 @@ export default function Search() {
       // 검색 파라미터 구성
       const searchParams = {
         region: selectedRegion,
-        checkIn: formatDate(checkIn),
-        checkOut: formatDate(checkOut),
+        checkIn: formatDate(dateRange[0]),
+        checkOut: formatDate(dateRange[1]),
         person: guests,
       };
 
@@ -79,8 +78,12 @@ export default function Search() {
     e.stopPropagation();
   };
 
+  const handleDateChange = (value) => {
+    setDateRange(value);
+  };
+
   return (
-    <div className={styles.search}>
+    <div className={styles.search} id="search">
       <div className="w1200">
         <div className={styles.search_conteiner}>
           <div className={styles.search_title}>촌캉스 숙소 검색하기</div>
@@ -125,61 +128,46 @@ export default function Search() {
             <div
               className={styles.search_category_warp}
               onClick={() =>
-                setActiveField(activeField === "checkIn" ? null : "checkIn")
+                setActiveField(activeField === "calendar" ? null : "calendar")
               }
             >
               <div className={styles.search_category}>체크인</div>
               <div className={styles.search_value}>
-                {checkIn ? checkIn.toLocaleDateString() : "날짜 추가"}
+                {dateRange[0] ? dateRange[0].toLocaleDateString() : "날짜 추가"}
               </div>
-
-              {activeField === "checkIn" && (
-                <div
-                  className={styles.calendar_wrapper}
-                  onClick={handleCalendarClick} // 달력 영역 클릭 시 이벤트 전파 방지
-                >
-                  <StyledCalender
-                    onChange={(date) => {
-                      setCheckIn(date);
-                      setActiveField("checkOut"); // 체크인 선택 후 체크아웃으로 자동 전환
-                    }}
-                    minDate={new Date()}
-                  />
-                </div>
-              )}
             </div>
 
             {/* 체크아웃 */}
             <div
               className={styles.search_category_warp}
               onClick={() =>
-                setActiveField(activeField === "checkOut" ? null : "checkOut")
+                setActiveField(activeField === "calendar" ? null : "calendar")
               }
             >
               <div className={styles.search_category}>체크아웃</div>
               <div className={styles.search_value}>
-                {checkOut ? checkOut.toLocaleDateString() : "날짜 추가"}
+                {dateRange[1] ? dateRange[1].toLocaleDateString() : "날짜 추가"}
               </div>
-
-              {activeField === "checkOut" && (
-                <div
-                  className={styles.calendar_wrapper}
-                  onClick={handleCalendarClick}
-                >
-                  <StyledCalender
-                    onChange={(date) => {
-                      setCheckOut(date);
-                      setActiveField(null);
-                    }}
-                    minDate={checkIn || new Date()}
-                  />
-                </div>
-              )}
             </div>
+
+            {/* 하나의 공유 달력 */}
+            {activeField === "calendar" && (
+              <div
+                className={styles.calendar_wrapper}
+                onClick={handleCalendarClick}
+              >
+                <StyledCalender
+                  onChange={handleDateChange}
+                  minDate={new Date()}
+                  value={dateRange}
+                  selectRange={true}
+                />
+              </div>
+            )}
 
             {/* 인원수 */}
             <div
-              className={styles.search_category_warp}
+              className={`${styles.search_category_warp} ${styles.guests_warp}`}
               onClick={() =>
                 setActiveField(activeField === "guests" ? null : "guests")
               }
@@ -197,7 +185,7 @@ export default function Search() {
                   >
                     -
                   </button>
-                  <span>{guests}명</span>
+                  <span>{guests}</span>
                   <button
                     onClick={(e) => {
                       e.stopPropagation(); // 이벤트 전파 중지
@@ -223,7 +211,7 @@ export default function Search() {
           </button>
         </div>
       </div>
-      {searchResults && <AccomSearchTest accommodations={searchResults} />}
+      {searchResults && <AccomSearch accommodations={searchResults} />}
     </div>
   );
 }
