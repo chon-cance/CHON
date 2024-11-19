@@ -4,8 +4,18 @@ import logo2 from "/img/logo2.png";
 
 import { useEffect } from "react";
 import gsap from "gsap";
+import { useAuth } from "../../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 export default function Header() {
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate("/"); // 로그아웃 후 메인 페이지로 이동
+  };
+
   useEffect(() => {
     // 두 번째 로고 (logo2) 애니메이션: 아래에서 위로 먼저 떨어짐
     gsap.fromTo(
@@ -65,12 +75,24 @@ export default function Header() {
       <div className="w1200">
         <nav>
           <ul>
-            <li>
-              <a href="/register">회원가입</a>
-            </li>
-            <li>
-              <a href="/login">로그인</a>
-            </li>
+            {user ? (
+              // 로그인 상태
+              <li>
+                <button onClick={handleLogout} className={styles.logout}>
+                  로그아웃
+                </button>
+              </li>
+            ) : (
+              // 비로그인 상태
+              <>
+                <li>
+                  <a href="/register">회원가입</a>
+                </li>
+                <li>
+                  <a href="/login">로그인</a>
+                </li>
+              </>
+            )}
           </ul>
         </nav>
         <div className={styles.logo_conteiner}>
