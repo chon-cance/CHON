@@ -1,9 +1,9 @@
 import { useState } from "react";
 import ReactPaginate from "react-paginate";
-import ChonCard from "../Main/List/SwiperChonList/ChonCard/ChonCard";
-import styles from "./AccomSearchTest.module.css";
+import ChonCard from "../../List/SwiperChonList/ChonCard/ChonCard";
+import styles from "./AccomSearch.module.css";
 
-export default function AccomSearchTest({ accommodations }) {
+export default function AccomSearch({ accommodations }) {
   const [currentPage, setCurrentPage] = useState(0);
   const itemsPerPage = 4;
 
