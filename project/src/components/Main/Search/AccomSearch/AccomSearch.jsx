@@ -1,11 +1,36 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ReactPaginate from "react-paginate";
 import ChonCard from "../../List/SwiperChonList/ChonCard/ChonCard";
 import styles from "./AccomSearch.module.css";
 
 export default function AccomSearch({ accommodations }) {
   const [currentPage, setCurrentPage] = useState(0);
-  const itemsPerPage = 4;
+  const [itemsPerPage, setItemsPerPage] = useState(4);
+
+  // 화면 크기에 따라 itemsPerPage 조절
+  useEffect(() => {
+    const handleResize = () => {
+      const width = window.innerWidth;
+      if (width > 1000) {
+        setItemsPerPage(4);
+      } else if (width > 710) {
+        setItemsPerPage(3);
+      } else if (width > 400) {
+        setItemsPerPage(2);
+      } else {
+        setItemsPerPage(1);
+      }
+    };
+
+    // 초기 실행
+    handleResize();
+
+    // resize 이벤트 리스너 등록
+    window.addEventListener("resize", handleResize);
+
+    // cleanup
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   // 전체 페이지 수 계산
   const pageCount = Math.ceil(accommodations?.length / itemsPerPage);
@@ -24,12 +49,6 @@ export default function AccomSearch({ accommodations }) {
 
   return (
     <div className={styles.container}>
-      <div className={styles.cardContainer}>
-        {currentAccommodations.map((accommodation) => (
-          <ChonCard key={accommodation.id} accommodations={accommodation} />
-        ))}
-      </div>
-
       <ReactPaginate
         previousLabel={null}
         nextLabel={null}
@@ -42,6 +61,12 @@ export default function AccomSearch({ accommodations }) {
         disabledClassName={styles.disabled}
         pageClassName={styles.pageItem}
       />
+
+      <div className={styles.cardContainer}>
+        {currentAccommodations.map((accommodation) => (
+          <ChonCard key={accommodation._id} accommodations={accommodation} />
+        ))}
+      </div>
     </div>
   );
 }

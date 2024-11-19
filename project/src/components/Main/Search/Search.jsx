@@ -80,14 +80,10 @@ export default function Search() {
 
   const handleDateChange = (value) => {
     setDateRange(value);
-    if (value[1]) {
-      // 체크아웃 날짜가 선택되면
-      setActiveField(null); // 달력 닫기
-    }
   };
 
   return (
-    <div className={styles.search}>
+    <div className={styles.search} id="search">
       <div className="w1200">
         <div className={styles.search_conteiner}>
           <div className={styles.search_title}>촌캉스 숙소 검색하기</div>
@@ -171,7 +167,7 @@ export default function Search() {
 
             {/* 인원수 */}
             <div
-              className={styles.search_category_warp}
+              className={`${styles.search_category_warp} ${styles.guests_warp}`}
               onClick={() =>
                 setActiveField(activeField === "guests" ? null : "guests")
               }

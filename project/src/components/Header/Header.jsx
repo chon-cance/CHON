@@ -13,6 +13,8 @@ export default function Header() {
 
   const handleLogout = () => {
     logout();
+    window.alert("로그아웃 되었습니다.");
+    window.location.reload();
     navigate("/"); // 로그아웃 후 메인 페이지로 이동
   };
 
