@@ -1,10 +1,10 @@
 import { useState } from "react";
-import Calendar from "react-calendar";
-import "react-calendar/dist/Calendar.css";
+import StyledCalender from "../../StyledCalender/StyledCalender";
+import "../../StyledCalender/StyledCalender.css";
 import styles from "./Search.module.css";
 import searchIcon from "/img/searchIcon.png";
 import { searchAccommodations } from "../../../api/accommodationSearch";
-import AccomSearchTest from "../../AccomSearchTest/AccomSearchTest";
+import AccomSearch from "./AccomSearch/AccomSearch";
 
 // 지역 데이터
 const REGIONS = [
@@ -29,14 +29,16 @@ export default function Search() {
   // 상태 관리
   const [activeField, setActiveField] = useState(null); // 현재 활성화된 필드
   const [selectedRegion, setSelectedRegion] = useState("");
-  const [checkIn, setCheckIn] = useState(null);
-  const [checkOut, setCheckOut] = useState(null);
+  const [dateRange, setDateRange] = useState([null, null]);
   const [guests, setGuests] = useState(1);
   const [error, setError] = useState("");
   const [searchResults, setSearchResults] = useState(null);
 
   // 검색 처리
   const handleSearch = async () => {
+    // 모든 드롭다운 닫기
+    setActiveField(null);
+
     try {
       setError("");
 
@@ -51,8 +53,8 @@ export default function Search() {
       // 검색 파라미터 구성
       const searchParams = {
         region: selectedRegion,
-        checkIn: formatDate(checkIn),
-        checkOut: formatDate(checkOut),
+        checkIn: formatDate(dateRange[0]),
+        checkOut: formatDate(dateRange[1]),
         person: guests,
       };
 
@@ -68,6 +70,19 @@ export default function Search() {
       console.error("검색 오류:", error);
       setError(error.message || "검색 중 오류가 발생했습니다.");
       window.alert(error.message || "검색 중 오류가 발생했습니다.");
+    }
+  };
+
+  // 달력 클릭 이벤트 전파 방지
+  const handleCalendarClick = (e) => {
+    e.stopPropagation();
+  };
+
+  const handleDateChange = (value) => {
+    setDateRange(value);
+    if (value[1]) {
+      // 체크아웃 날짜가 선택되면
+      setActiveField(null); // 달력 닫기
     }
   };
 
@@ -102,7 +117,9 @@ export default function Search() {
                         setSelectedRegion(region);
                         setActiveField(null);
                       }}
-                      className={styles.region}
+                      className={`${styles.region} ${
+                        selectedRegion === region ? styles.selected : ""
+                      }`}
                     >
                       {region}
                     </div>
@@ -115,51 +132,42 @@ export default function Search() {
             <div
               className={styles.search_category_warp}
               onClick={() =>
-                setActiveField(activeField === "checkIn" ? null : "checkIn")
+                setActiveField(activeField === "calendar" ? null : "calendar")
               }
             >
               <div className={styles.search_category}>체크인</div>
               <div className={styles.search_value}>
-                {checkIn ? checkIn.toLocaleDateString() : "날짜 추가"}
+                {dateRange[0] ? dateRange[0].toLocaleDateString() : "날짜 추가"}
               </div>
-
-              {activeField === "checkIn" && (
-                <div className={styles.calendar_wrapper}>
-                  <Calendar
-                    onChange={(date) => {
-                      setCheckIn(date);
-                      setActiveField("checkOut"); // 체크인 선택 후 체크아웃으로 이동
-                    }}
-                    minDate={new Date()}
-                  />
-                </div>
-              )}
             </div>
 
             {/* 체크아웃 */}
             <div
               className={styles.search_category_warp}
               onClick={() =>
-                setActiveField(activeField === "checkOut" ? null : "checkOut")
+                setActiveField(activeField === "calendar" ? null : "calendar")
               }
             >
               <div className={styles.search_category}>체크아웃</div>
               <div className={styles.search_value}>
-                {checkOut ? checkOut.toLocaleDateString() : "날짜 추가"}
+                {dateRange[1] ? dateRange[1].toLocaleDateString() : "날짜 추가"}
               </div>
-
-              {activeField === "checkOut" && (
-                <div className={styles.calendar_wrapper}>
-                  <Calendar
-                    onChange={(date) => {
-                      setCheckOut(date);
-                      setActiveField(null);
-                    }}
-                    minDate={checkIn || new Date()}
-                  />
-                </div>
-              )}
             </div>
+
+            {/* 하나의 공유 달력 */}
+            {activeField === "calendar" && (
+              <div
+                className={styles.calendar_wrapper}
+                onClick={handleCalendarClick}
+              >
+                <StyledCalender
+                  onChange={handleDateChange}
+                  minDate={new Date()}
+                  value={dateRange}
+                  selectRange={true}
+                />
+              </div>
+            )}
 
             {/* 인원수 */}
             <div
@@ -169,7 +177,7 @@ export default function Search() {
               }
             >
               <div className={styles.search_category}>인원수</div>
-              <div className={styles.search_value}>{`게스트 ${guests}명`}</div>
+              <div className={styles.search_value}>{`${guests}`}</div>
 
               {activeField === "guests" && (
                 <div className={styles.guests_selector}>
@@ -181,7 +189,7 @@ export default function Search() {
                   >
                     -
                   </button>
-                  <span>{guests}명</span>
+                  <span>{guests}</span>
                   <button
                     onClick={(e) => {
                       e.stopPropagation(); // 이벤트 전파 중지
@@ -207,7 +215,7 @@ export default function Search() {
           </button>
         </div>
       </div>
-      {searchResults && <AccomSearchTest accommodations={searchResults} />}
+      {searchResults && <AccomSearch accommodations={searchResults} />}
     </div>
   );
 }

@@ -42,6 +42,17 @@ nav ul li a:hover {
   color: #ffe49f;
 }
 
+.logout {
+  color: white;
+  font-size: 18px;
+  background-color: transparent;
+}
+
+.logout:hover {
+  color: #ffe49f;
+  cursor: pointer;
+}
+
 /*======================*/
 /* header 촌스럽게 로고 */
 /*======================*/
