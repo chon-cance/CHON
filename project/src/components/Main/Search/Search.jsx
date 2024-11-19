@@ -1,6 +1,6 @@
 import { useState } from "react";
-import Calendar from "react-calendar";
-import "react-calendar/dist/Calendar.css";
+import StyledCalender from "../../StyledCalender/StyledCalender";
+import "../../StyledCalender/StyledCalender.css";
 import styles from "./Search.module.css";
 import searchIcon from "/img/searchIcon.png";
 import { searchAccommodations } from "../../../api/accommodationSearch";
@@ -37,6 +37,9 @@ export default function Search() {
 
   // 검색 처리
   const handleSearch = async () => {
+    // 모든 드롭다운 닫기
+    setActiveField(null);
+
     try {
       setError("");
 
@@ -71,6 +74,11 @@ export default function Search() {
     }
   };
 
+  // 달력 클릭 이벤트 전파 방지
+  const handleCalendarClick = (e) => {
+    e.stopPropagation();
+  };
+
   return (
     <div className={styles.search}>
       <div className="w1200">
@@ -102,7 +110,9 @@ export default function Search() {
                         setSelectedRegion(region);
                         setActiveField(null);
                       }}
-                      className={styles.region}
+                      className={`${styles.region} ${
+                        selectedRegion === region ? styles.selected : ""
+                      }`}
                     >
                       {region}
                     </div>
@@ -124,11 +134,14 @@ export default function Search() {
               </div>
 
               {activeField === "checkIn" && (
-                <div className={styles.calendar_wrapper}>
-                  <Calendar
+                <div
+                  className={styles.calendar_wrapper}
+                  onClick={handleCalendarClick} // 달력 영역 클릭 시 이벤트 전파 방지
+                >
+                  <StyledCalender
                     onChange={(date) => {
                       setCheckIn(date);
-                      setActiveField("checkOut"); // 체크인 선택 후 체크아웃으로 이동
+                      setActiveField("checkOut"); // 체크인 선택 후 체크아웃으로 자동 전환
                     }}
                     minDate={new Date()}
                   />
@@ -149,8 +162,11 @@ export default function Search() {
               </div>
 
               {activeField === "checkOut" && (
-                <div className={styles.calendar_wrapper}>
-                  <Calendar
+                <div
+                  className={styles.calendar_wrapper}
+                  onClick={handleCalendarClick}
+                >
+                  <StyledCalender
                     onChange={(date) => {
                       setCheckOut(date);
                       setActiveField(null);
@@ -169,7 +185,7 @@ export default function Search() {
               }
             >
               <div className={styles.search_category}>인원수</div>
-              <div className={styles.search_value}>{`게스트 ${guests}명`}</div>
+              <div className={styles.search_value}>{`${guests}`}</div>
 
               {activeField === "guests" && (
                 <div className={styles.guests_selector}>
