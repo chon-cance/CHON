@@ -1,6 +1,9 @@
+import { useState } from "react";
 import styles from "./ChonCard.module.css";
+import Modal from "../../../../Modal/Modal";
 
 export default function ChonCard({ accommodations }) {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   if (!accommodations) return null;
 
   const backgroundStyle = {
@@ -16,22 +19,31 @@ export default function ChonCard({ accommodations }) {
   };
 
   return (
-    <div className={styles.card}>
-      <div
-        className={styles.card_img}
-        style={backgroundStyle}
-        onError={handleImageError}
-      ></div>
-      <div className={styles.chon_address}>
-        <div className={styles.address}>{accommodations.address}</div>
-        <div>
-          <span>
-            <img src="/img/star.png" alt="star" />
-          </span>
-          <span>4.5(3)</span>
+    <>
+      <div className={styles.card} onClick={() => setIsModalOpen(true)}>
+        <div
+          className={styles.card_img}
+          style={backgroundStyle}
+          onError={handleImageError}
+        ></div>
+        <div className={styles.chon_address}>
+          <div className={styles.address}>{accommodations.address}</div>
+          <div>
+            <span>
+              <img src="/img/star.png" alt="star" />
+            </span>
+            <span>4.5(3)</span>
+          </div>
         </div>
+        <div className={styles.chon_name}>{accommodations.name}</div>
       </div>
-      <div className={styles.chon_name}>{accommodations.name}</div>
-    </div>
+
+      {isModalOpen && (
+        <Modal
+          accommodation={accommodations}
+          onClose={() => setIsModalOpen(false)}
+        />
+      )}
+    </>
   );
 }

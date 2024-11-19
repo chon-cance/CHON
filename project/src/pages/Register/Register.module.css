@@ -71,6 +71,7 @@ input::placeholder {
 
 .checkbox_text {
   margin-left: 10px;
+  cursor: pointer;
 }
 
 /*=======================================*/
@@ -86,4 +87,9 @@ input::placeholder {
   border-radius: 10px;
   background-color: #394a4b;
   margin-bottom: 35px;
+  cursor: pointer;
+}
+
+.registerForm_Btn:hover {
+  background-color: #2c3b3b;
 }

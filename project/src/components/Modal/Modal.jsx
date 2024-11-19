@@ -1,22 +1,35 @@
 import styles from "./Modal.module.css";
+import { createPortal } from "react-dom";
 
-export default function Modal() {
-  return (
-    <div className={styles.dialog}>
-      <div className={styles.closeBtn_warp}>
-        <button className={styles.closeBtn}>⨯</button>
-      </div>
+export default function Modal({ accommodation, onClose }) {
+  return createPortal(
+    <div className={styles.modalOverlay} onClick={onClose}>
+      <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
+        <button className={styles.closeButton} onClick={onClose}>
+          ✕
+        </button>
 
-      <div>
-        <div>
-          <div>사진</div>
-          <div className={styles.dddd}>
-            <div>숙소정보</div>
-            <div>예약폼</div>
-          </div>
+        <div className={styles.imageSection}>
+          {accommodation.photo.map((photo, index) => (
+            <img
+              key={index}
+              src={`/img/${accommodation.accommodation_num}/${photo}`}
+              alt={`숙소 이미지 ${index + 1}`}
+            />
+          ))}
         </div>
-        <div>후기</div>
+
+        <div className={styles.infoSection}>
+          <h2>{accommodation.name}</h2>
+          <p className={styles.address}>{accommodation.address}</p>
+          <p className={styles.price}>
+            가격: {accommodation.price.toLocaleString()}원
+          </p>
+          <div className={styles.description}>{accommodation.description}</div>
+          {/* 추가 정보들 */}
+        </div>
       </div>
-    </div>
+    </div>,
+    document.getElementById("modal-root")
   );
 }

@@ -24,6 +24,10 @@ const reservationSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
+    message: {
+      type: String,
+      default: null,
+    },
     state: {
       // 대기:await, 승인:confirm, 거절:decline, 삭제:delete
       type: String,
