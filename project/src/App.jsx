@@ -13,6 +13,7 @@ export default function App() {
       {" "}
       <Header />
       <Main />
+      <HostResve id="6736cf81ecb105bbcde2471e" /> {/* 예약정보 (reservationId) 필요 */}
       <Footer />
     </>
   );
