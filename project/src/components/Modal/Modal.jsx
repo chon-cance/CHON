@@ -1,22 +1,22 @@
-import styles from "./Modal.module.css";
+import React from "react";
+import "./Modal.css";
 
-export default function Modal() {
+const Modal = ({ isOpen, onClose, children }) => {
+  if (!isOpen) return null;
+
   return (
-    <div className={styles.dialog}>
-      <div className={styles.closeBtn_warp}>
-        <button className={styles.closeBtn}>⨯</button>
-      </div>
-
-      <div>
-        <div>
-          <div>사진</div>
-          <div className={styles.dddd}>
-            <div>숙소정보</div>
-            <div>예약폼</div>
-          </div>
-        </div>
-        <div>후기</div>
+    <div className="modal-overlay" onClick={onClose}>
+      <div
+        className="modal-container"
+        onClick={(e) => e.stopPropagation()} // 클릭 이벤트 전파 방지
+      >
+        <button className="modal-close" onClick={onClose}>
+          ×
+        </button>
+        {children}
       </div>
     </div>
   );
-}
+};
+
+export default Modal;
