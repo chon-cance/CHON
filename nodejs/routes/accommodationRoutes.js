@@ -50,11 +50,9 @@ router.get("/top_grade", async (req, res) => {
  */
 router.get("/detail", async (req, res) => {
   try {
-    const accommodation_num = req.body.accommodation_num;
+    const accommodationId = req.query.accommodationId;
 
-    const accommodationData = await Accommodation.findOne({
-      accommodation_num: accommodation_num,
-    });
+    const accommodationData = await Accommodation.findOne({ _id: accommodationId });
     if (accommodationData) {
       res.status(200).json(accommodationData);
     } else {
@@ -66,16 +64,16 @@ router.get("/detail", async (req, res) => {
 });
 
 /**
- * 숙소의 예약 정보
+ * 숙소의 예약 timeslots (전체 예약의 모든 timeslot을 반환함)
  */
-router.get("/reservation", async (req, res) => {
+router.get("/timeslots", async (req, res) => {
   try {
     const accommodationId = req.query.accommodationId;
 
     // 1. 숙소의 모든 예약 조회
     const reservationData = await Reservation.find({
       accommodationId: accommodationId,
-      // endDate: { $gte: new Date() },
+      endDate: { $gte: new Date() },
     });
 
     console.log(`숙소 ${accommodationId}의 예약 수:`, reservationData.length);
@@ -123,7 +121,7 @@ router.get("/reservation", async (req, res) => {
       });
 
       console.log("날짜별 예약 상태:", dateAvailability);
-      res.status(200).json({ reservationIds: reservationIds, dateAvailability: dateAvailability });
+      res.status(200).json(dateAvailability);
 
       // // 모든 reservationId에 대해 timeSlot을 조회
       // const timeSlotPromises = reservationData.map(async (i) => {
@@ -137,6 +135,35 @@ router.get("/reservation", async (req, res) => {
       // timeSlotData = await Promise.all(timeSlotPromises);
 
       // res.status(200).json({ reservationData: reservationData, timeSlotData: timeSlotData });
+    } else {
+      res.status(500).json({ message: "예약 정보가 없습니다." });
+    }
+  } catch (e) {
+    res.status(500).json({ message: e.message });
+  }
+});
+
+/**
+ * 숙소의 예약 정보
+ */
+router.get("/reservations", async (req, res) => {
+  try {
+    const accommodationId = req.query.accommodationId;
+
+    // 1. 숙소의 모든 예약 조회
+    const reservationDatas = await Reservation.find({ accommodationId: accommodationId });
+
+    if (reservationDatas.length > 0) {
+      // 2. 예약 ID 목록 생성
+      const reservationPromises = reservationDatas.map(async (res) => {
+        const data = await Reservation.findOne({ _id: res._id }).populate("accommodationId", "name address phone price region").populate("userId", "name phone").sort({ startDate: -1 });
+        return data;
+      });
+
+      // 모든 프로미스가 완료될 때까지 기다림
+      const reservationData = await Promise.all(reservationPromises);
+
+      res.status(200).json({ reservationData: reservationData });
     } else {
       res.status(500).json({ message: "예약 정보가 없습니다." });
     }

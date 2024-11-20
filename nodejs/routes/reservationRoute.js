@@ -34,7 +34,7 @@ router.post("/create", async (req, res) => {
   session.startTransaction();
 
   try {
-    const { accommodationId, userId, startDate, endDate, person } = req.body;
+    const { accommodationId, userId, startDate, endDate, person, message } = req.body;
     const nowDate = new Date(new Date().getTime() + 9 * 60 * 60 * 1000); // 대한민국 시간
 
     // 2. 예약 생성(reservation 에 insert)
@@ -44,6 +44,7 @@ router.post("/create", async (req, res) => {
       startDate: startDate,
       endDate: endDate,
       person: person,
+      message: message,
       state: "await",
       createdAt: nowDate,
     });

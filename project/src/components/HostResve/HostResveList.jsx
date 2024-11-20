@@ -1,54 +1,27 @@
-import styles from "./HostResve.module.css";
+import styles from "./HostResveList.module.css";
 import logo3 from "/img/logo3.png";
-import exit from "/img/exit.png";
 import resve from "/img/resve.png";
 import { useState, useEffect } from "react";
-import { ShowAlert, ShowConfirm, ShowLoading } from "../../AlertUtils.js";
+// import { ShowAlert, ShowConfirm, ShowLoading } from "../../AlertUtils.js";
 
 export default function HostResveList({ id }) {
   const [reservationData, setReservationData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [reservation, setReservation] = useState({
-    state: "승인대기",
-    color: { color: "red" },
-    view: true,
-  });
-  let reservationIds = [];
+  const [accommodationName, setAccommodationName] = useState("");
 
   const fetchReservation = async () => {
     try {
-      const response = await fetch(`http://192.168.0.72:8080/accomodations/reservation?accomodationId=${id}`);
+      const acc_response = await fetch(`http://192.168.0.72:8080/accommodations/detail?accommodationId=${id}`);
+      const acc_data = await acc_response.json();
+      setAccommodationName(acc_data.name);
+
+      const response = await fetch(`http://192.168.0.72:8080/accommodations/reservations?accommodationId=${id}`);
 
       const data = await response.json();
-      reservationIds = data.reservationIds;
+      const reservationDatas = data.reservationData;
 
-      const fetchedReservations = await Promise.all(reservationIds.map((id) => fetchReservationData(id)));
-      setReservationData(fetchedReservations);
-      setLoading(false);
-
-      const fetchReservationData = async (id) => {
-        try {
-          const response = await fetch(`http://192.168.0.72:8080/reservations/?reservationId=${id}`);
-          if (!response.ok) {
-            throw new Error("예약 정보를 불러오는 데 실패했습니다.");
-          }
-          return await response.json(); // JSON으로 변환하여 반환
-        } catch (error) {
-          console.error(error);
-          return null; // 오류 발생 시 null 반환
-        }
-      };
-
-      //   if (data.state == "confirm") {
-      //     setReservation({ state: "승인완료", color: { color: "#394A4B" }, view: false });
-      //   } else if (data.state == "decline") {
-      //     setReservation({ state: "승인거절", color: { color: "#a6a6a6" }, view: false });
-      //   } else if (data.state == "delete") {
-      //     setReservation({ state: "취소된 예약", color: { color: "red" }, view: false });
-      //   }
-
-      //   setReservationData(data); // 예약 정보 저장
+      setReservationData(reservationDatas); // 예약 정보 저장
     } catch (err) {
       setError("예약 정보를 불러오는 데 실패했습니다."); // 오류 처리
     } finally {
@@ -68,33 +41,39 @@ export default function HostResveList({ id }) {
           <img src={logo3} alt="" />
         </div>
       </div>
-      {loading && <p>로딩 중...</p>}
-      {error && <p style={{ color: "red" }}>{error}</p>}
-      {reservationIds &&
-        reservationIds.map((res, index) => {
-          <div className={styles.hostResve_main} key={index}>
-            <div className={styles.userName}>
-              <b>{/* {reservationData.accommodationId.name} */}</b> 님
-            </div>
-            <div className={styles.hostResve_title}>
-              <img src={resve} alt="" />
-              <p>예약 관리</p>
-            </div>
-            <div className={styles.approvalResult}>
-              <p style={reservation.color}>{reservation.state}</p>
-            </div>
-            <div className={styles.hostResve_box}>
-              <div className={styles.guest_infoValue}>
-                <div>{reservationData.userId.name}</div>
-                {reservation.state == "승인완료" && !reservation.view && <div>{reservationData.userId.phone.replace(/(\d{3})(\d{4})(\d{4})/, "$1-$2-$3")}</div>}
-                <div>
-                  {reservationData.startDate.split("T")[0]} - {reservationData.endDate.split("T")[0]}
+      <div className={styles.hostResve_main}>
+        <div className={styles.userName}>
+          <b>{accommodationName}</b> 님
+        </div>
+        <div className={styles.hostResve_title}>
+          <img src={resve} alt="" />
+          <p>예약 관리</p>
+        </div>
+        {loading && <p>로딩 중...</p>}
+        {error && <p style={{ color: "red" }}>{error}</p>}
+        {reservationData &&
+          reservationData.map((res, index) => {
+            let resState = { state: "승인대기", color: { color: "red" } };
+            if (res.state == "confirm") {
+              resState = { state: "승인완료", color: { color: "#394A4B" } };
+            } else if (res.state == "decline") {
+              resState = { state: "승인거절", color: { color: "#a6a6a6" } };
+            } else if (res.state == "delete") {
+              resState = { state: "취소된 예약", color: { color: "red" } };
+            }
+            return (
+              <div className={styles.hostResve_box} key={index}>
+                <div className={styles.guest_infoValue}>
+                  {res.userId.name}
+                  <br /> {res.startDate.split("T")[0]} - {res.endDate.split("T")[0]}
+                </div>
+                <div className={styles.resveState} style={resState.color}>
+                  {resState.state}
                 </div>
               </div>
-              <div>승인대기</div>
-            </div>
-          </div>;
-        })}
+            );
+          })}
+      </div>
     </div>
   );
 }
