@@ -23,7 +23,7 @@ const router = createBrowserRouter([
     element: <Login />,
   },
   {
-    path: "/host/resve/:id",
+    path: "/host/resve",
     element: <HostResve />,
   },
   {

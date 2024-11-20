@@ -15,7 +15,7 @@ export default function ReservationItem({ reservation }) {
   }
 
   const handleClick = () => {
-    navigate(`/host/resve/${reservation._id}`); // 예약 상세 페이지로 이동
+    navigate(`/host/resve?id=${reservation._id}`);
   };
 
   return (

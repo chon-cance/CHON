@@ -1,13 +1,23 @@
-export const accommodationReservation = async (accommodationId) => {
+export const createReservation = async (reservationData) => {
   try {
     const response = await fetch(
-      `http://192.168.0.72:8080/accommodations/reservation?accommodationId=${accommodationId}`
+      `http://192.168.0.72:8080/reservations/create`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(reservationData),
+      }
     );
+
     if (!response.ok) {
-      throw new Error("숙소 예약 조회 실패");
+      throw new Error("예약 생성 실패");
     }
+
     return response.json();
   } catch (error) {
-    console.error("숙소 예약 조회 오류:", error);
+    console.error("예약 생성 오류:", error);
+    throw error; // 에러를 상위로 전파
   }
 };

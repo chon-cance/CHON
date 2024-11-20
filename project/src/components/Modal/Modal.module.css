@@ -370,3 +370,15 @@ a:hover {
     height: 60px;
   }
 }
+
+.errorMessage {
+  color: red;
+  font-size: 14px;
+  margin-top: 8px;
+  text-align: center;
+}
+
+.reserveButton:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}

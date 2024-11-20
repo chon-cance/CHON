@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { createPortal } from "react-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 
 import "swiper/css";
 import styles from "./Modal.module.css";
@@ -13,14 +15,65 @@ export default function Modal({ accommodation, onClose }) {
   const [checkOut, setCheckOut] = useState("");
   const [guests, setGuests] = useState(1);
   const [requests, setRequests] = useState("");
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
+  const { user } = useAuth();
 
   const handlePhotoClick = (index) => setCurrentPhoto(index);
 
-  const handleReservation = () => {
-    setCheckIn("");
-    setCheckOut("");
-    setGuests(1);
-    setRequests("");
+  const handleReservation = async () => {
+    try {
+      if (!user) {
+        alert("로그인이 필요한 서비스입니다.");
+        navigate("/login");
+        return;
+      }
+
+      if (!checkIn || !checkOut || !guests) {
+        alert("모든 필수 항목을 입력해주세요.");
+        return;
+      }
+
+      const reservationData = {
+        accommodationId: accommodation._id,
+        userId: user._id,
+        startDate: new Date(checkIn).toISOString(),
+        endDate: new Date(checkOut).toISOString(),
+        person: parseInt(guests),
+        message: requests || "",
+      };
+
+      console.log("Sending reservation data:", reservationData);
+
+      const response = await fetch(
+        "http://192.168.0.72:8080/reservations/create",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify(reservationData),
+        }
+      );
+
+      const data = await response.json();
+
+      if (response.ok) {
+        alert("예약이 완료되었습니다.");
+        setCheckIn("");
+        setCheckOut("");
+        setGuests(1);
+        setRequests("");
+        onClose();
+      } else {
+        throw new Error(data.message || "예약 처리 중 오류가 발생했습니다.");
+      }
+    } catch (error) {
+      console.error("Reservation error:", error);
+      setError(error.message);
+      alert(error.message);
+    }
   };
 
   // 별점 렌더링 함수 (노란색으로 색상 지정)
@@ -66,7 +119,11 @@ export default function Modal({ accommodation, onClose }) {
           >
             {accommodation.photo.map((photo, index) => (
               <SwiperSlide key={index}>
-                <img src={`/img/${accommodation.accommodation_num}/${photo}`} alt={`숙소 이미지 ${index + 1}`} className={styles.mainImage} />
+                <img
+                  src={`/img/${accommodation.accommodation_num}/${photo}`}
+                  alt={`숙소 이미지 ${index + 1}`}
+                  className={styles.mainImage}
+                />
               </SwiperSlide>
             ))}
           </Swiper>
@@ -84,11 +141,14 @@ export default function Modal({ accommodation, onClose }) {
               </p>
               <p className={styles.detail}>
                 <img src={icon2} alt="인원 아이콘" className={styles.icon} />
-                기준 {accommodation.person}명 / 최대 {accommodation.max_person} 명
+                기준 {accommodation.person}명 / 최대 {accommodation.max_person}{" "}
+                명
               </p>
             </div>
 
-            <p className={styles.price}>₩ {accommodation.price.toLocaleString()}</p>
+            <p className={styles.price}>
+              ₩ {accommodation.price.toLocaleString()}
+            </p>
           </div>
 
           <div className={styles.reservationSection}>
@@ -96,25 +156,48 @@ export default function Modal({ accommodation, onClose }) {
               <div className={styles.dateSection}>
                 <div className={styles.inputGroup}>
                   <label>체크인</label>
-                  <input type="date" value={checkIn} onChange={(e) => setCheckIn(e.target.value)} />
+                  <input
+                    type="date"
+                    value={checkIn}
+                    onChange={(e) => setCheckIn(e.target.value)}
+                  />
                 </div>
                 <div className={styles.inputGroup}>
                   <label>체크아웃</label>
-                  <input type="date" value={checkOut} onChange={(e) => setCheckOut(e.target.value)} />
+                  <input
+                    type="date"
+                    value={checkOut}
+                    onChange={(e) => setCheckOut(e.target.value)}
+                  />
                 </div>
                 <div className={styles.inputGroup}>
                   <label>인원수</label>
-                  <input type="number" min={1} max={accommodation.max_person} value={guests} onChange={(e) => setGuests(e.target.value)} />
+                  <input
+                    type="number"
+                    min={1}
+                    max={accommodation.max_person}
+                    value={guests}
+                    onChange={(e) => setGuests(e.target.value)}
+                  />
                 </div>
               </div>
               <div>
                 <div className={styles.inputGroup}>
-                  <textarea rows={3} value={requests} onChange={(e) => setRequests(e.target.value)} placeholder="전달사항을 기입해주세요."></textarea>
+                  <textarea
+                    rows={3}
+                    value={requests}
+                    onChange={(e) => setRequests(e.target.value)}
+                    placeholder="전달사항을 기입해주세요."
+                  ></textarea>
                 </div>
               </div>
             </div>
 
-            <button className={styles.reserveButton} onClick={handleReservation}>
+            {error && <div className={styles.error}>{error}</div>}
+            <button
+              className={styles.reserveButton}
+              onClick={handleReservation}
+            >
               예약 신청하기
             </button>
           </div>
@@ -122,20 +205,21 @@ export default function Modal({ accommodation, onClose }) {
 
         <div className={styles.reviewSection}>
           <div className={styles.reviewTitle}>
-          <span className={styles.reviewH3}>후기</span>
-          <span className={styles.starAndNumber}>
-            {/* 별 하나 표시, 색을 노란색으로 설정 */}
-            <span className={styles.starsWrapper}>
-              <span className={styles.star} style={{ color: "gold" }}>
-                {"★"}
+            <span className={styles.reviewH3}>후기</span>
+            <span className={styles.starAndNumber}>
+              {/* 별 하나 표시, 색을 노란색으로 설정 */}
+              <span className={styles.starsWrapper}>
+                <span className={styles.star} style={{ color: "gold" }}>
+                  {"★"}
+                </span>
               </span>
+              <span className={styles.averageRating}>
+                {/* 평균 별점 숫자 표시 */}
+                {calculateAverageGrade()}
+              </span>
+              ({accommodation.review.length})
             </span>
-            <span className={styles.averageRating}>
-              {/* 평균 별점 숫자 표시 */}
-              {calculateAverageGrade()}
-            </span>
-            ({accommodation.review.length})
-          </span></div>
+          </div>
           <Swiper
             slidesPerView={3} // 한 번에 3개 리뷰 표시
             spaceBetween={20} // 리뷰 간 간격 설정

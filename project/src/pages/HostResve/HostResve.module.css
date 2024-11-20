@@ -18,11 +18,12 @@
 .exit {
   font-size: 20px;
 }
-.exit a {
+.exit_btn {
   color: white;
   display: flex;
+  cursor: pointer;
 }
-.exit a p {
+.exit_btn p {
   padding-right: 10px;
 }
 
