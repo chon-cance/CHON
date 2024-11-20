@@ -2,7 +2,6 @@ import styles from "./HostResveList.module.css";
 import logo3 from "/img/logo3.png";
 import resve from "/img/resve.png";
 import { useState, useEffect } from "react";
-// import { ShowAlert, ShowConfirm, ShowLoading } from "../../AlertUtils.js";
 
 export default function HostResveList({ id }) {
   const [reservationData, setReservationData] = useState([]);
