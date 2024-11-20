@@ -50,7 +50,7 @@ export default function Modal({ accommodation, onClose }) {
   };
 
   return createPortal(
-    <div className={styles.modalOverlay} onClick={onClose}>
+    <div className={styles.modalOverlay}>
       <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
         <button className={styles.closeButton} onClick={onClose}>
           ✕
@@ -66,11 +66,7 @@ export default function Modal({ accommodation, onClose }) {
           >
             {accommodation.photo.map((photo, index) => (
               <SwiperSlide key={index}>
-                <img
-                  src={`/img/${accommodation.accommodation_num}/${photo}`}
-                  alt={`숙소 이미지 ${index + 1}`}
-                  className={styles.mainImage}
-                />
+                <img src={`/img/${accommodation.accommodation_num}/${photo}`} alt={`숙소 이미지 ${index + 1}`} className={styles.mainImage} />
               </SwiperSlide>
             ))}
           </Swiper>
@@ -82,93 +78,64 @@ export default function Modal({ accommodation, onClose }) {
             <p className={styles.description}>{accommodation.explain}</p>
 
             <div className={styles.locationAndDetails}>
-              <p className={styles.address}>
+              <p className={styles.detail}>
                 <img src={icon1} alt="지도 아이콘" className={styles.icon} />
-                <a
-                  href={accommodation.ref_url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {accommodation.address}
-                </a>
+                {accommodation.address}
               </p>
-              <p className={styles.details}>
+              <p className={styles.detail}>
                 <img src={icon2} alt="인원 아이콘" className={styles.icon} />
-                기준 {accommodation.person}명 / 최대 {accommodation.max_person}{" "}
-                명
+                기준 {accommodation.person}명 / 최대 {accommodation.max_person} 명
               </p>
             </div>
 
-            <p className={styles.price}>
-              ₩ {accommodation.price.toLocaleString()}
-            </p>
+            <p className={styles.price}>₩ {accommodation.price.toLocaleString()}</p>
           </div>
 
           <div className={styles.reservationSection}>
-            <div className={styles.dateSection}>
-              <div className={styles.inputGroup}>
-                <label>체크인</label>
-                <input
-                  type="date"
-                  value={checkIn}
-                  onChange={(e) => setCheckIn(e.target.value)}
-                />
+            <div className={styles.reser_box}>
+              <div className={styles.dateSection}>
+                <div className={styles.inputGroup}>
+                  <label>체크인</label>
+                  <input type="date" value={checkIn} onChange={(e) => setCheckIn(e.target.value)} />
+                </div>
+                <div className={styles.inputGroup}>
+                  <label>체크아웃</label>
+                  <input type="date" value={checkOut} onChange={(e) => setCheckOut(e.target.value)} />
+                </div>
+                <div className={styles.inputGroup}>
+                  <label>인원수</label>
+                  <input type="number" min={1} max={accommodation.max_person} value={guests} onChange={(e) => setGuests(e.target.value)} />
+                </div>
               </div>
-              <div className={styles.inputGroup}>
-                <label>체크아웃</label>
-                <input
-                  type="date"
-                  value={checkOut}
-                  onChange={(e) => setCheckOut(e.target.value)}
-                />
-              </div>
-              <div className={styles.inputGroup}>
-                <label>인원수</label>
-                <input
-                  type="number"
-                  min={1}
-                  max={accommodation.max_person}
-                  value={guests}
-                  onChange={(e) => setGuests(e.target.value)}
-                />
+              <div>
+                <div className={styles.inputGroup}>
+                  <textarea rows={3} value={requests} onChange={(e) => setRequests(e.target.value)} placeholder="전달사항을 기입해주세요."></textarea>
+                </div>
               </div>
             </div>
 
-            <div className={styles.inputGroup}>
-              <label>요청사항</label>
-              <textarea
-                rows={3}
-                value={requests}
-                onChange={(e) => setRequests(e.target.value)}
-                placeholder="요청사항을 입력해주세요."
-              ></textarea>
-            </div>
-
-            <button
-              className={styles.reserveButton}
-              onClick={handleReservation}
-            >
+            <button className={styles.reserveButton} onClick={handleReservation}>
               예약 신청하기
             </button>
           </div>
         </div>
 
         <div className={styles.reviewSection}>
-          <h3>
-            후기 ({accommodation.review.length}){" "}
-            <span className={styles.starAndNumber}>
-              {/* 별 하나 표시, 색을 노란색으로 설정 */}
-              <span className={styles.starsWrapper}>
-                <span className={styles.star} style={{ color: "gold" }}>
-                  {"★"}
-                </span>
-              </span>
-              <span className={styles.averageRating}>
-                {/* 평균 별점 숫자 표시 */}
-                {calculateAverageGrade()}
+          <div className={styles.reviewTitle}>
+          <span className={styles.reviewH3}>후기</span>
+          <span className={styles.starAndNumber}>
+            {/* 별 하나 표시, 색을 노란색으로 설정 */}
+            <span className={styles.starsWrapper}>
+              <span className={styles.star} style={{ color: "gold" }}>
+                {"★"}
               </span>
             </span>
-          </h3>
+            <span className={styles.averageRating}>
+              {/* 평균 별점 숫자 표시 */}
+              {calculateAverageGrade()}
+            </span>
+            ({accommodation.review.length})
+          </span></div>
           <Swiper
             slidesPerView={3} // 한 번에 3개 리뷰 표시
             spaceBetween={20} // 리뷰 간 간격 설정
