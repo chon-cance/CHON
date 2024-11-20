@@ -2,10 +2,12 @@ import styles from "./HostResve.module.css";
 import logo3 from "/img/logo3.png";
 import exit from "/img/exit.png";
 import resve from "/img/resve.png";
+import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { ShowAlert, ShowConfirm, ShowLoading } from "../../AlertUtils.js";
 
-export default function HostResve({ id }) {
+export default function HostResve() {
+  const { id } = useParams();
   const [reservationData, setReservationData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -17,16 +19,30 @@ export default function HostResve({ id }) {
 
   const fetchReservationData = async () => {
     try {
-      const response = await fetch(`http://192.168.0.72:8080/reservations/?reservationId=${id}`);
+      const response = await fetch(
+        `http://192.168.0.72:8080/reservations/?reservationId=${id}`
+      );
 
       const data = await response.json();
 
       if (data.state == "confirm") {
-        setReservation({ state: "승인완료", color: { color: "#394A4B" }, view: false });
+        setReservation({
+          state: "승인완료",
+          color: { color: "#394A4B" },
+          view: false,
+        });
       } else if (data.state == "decline") {
-        setReservation({ state: "승인거절", color: { color: "#a6a6a6" }, view: false });
+        setReservation({
+          state: "승인거절",
+          color: { color: "#a6a6a6" },
+          view: false,
+        });
       } else if (data.state == "delete") {
-        setReservation({ state: "취소된 예약", color: { color: "red" }, view: false });
+        setReservation({
+          state: "취소된 예약",
+          color: { color: "red" },
+          view: false,
+        });
       }
 
       setReservationData(data); // 예약 정보 저장
@@ -44,9 +60,12 @@ export default function HostResve({ id }) {
 
   async function reservationConfirm() {
     try {
-      const response = await fetch(`http://192.168.0.72:8080/reservations/confirm/${id}`, {
-        method: "PUT", // 필요한 HTTP 메서드 설정
-      });
+      const response = await fetch(
+        `http://192.168.0.72:8080/reservations/confirm/${id}`,
+        {
+          method: "PUT", // 필요한 HTTP 메서드 설정
+        }
+      );
 
       if (!response.ok) {
         throw new Error("네트워크 응답이 좋지 않습니다.");
@@ -54,7 +73,11 @@ export default function HostResve({ id }) {
 
       const data = await response.json();
 
-      setReservation({ state: "승인완료", color: { color: "#394A4B" }, view: false });
+      setReservation({
+        state: "승인완료",
+        color: { color: "#394A4B" },
+        view: false,
+      });
       ShowAlert("success", "성공", data.message);
       // alert(data.message); // 받은 메시지를 alert로 표시
     } catch (e) {
@@ -65,9 +88,12 @@ export default function HostResve({ id }) {
 
   async function reservationDecline() {
     try {
-      const response = await fetch(`http://192.168.0.72:8080/reservations/decline/${id}`, {
-        method: "PUT", // 필요한 HTTP 메서드 설정
-      });
+      const response = await fetch(
+        `http://192.168.0.72:8080/reservations/decline/${id}`,
+        {
+          method: "PUT", // 필요한 HTTP 메서드 설정
+        }
+      );
 
       if (!response.ok) {
         throw new Error("네트워크 응답이 좋지 않습니다.");
@@ -75,7 +101,11 @@ export default function HostResve({ id }) {
 
       const data = await response.json();
 
-      setReservation({ state: "승인거절", color: { color: "#a6a6a6" }, view: false });
+      setReservation({
+        state: "승인거절",
+        color: { color: "#a6a6a6" },
+        view: false,
+      });
       ShowAlert("success", "성공", data.message);
       // alert(data.message); // 받은 메시지를 alert로 표시
     } catch (e) {
@@ -114,7 +144,9 @@ export default function HostResve({ id }) {
           <div className={styles.hostResve_box}>
             <div className={styles.guest_info}>
               <div>게스트</div>
-              {reservation.state == "승인완료" && !reservation.view && <div>전화번호</div>}
+              {reservation.state == "승인완료" && !reservation.view && (
+                <div>전화번호</div>
+              )}
               <div>체크인</div>
               <div>체크아웃</div>
               <div>인원수</div>
@@ -122,7 +154,14 @@ export default function HostResve({ id }) {
             </div>
             <div className={styles.guest_infoValue}>
               <div>{reservationData.userId.name}</div>
-              {reservation.state == "승인완료" && !reservation.view && <div>{reservationData.userId.phone.replace(/(\d{3})(\d{4})(\d{4})/, "$1-$2-$3")}</div>}
+              {reservation.state == "승인완료" && !reservation.view && (
+                <div>
+                  {reservationData.userId.phone.replace(
+                    /(\d{3})(\d{4})(\d{4})/,
+                    "$1-$2-$3"
+                  )}
+                </div>
+              )}
               <div>{reservationData.startDate.split("T")[0]}</div>
               <div>{reservationData.endDate.split("T")[0]}</div>
               <div>{reservationData.person}</div>

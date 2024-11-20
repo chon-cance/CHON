@@ -1,9 +1,12 @@
 import styles from "./HostResveList.module.css";
 import logo3 from "/img/logo3.png";
 import resve from "/img/resve.png";
+import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
+import ReservationItem from "./components/ReservationItem";
 
-export default function HostResveList({ id }) {
+export default function HostResveList() {
+  const { id } = useParams();
   const [reservationData, setReservationData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -11,11 +14,15 @@ export default function HostResveList({ id }) {
 
   const fetchReservation = async () => {
     try {
-      const acc_response = await fetch(`http://192.168.0.72:8080/accommodations/detail?accommodationId=${id}`);
+      const acc_response = await fetch(
+        `http://192.168.0.72:8080/accommodations/detail?accommodationId=${id}`
+      );
       const acc_data = await acc_response.json();
       setAccommodationName(acc_data.name);
 
-      const response = await fetch(`http://192.168.0.72:8080/accommodations/reservations?accommodationId=${id}`);
+      const response = await fetch(
+        `http://192.168.0.72:8080/accommodations/reservations?accommodationId=${id}`
+      );
 
       const data = await response.json();
       const reservationDatas = data.reservationData;
@@ -52,25 +59,7 @@ export default function HostResveList({ id }) {
         {error && <p style={{ color: "red" }}>{error}</p>}
         {reservationData &&
           reservationData.map((res, index) => {
-            let resState = { state: "승인대기", color: { color: "red" } };
-            if (res.state == "confirm") {
-              resState = { state: "승인완료", color: { color: "#394A4B" } };
-            } else if (res.state == "decline") {
-              resState = { state: "승인거절", color: { color: "#a6a6a6" } };
-            } else if (res.state == "delete") {
-              resState = { state: "취소된 예약", color: { color: "red" } };
-            }
-            return (
-              <div className={styles.hostResve_box} key={index}>
-                <div className={styles.guest_infoValue}>
-                  {res.userId.name}
-                  <br /> {res.startDate.split("T")[0]} - {res.endDate.split("T")[0]}
-                </div>
-                <div className={styles.resveState} style={resState.color}>
-                  {resState.state}
-                </div>
-              </div>
-            );
+            return <ReservationItem reservation={res} key={index} />;
           })}
       </div>
     </div>
