@@ -24,7 +24,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 // Solapi 라우트
-app.use("/kakaotalk", solapiRoutes);
+app.use("/alarm", solapiRoutes);
 
 // User 라우트
 app.use("/user", userRoutes);
