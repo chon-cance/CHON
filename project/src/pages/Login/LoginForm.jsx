@@ -28,13 +28,16 @@ const LoginForm = () => {
     console.log("🔑 Login attempt...", formData);
 
     try {
-      const response = await fetch("http://192.168.0.72:8080/user/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
+      const response = await fetch(
+        "http://port-0-chon-m3qz4omzb344e0d7.sel4.cloudtype.app/user/login",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
 
       const data = await response.json();
       console.log("📡 Server response:", data);

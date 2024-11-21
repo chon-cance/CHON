@@ -89,13 +89,16 @@ const RegisterForm = () => {
       }
 
       // 회원가입 요청
-      const joinResponse = await fetch("http://192.168.0.72:8080/user/join", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
+      const joinResponse = await fetch(
+        "http://port-0-chon-m3qz4omzb344e0d7.sel4.cloudtype.app/user/join",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
 
       const joinData = await joinResponse.json();
 
@@ -105,7 +108,7 @@ const RegisterForm = () => {
       ) {
         // 회원가입 성공 후 자동 로그인 요청
         const loginResponse = await fetch(
-          "http://192.168.0.72:8080/user/login",
+          "http://port-0-chon-m3qz4omzb344e0d7.sel4.cloudtype.app/user/login",
           {
             method: "POST",
             headers: {

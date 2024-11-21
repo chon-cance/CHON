@@ -31,7 +31,8 @@ export default function Modal({ accommodation, onClose }) {
   useEffect(() => {
     const fetchTimeSlots = async () => {
       try {
-        const response = await fetch(`http://192.168.0.72:8080/accommodations/timeslots?accommodationId=${accommodation._id}`);
+        const response = await fetch(`http://port-0-chon-m3qz4omzb344e0d7.sel4.cloudtype.app/accommodations/timeslots?accommodationId=${accommodation._id}`);
+
         const data = await response.json();
         setTimeSlots(data);
       } catch (error) {
@@ -50,7 +51,7 @@ export default function Modal({ accommodation, onClose }) {
         url: `localhost:5173/guest/${reservationData._id}`,
       };
 
-      const response = await fetch("http://192.168.0.72:8080/alarm/request_guest", {
+      const response = await fetch("http://port-0-chon-m3qz4omzb344e0d7.sel4.cloudtype.app/alarm/request_guest", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -77,7 +78,7 @@ export default function Modal({ accommodation, onClose }) {
         url: `localhost:5173/host/${reservationData.accommodationId}`,
       };
 
-      const response = await fetch("http://192.168.0.72:8080/alarm/request_host", {
+      const response = await fetch("http://port-0-chon-m3qz4omzb344e0d7.sel4.cloudtype.app/alarm/request_host", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -121,7 +122,7 @@ export default function Modal({ accommodation, onClose }) {
 
       console.log("Sending reservation data:", reservationData);
 
-      const response = await fetch("http://192.168.0.72:8080/reservations/create", {
+      const response = await fetch("http://port-0-chon-m3qz4omzb344e0d7.sel4.cloudtype.app/reservations/create", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -302,10 +303,9 @@ export default function Modal({ accommodation, onClose }) {
                   <div className={styles.form_value}>게스트 추가</div>
                 </div>
               </div>
-              <div>
-                <div className={styles.inputGroup}>
-                  <textarea placeholder="전달사항을 기입해주세요."></textarea>
-                </div>
+
+              <div className={styles.inputGroup}>
+                <textarea placeholder="전달사항을 기입해주세요."></textarea>
               </div>
             </div>
 
