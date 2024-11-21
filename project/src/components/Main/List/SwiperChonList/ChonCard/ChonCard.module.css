@@ -14,12 +14,15 @@
 
 .chon_address {
   color: #606060;
-  font-weight: 100;
   font-size: 14px;
   margin-top: 8px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+}
+
+.chon_address span {
+  letter-spacing: 1px;
 }
 .address {
   height: 16px;
