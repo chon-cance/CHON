@@ -36,16 +36,13 @@ export default function AccomSearch({ accommodations }) {
   const pageCount = Math.ceil(accommodations?.length / itemsPerPage);
 
   // 현재 페이지에 표시할 숙소 데이터
-  const currentAccommodations = accommodations?.slice(
-    currentPage * itemsPerPage,
-    (currentPage + 1) * itemsPerPage
-  );
+  const currentAccommodations = accommodations?.slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage);
 
   const handlePageChange = ({ selected }) => {
     setCurrentPage(selected);
   };
 
-  if (!accommodations || accommodations.length === 0) return null;
+  if (!accommodations || accommodations.length === 0) return <div className={styles.empty_text}>검색된 숙소가 없습니다.</div>;
 
   return (
     <div className={styles.container}>
