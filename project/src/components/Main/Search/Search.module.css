@@ -33,6 +33,10 @@
   cursor: pointer;
 }
 
+.search_category_warp.guests_warp {
+  border-right: none;
+}
+
 .search_category {
   font-size: 16px;
   color: #394a4b;

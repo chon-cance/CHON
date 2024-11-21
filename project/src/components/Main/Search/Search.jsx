@@ -8,6 +8,7 @@ import AccomSearch from "./AccomSearch/AccomSearch";
 
 // 지역 데이터
 const REGIONS = [
+  "전체",
   "강원",
   "경기",
   "경남",
@@ -22,7 +23,6 @@ const REGIONS = [
   "대전",
   "부산",
   "울산",
-  "인천",
 ];
 
 export default function Search() {
@@ -30,7 +30,7 @@ export default function Search() {
   const [activeField, setActiveField] = useState(null); // 현재 활성화된 필드
   const [selectedRegion, setSelectedRegion] = useState("");
   const [dateRange, setDateRange] = useState([null, null]);
-  const [guests, setGuests] = useState(1);
+  const [guests, setGuests] = useState(0);
   const [error, setError] = useState("");
   const [searchResults, setSearchResults] = useState(null);
 
@@ -52,7 +52,7 @@ export default function Search() {
 
       // 검색 파라미터 구성
       const searchParams = {
-        region: selectedRegion,
+        region: selectedRegion === "전체" ? "" : selectedRegion,
         checkIn: formatDate(dateRange[0]),
         checkOut: formatDate(dateRange[1]),
         person: guests,
@@ -87,8 +87,6 @@ export default function Search() {
       <div className="w1200">
         <div className={styles.search_conteiner}>
           <div className={styles.search_title}>촌캉스 숙소 검색하기</div>
-
-          {error && <div className={styles.errorMessage}>{error}</div>}
 
           <div className={styles.search_warp}>
             {/* 지역 선택 */}
@@ -173,7 +171,9 @@ export default function Search() {
               }
             >
               <div className={styles.search_category}>인원수</div>
-              <div className={styles.search_value}>{`${guests}`}</div>
+              <div className={styles.search_value}>
+                {guests == 0 ? "게스트 추가" : `${guests} 명`}
+              </div>
 
               {activeField === "guests" && (
                 <div className={styles.guests_selector}>
