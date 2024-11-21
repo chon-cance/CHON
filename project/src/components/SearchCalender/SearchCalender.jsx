@@ -6,9 +6,15 @@ export default function SearchCalendar({ onChange, value }) {
   today.setHours(today.getHours() + 9);
   today.setHours(0, 0, 0, 0);
 
-  const tileDisabled = ({ date }) => {
-    const koreaDate = new Date(date.getTime() + 9 * 60 * 60 * 1000);
-    return koreaDate < today;
+  const minDate = new Date(today.getFullYear(), today.getMonth(), 1);
+
+  const tileDisabled = ({ date, view }) => {
+    if (view === "month") {
+      const koreaDate = new Date(date.getTime() + 9 * 60 * 60 * 1000);
+      koreaDate.setHours(0, 0, 0, 0);
+      return koreaDate.getTime() < today.getTime();
+    }
+    return false;
   };
 
   const formatDay = (locale, date) => {
@@ -21,7 +27,7 @@ export default function SearchCalendar({ onChange, value }) {
       locale="ko"
       formatDay={formatDay}
       onChange={onChange}
-      minDate={today}
+      minDate={minDate}
       value={value}
       selectRange={true}
       showDoubleView={true}

@@ -240,11 +240,13 @@ export default function Modal({ accommodation, onClose }) {
           >
             {accommodation.photo.map((photo, index) => (
               <SwiperSlide key={index}>
-                <img
-                  src={`/img/${accommodation.accommodation_num}/${photo}`}
-                  alt={`숙소 이미지 ${index + 1}`}
-                  className={styles.mainImage}
-                />
+                <div className={styles.imageSection}>
+                  <img
+                    src={`/img/${accommodation.accommodation_num}/${photo}`}
+                    alt={`숙소 이미지 ${index + 1}`}
+                    className={styles.mainImage}
+                  />
+                </div>
               </SwiperSlide>
             ))}
           </Swiper>
@@ -337,10 +339,9 @@ export default function Modal({ accommodation, onClose }) {
                   <div className={styles.form_value}>게스트 추가</div>
                 </div>
               </div>
-              <div>
-                <div className={styles.inputGroup}>
-                  <textarea placeholder="전달사항을 기입해주세요."></textarea>
-                </div>
+
+              <div className={styles.inputGroup}>
+                <textarea placeholder="전달사항을 기입해주세요."></textarea>
               </div>
             </div>
 
