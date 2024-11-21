@@ -1,16 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 // Import required modules
 import { Navigation, Pagination } from "swiper/modules";
-import "swiper/css/pagination"; // Pagination 스타일 추가
 
 import "swiper/css";
 import styles from "./Modal.module.css";
 import icon1 from "./icon/map-pin.png";
 import icon2 from "./icon/users.png";
+import "./customSwiper.css";
+import StyledCalender from "../ModalCalender/StyledCalender";
 
 export default function Modal({ accommodation, onClose }) {
   const [currentPhoto, setCurrentPhoto] = useState(0);
@@ -21,6 +22,26 @@ export default function Modal({ accommodation, onClose }) {
   const [error, setError] = useState("");
   const navigate = useNavigate();
   const { user } = useAuth();
+  const [checkInDate, setCheckInDate] = useState(null);
+  const [showCheckInCalendar, setShowCheckInCalendar] = useState(false);
+  const [showCheckOutCalendar, setShowCheckOutCalendar] = useState(false);
+  const [timeSlots, setTimeSlots] = useState({});
+
+  // TimeSlots 데이터 가져오기
+  useEffect(() => {
+    const fetchTimeSlots = async () => {
+      try {
+        const response = await fetch(
+          `http://192.168.0.72:8080/accommodations/timeslots?accommodationId=${accommodation._id}`
+        );
+        const data = await response.json();
+        setTimeSlots(data);
+      } catch (error) {
+        console.error("TimeSlots 조회 실패:", error);
+      }
+    };
+    fetchTimeSlots();
+  }, [accommodation._id]);
 
   const handlePhotoClick = (index) => setCurrentPhoto(index);
 
@@ -187,6 +208,19 @@ export default function Modal({ accommodation, onClose }) {
     return finalDate; // 'yyyy-mm-dd' 형식으로 변환
   };
 
+  // 체크인 날짜 선택 핸들러
+  const handleCheckInSelect = (date) => {
+    setCheckInDate(date);
+    setCheckIn(date.toISOString());
+    setShowCheckInCalendar(false);
+  };
+
+  // 체크아웃 날짜 선택 핸들러
+  const handleCheckOutSelect = (date) => {
+    setCheckOut(date.toISOString());
+    setShowCheckOutCalendar(false);
+  };
+
   return createPortal(
     <div className={styles.modalOverlay}>
       <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
@@ -245,14 +279,59 @@ export default function Modal({ accommodation, onClose }) {
           <div className={styles.reservationSection}>
             <div className={styles.reser_box}>
               <div className={styles.dateSection}>
-                <div className={styles.inputGroup}>
+                <div
+                  className={styles.inputGroup}
+                  onClick={() => {
+                    setShowCheckInCalendar(true);
+                    setShowCheckOutCalendar(false); // 체크아웃 달력 닫기
+                  }}
+                >
                   <div className={styles.form_category}>체크인</div>
-                  <div className={styles.form_value}>날짜추가</div>
+                  <div className={styles.form_value}>
+                    {checkIn
+                      ? new Date(checkIn).toLocaleDateString()
+                      : "날짜 추가"}
+                  </div>
                 </div>
-                <div className={styles.inputGroup}>
+
+                {showCheckInCalendar && (
+                  <div className={styles.calendar_wrapper}>
+                    <StyledCalender
+                      onChange={handleCheckInSelect}
+                      value={checkIn ? new Date(checkIn) : null}
+                      isCheckIn={true}
+                      timeSlots={timeSlots}
+                    />
+                  </div>
+                )}
+
+                <div
+                  className={styles.inputGroup}
+                  onClick={() => {
+                    setShowCheckOutCalendar(true);
+                    setShowCheckInCalendar(false); // 체크인 달력 닫기
+                  }}
+                >
                   <div className={styles.form_category}>체크아웃</div>
-                  <div className={styles.form_value}>날짜추가</div>
+                  <div className={styles.form_value}>
+                    {checkOut
+                      ? new Date(checkOut).toLocaleDateString()
+                      : "날짜 추가"}
+                  </div>
                 </div>
+
+                {showCheckOutCalendar && (
+                  <div className={styles.calendar_wrapper}>
+                    <StyledCalender
+                      onChange={handleCheckOutSelect}
+                      value={checkOut ? new Date(checkOut) : null}
+                      isCheckIn={false}
+                      selectedCheckIn={checkIn ? new Date(checkIn) : null}
+                      timeSlots={timeSlots}
+                    />
+                  </div>
+                )}
+
                 <div className={styles.inputGroup}>
                   <div className={styles.form_category}>인원수</div>
                   <div className={styles.form_value}>게스트 추가</div>
