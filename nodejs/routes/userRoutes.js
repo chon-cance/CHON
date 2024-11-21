@@ -40,6 +40,7 @@ router.post("/login", async (req, res) => {
           .json({ success: false, message: "비밀번호가 일치하지 않습니다." });
       } else {
         res.json({
+          _id: user._id,
           id: user.id,
           name: user.name,
           phone: user.phone,

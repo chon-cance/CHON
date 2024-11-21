@@ -15,16 +15,6 @@
   justify-content: space-between;
   align-items: center;
 }
-.exit {
-  font-size: 20px;
-}
-.exit a {
-  color: white;
-  display: flex;
-}
-.exit a p {
-  padding-right: 10px;
-}
 
 /*=====================*/
 /* 예약 main */
@@ -70,49 +60,17 @@
   border-radius: 5px;
   display: flex;
   padding: 20px;
+  margin: 20px 0;
 }
 
-.guest_info {
-  min-width: 73px;
-}
-.guest_info div {
-  color: #394a4b;
+.guest_infoValue {
+  width: 250px;
   font-size: 18px;
-  margin-right: 10px;
-  margin-bottom: 20px;
-  font-weight: bold;
-}
-.guest_infoValue div {
-  font-size: 18px;
-  margin-bottom: 20px;
-}
-.guest_info div:last-of-type,
-.guest_infoValue div:last-of-type {
-  margin-bottom: 0;
+  line-height: 25px;
 }
 
-/* 버튼 */
-.hostResve_btn {
-  width: 100%;
-  margin: 50px 0 80px 0;
-  display: flex;
-  justify-content: space-between;
-  cursor: pointer;
-}
-.hostResve_btn div {
-  font-size: 24px;
+.resveState {
+  align-content: center;
+  font-size: 14px;
   font-weight: bold;
-  text-align: center;
-  padding: 13px 0;
-  width: 48%;
-  border: 1px solid #394a4b;
-  border-radius: 5px;
-}
-.hostResve_btn div:first-of-type {
-  background-color: white;
-  color: #394a4b;
-}
-.hostResve_btn div:last-of-type {
-  background-color: #394a4b;
-  color: white;
 }

@@ -2,12 +2,18 @@ import styles from "./HostResve.module.css";
 import logo3 from "/img/logo3.png";
 import exit from "/img/exit.png";
 import resve from "/img/resve.png";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { ShowAlert, ShowConfirm, ShowLoading } from "../../utils/AlertUtils.js";
-
+import useQueryRemover from "../../hooks/useQueryRemover.js";
+import { useNavigate } from "react-router-dom";
 export default function HostResve() {
-  const { id } = useParams();
+  const [searchParams] = useSearchParams();
+  const id = searchParams.get("id");
+  const navigate = useNavigate();
+
+  // accommodationId를 상태로 저장
+  const [accommodationId, setAccommodationId] = useState(null);
   const [reservationData, setReservationData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -46,6 +52,8 @@ export default function HostResve() {
       }
 
       setReservationData(data); // 예약 정보 저장
+      // 숙소 ID 저장
+      setAccommodationId(data.accommodationId._id);
     } catch (err) {
       setError("예약 정보를 불러오는 데 실패했습니다."); // 오류 처리
     } finally {
@@ -114,6 +122,20 @@ export default function HostResve() {
     }
   }
 
+  const handleGoBack = () => {
+    // 이전 페이지로 이동할 때 직접 경로 지정
+    if (accommodationId) {
+      navigate(`/host/${accommodationId}`);
+    }
+  };
+
+  useQueryRemover({
+    query: "id",
+    excuteFunc: () => {
+      fetchReservationData();
+    },
+  });
+
   return (
     <div className={styles.hostResve}>
       <div className={styles.hostResve_header}>
@@ -121,10 +143,10 @@ export default function HostResve() {
           <img src={logo3} alt="" />
         </div>
         <div className={styles.exit}>
-          <a href="">
+          <div onClick={handleGoBack} className={styles.exit_btn}>
             <p>뒤로가기</p>
             <img src={exit} alt="" />
-          </a>
+          </div>
         </div>
       </div>
       {loading && <p>로딩 중...</p>}

@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { createPortal } from "react-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Pagination } from "swiper/modules";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 
 import "swiper/css";
-import "swiper/css/pagination";
 import styles from "./Modal.module.css";
 import icon1 from "./icon/map-pin.png";
 import icon2 from "./icon/users.png";
@@ -15,30 +15,95 @@ export default function Modal({ accommodation, onClose }) {
   const [checkOut, setCheckOut] = useState("");
   const [guests, setGuests] = useState(1);
   const [requests, setRequests] = useState("");
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
+  const { user } = useAuth();
 
   const handlePhotoClick = (index) => setCurrentPhoto(index);
 
-  const handleReservation = () => {
-    setCheckIn("");
-    setCheckOut("");
-    setGuests(1);
-    setRequests("");
+  const handleReservation = async () => {
+    try {
+      if (!user) {
+        alert("로그인이 필요한 서비스입니다.");
+        navigate("/login");
+        return;
+      }
+
+      if (!checkIn || !checkOut || !guests) {
+        alert("모든 필수 항목을 입력해주세요.");
+        return;
+      }
+
+      const reservationData = {
+        accommodationId: accommodation._id,
+        userId: user._id,
+        startDate: new Date(checkIn).toISOString(),
+        endDate: new Date(checkOut).toISOString(),
+        person: parseInt(guests),
+        message: requests || "",
+      };
+
+      console.log("Sending reservation data:", reservationData);
+
+      const response = await fetch(
+        "http://192.168.0.72:8080/reservations/create",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify(reservationData),
+        }
+      );
+
+      const data = await response.json();
+
+      if (response.ok) {
+        alert("예약이 완료되었습니다.");
+        setCheckIn("");
+        setCheckOut("");
+        setGuests(1);
+        setRequests("");
+        onClose();
+      } else {
+        throw new Error(data.message || "예약 처리 중 오류가 발생했습니다.");
+      }
+    } catch (error) {
+      console.error("Reservation error:", error);
+      setError(error.message);
+      alert(error.message);
+    }
   };
 
-  // 별점 렌더링 함수
+  // 별점 렌더링 함수 (노란색으로 색상 지정)
   const renderStars = (grade) => {
     return Array.from({ length: 5 }, (_, i) => (
       <span
         key={i}
         className={`${styles.star} ${i < grade ? styles.activeStar : ""}`}
+        style={{ color: i < grade ? "gold" : "gray" }} // 별 색을 노란색과 회색으로 지정
       >
         ★
       </span>
     ));
   };
 
+  // 평균 별점 계산
+  const calculateAverageGrade = () => {
+    const grade = accommodation.grade; // accommodation의 grade를 별점으로 사용
+    return grade.toFixed(1); // 소수점 첫째 자리까지 계산
+  };
+
+  // 리뷰 날짜 추출 함수 (임의로 날짜 추가)
+  const getReviewDate = (index) => {
+    const date = new Date(accommodation.create_date);
+    date.setDate(date.getDate() + index); // 임의로 리뷰마다 날짜를 다르게 설정
+    return date.toLocaleDateString(); // 'yyyy-mm-dd' 형식으로 변환
+  };
+
   return createPortal(
-    <div className={styles.modalOverlay} onClick={onClose}>
+    <div className={styles.modalOverlay}>
       <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
         <button className={styles.closeButton} onClick={onClose}>
           ✕
@@ -49,8 +114,7 @@ export default function Modal({ accommodation, onClose }) {
             pagination={{
               type: "fraction",
             }}
-            navigation={true}
-            modules={[Pagination]}
+            modules={[]} // Pagination 모듈 제거
             className="mySwiper"
           >
             {accommodation.photo.map((photo, index) => (
@@ -68,60 +132,68 @@ export default function Modal({ accommodation, onClose }) {
         <div className={styles.contentWrapper}>
           <div className={styles.infoSection}>
             <h2>{accommodation.name}</h2>
-            <p className={styles.address}>
-              <img src={icon1} alt="지도 아이콘" className={styles.icon} />{" "}
-              {accommodation.address}
-            </p>
-            <p className={styles.details}>
-              <img src={icon2} alt="인원 아이콘" className={styles.icon} /> 기준{" "}
-              {accommodation.person}명 / 최대 {accommodation.max_person}명
-            </p>
-            <p>{accommodation.explain}</p>
+            <p className={styles.description}>{accommodation.explain}</p>
+
+            <div className={styles.locationAndDetails}>
+              <p className={styles.detail}>
+                <img src={icon1} alt="지도 아이콘" className={styles.icon} />
+                {accommodation.address}
+              </p>
+              <p className={styles.detail}>
+                <img src={icon2} alt="인원 아이콘" className={styles.icon} />
+                기준 {accommodation.person}명 / 최대 {accommodation.max_person}{" "}
+                명
+              </p>
+            </div>
+
             <p className={styles.price}>
               ₩ {accommodation.price.toLocaleString()}
             </p>
           </div>
 
           <div className={styles.reservationSection}>
-            <div className={styles.dateSection}>
-              <div className={styles.inputGroup}>
-                <label>체크인</label>
-                <input
-                  type="date"
-                  value={checkIn}
-                  onChange={(e) => setCheckIn(e.target.value)}
-                />
+            <div className={styles.reser_box}>
+              <div className={styles.dateSection}>
+                <div className={styles.inputGroup}>
+                  <label>체크인</label>
+                  <input
+                    type="date"
+                    value={checkIn}
+                    onChange={(e) => setCheckIn(e.target.value)}
+                  />
+                </div>
+                <div className={styles.inputGroup}>
+                  <label>체크아웃</label>
+                  <input
+                    type="date"
+                    value={checkOut}
+                    onChange={(e) => setCheckOut(e.target.value)}
+                  />
+                </div>
+                <div className={styles.inputGroup}>
+                  <label>인원수</label>
+                  <input
+                    type="number"
+                    min={1}
+                    max={accommodation.max_person}
+                    value={guests}
+                    onChange={(e) => setGuests(e.target.value)}
+                  />
+                </div>
               </div>
-              <div className={styles.inputGroup}>
-                <label>체크아웃</label>
-                <input
-                  type="date"
-                  value={checkOut}
-                  onChange={(e) => setCheckOut(e.target.value)}
-                />
-              </div>
-              <div className={styles.inputGroup}>
-                <label>인원수</label>
-                <input
-                  type="number"
-                  min={1}
-                  max={accommodation.max_person}
-                  value={guests}
-                  onChange={(e) => setGuests(e.target.value)}
-                />
+              <div>
+                <div className={styles.inputGroup}>
+                  <textarea
+                    rows={3}
+                    value={requests}
+                    onChange={(e) => setRequests(e.target.value)}
+                    placeholder="전달사항을 기입해주세요."
+                  ></textarea>
+                </div>
               </div>
             </div>
 
-            <div className={styles.inputGroup}>
-              <label>요청사항</label>
-              <textarea
-                rows={3}
-                value={requests}
-                onChange={(e) => setRequests(e.target.value)}
-                placeholder="요청사항을 입력해주세요."
-              ></textarea>
-            </div>
-
+            {error && <div className={styles.error}>{error}</div>}
             <button
               className={styles.reserveButton}
               onClick={handleReservation}
@@ -132,21 +204,40 @@ export default function Modal({ accommodation, onClose }) {
         </div>
 
         <div className={styles.reviewSection}>
-          <h3>후기 ({accommodation.review.length})</h3>
+          <div className={styles.reviewTitle}>
+            <span className={styles.reviewH3}>후기</span>
+            <span className={styles.starAndNumber}>
+              {/* 별 하나 표시, 색을 노란색으로 설정 */}
+              <span className={styles.starsWrapper}>
+                <span className={styles.star} style={{ color: "gold" }}>
+                  {"★"}
+                </span>
+              </span>
+              <span className={styles.averageRating}>
+                {/* 평균 별점 숫자 표시 */}
+                {calculateAverageGrade()}
+              </span>
+              ({accommodation.review.length})
+            </span>
+          </div>
           <Swiper
-            slidesPerView={1}
-            spaceBetween={20}
-            pagination={{
-              clickable: true,
-            }}
-            modules={[Pagination]}
+            slidesPerView={3} // 한 번에 3개 리뷰 표시
+            spaceBetween={20} // 리뷰 간 간격 설정
+            modules={[]} // Pagination 모듈 제거
             className="mySwiper"
           >
             {accommodation.review.map((review, index) => (
               <SwiperSlide key={index}>
                 <div className={styles.reviewItem}>
                   <div className={styles.starRating}>
-                    {renderStars(accommodation.grade)}
+                    <div className={styles.starsWrapper}>
+                      {/* 별점 표시 (여전히 별점 개수 표시) */}
+                      {renderStars(accommodation.grade)}
+                    </div>
+                    <span className={styles.reviewDate}>
+                      {/* 별점 옆에 등록일 표시 */}
+                      {getReviewDate(index)} {/* 리뷰 날짜 표시 */}
+                    </span>
                   </div>
                   <p>{review}</p>
                 </div>
