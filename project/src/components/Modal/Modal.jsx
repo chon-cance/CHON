@@ -8,7 +8,6 @@ import "swiper/css";
 import styles from "./Modal.module.css";
 import icon1 from "./icon/map-pin.png";
 import icon2 from "./icon/users.png";
-import reservation from "../../../../nodejs/schema/reservation";
 
 export default function Modal({ accommodation, onClose }) {
   const [currentPhoto, setCurrentPhoto] = useState(0);
@@ -22,11 +21,11 @@ export default function Modal({ accommodation, onClose }) {
 
   const handlePhotoClick = (index) => setCurrentPhoto(index);
 
-  const guestAlarm = async () => {
+  const guestAlarm = async (reservationData) => {
     try {
       const alarmData = {
-        reservationId: reservation._id,
-        url: `http://192.168.0.72:8080/guest/${reservation._id}`,
+        reservationId: reservationData._id,
+        url: `localhost:5173/guest/${reservationData._id}`,
       };
 
       const response = await fetch(
@@ -46,16 +45,17 @@ export default function Modal({ accommodation, onClose }) {
 
       const data = await response.json();
       console.log("알람 전송 성공:", data);
+      console.log(alarmData);
     } catch (error) {
       console.error("알람 전송 실패:", error);
     }
   };
 
-  const hostAlarm = async () => {
+  const hostAlarm = async (reservationData) => {
     try {
       const alarmData = {
-        reservationId: reservation._id,
-        url: `http://192.168.0.72:8080/host/${reservation.accommodationId}`,
+        reservationId: reservationData._id,
+        url: `localhost:5173/host/${reservationData.accommodationId}`,
       };
 
       const response = await fetch(
@@ -75,6 +75,7 @@ export default function Modal({ accommodation, onClose }) {
 
       const data = await response.json();
       console.log("알람 전송 성공:", data);
+      console.log(alarmData);
     } catch (error) {
       console.error("알람 전송 실패:", error);
     }
@@ -124,8 +125,8 @@ export default function Modal({ accommodation, onClose }) {
         setGuests(1);
         setRequests("");
         onClose();
-        guestAlarm();
-        hostAlarm();
+        guestAlarm(data);
+        hostAlarm(data);
       } else {
         throw new Error(data.message || "예약 처리 중 오류가 발생했습니다.");
       }

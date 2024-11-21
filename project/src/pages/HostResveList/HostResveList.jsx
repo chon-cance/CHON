@@ -3,7 +3,7 @@ import logo3 from "/img/logo3.png";
 import resve from "/img/resve.png";
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
-import ReservationItem from "./components/ReservationItem";
+import ReservationItem from "./ReservationItem/ReservationItem";
 
 export default function HostResveList() {
   const { id } = useParams();
