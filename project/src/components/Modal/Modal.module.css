@@ -339,13 +339,7 @@ a:hover {
     padding: 20px 20px 0 20px;
   }
   .mainImage {
-    height: 300px;
     border-radius: 0;
-  }
-
-  .thumbnail {
-    width: 80px;
-    height: 60px;
   }
 }
 @media (max-width: 420px) {
