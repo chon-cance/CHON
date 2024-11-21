@@ -77,6 +77,32 @@ export default function HostResve() {
     }
   }, [reservationId]);
 
+  const confirmAlarm = async () => {
+    try {
+      const alarmData = {
+        reservationId: reservationId,
+        url: `http://192.168.0.72:8080/guest/${reservationId}`,
+      };
+
+      const response = await fetch("http://192.168.0.72:8080/alarm/confirm", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(alarmData),
+      });
+
+      if (!response.ok) {
+        throw new Error("알람 전송에 실패했습니다.");
+      }
+
+      const data = await response.json();
+      console.log("알람 전송 성공:", data);
+    } catch (error) {
+      console.error("알람 전송 실패:", error);
+    }
+  };
+
   async function reservationConfirm() {
     if (!reservationId) {
       ShowAlert("fail", "실패", "예약 ID가 존재하지 않습니다.");
@@ -97,6 +123,8 @@ export default function HostResve() {
         throw new Error(data.message || "네트워크 응답이 좋지 않습니다.");
       }
 
+      confirmAlarm();
+
       setReservation({
         state: "승인완료",
         color: { color: "#394A4B" },
@@ -107,6 +135,31 @@ export default function HostResve() {
       ShowAlert("fail", "실패", e.message || "예약 승인 요청에 실패했습니다.");
     }
   }
+
+  const declineAlarm = async () => {
+    try {
+      const alarmData = {
+        reservationId: reservationId,
+      };
+
+      const response = await fetch("http://192.168.0.72:8080/alarm/decline", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(alarmData),
+      });
+
+      if (!response.ok) {
+        throw new Error("알람 전송에 실패했습니다.");
+      }
+
+      const data = await response.json();
+      console.log("알람 전송 성공:", data);
+    } catch (error) {
+      console.error("알람 전송 실패:", error);
+    }
+  };
 
   async function reservationDecline() {
     try {
@@ -122,6 +175,8 @@ export default function HostResve() {
       }
 
       const data = await response.json();
+
+      declineAlarm();
 
       setReservation({
         state: "승인거절",

@@ -8,6 +8,7 @@ import "swiper/css";
 import styles from "./Modal.module.css";
 import icon1 from "./icon/map-pin.png";
 import icon2 from "./icon/users.png";
+import reservation from "../../../../nodejs/schema/reservation";
 
 export default function Modal({ accommodation, onClose }) {
   const [currentPhoto, setCurrentPhoto] = useState(0);
@@ -20,6 +21,64 @@ export default function Modal({ accommodation, onClose }) {
   const { user } = useAuth();
 
   const handlePhotoClick = (index) => setCurrentPhoto(index);
+
+  const guestAlarm = async () => {
+    try {
+      const alarmData = {
+        reservationId: reservation._id,
+        url: `http://192.168.0.72:8080/guest/${reservation._id}`,
+      };
+
+      const response = await fetch(
+        "http://192.168.0.72:8080/alarm/request_guest",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(alarmData),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("알람 전송에 실패했습니다.");
+      }
+
+      const data = await response.json();
+      console.log("알람 전송 성공:", data);
+    } catch (error) {
+      console.error("알람 전송 실패:", error);
+    }
+  };
+
+  const hostAlarm = async () => {
+    try {
+      const alarmData = {
+        reservationId: reservation._id,
+        url: `http://192.168.0.72:8080/host/${reservation.accommodationId}`,
+      };
+
+      const response = await fetch(
+        "http://192.168.0.72:8080/alarm/request_host",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(alarmData),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("알람 전송에 실패했습니다.");
+      }
+
+      const data = await response.json();
+      console.log("알람 전송 성공:", data);
+    } catch (error) {
+      console.error("알람 전송 실패:", error);
+    }
+  };
 
   const handleReservation = async () => {
     try {
@@ -45,13 +104,16 @@ export default function Modal({ accommodation, onClose }) {
 
       console.log("Sending reservation data:", reservationData);
 
-      const response = await fetch("http://192.168.0.72:8080/reservations/create", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(reservationData),
-      });
+      const response = await fetch(
+        "http://192.168.0.72:8080/reservations/create",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(reservationData),
+        }
+      );
 
       const data = await response.json();
 
@@ -62,6 +124,8 @@ export default function Modal({ accommodation, onClose }) {
         setGuests(1);
         setRequests("");
         onClose();
+        guestAlarm();
+        hostAlarm();
       } else {
         throw new Error(data.message || "예약 처리 중 오류가 발생했습니다.");
       }
@@ -77,7 +141,9 @@ export default function Modal({ accommodation, onClose }) {
     return Array.from({ length: 5 }, (_, i) => (
       <span
         key={i}
-        className={`${styles.star} ${i < grade ? styles.activeStar : styles.star}`}
+        className={`${styles.star} ${
+          i < grade ? styles.activeStar : styles.star
+        }`}
         style={{ color: i < grade ? "gold" : "#dddddd" }} // 별 색을 노란색과 회색으로 지정
       >
         ★
@@ -108,8 +174,12 @@ export default function Modal({ accommodation, onClose }) {
 
     // const date = new Date(accommodation.create_date);
     // date.setDate(date.getDate() + index); // 임의로 리뷰마다 날짜를 다르게 설정
-    const formattedDate = randomDate.toLocaleDateString("ko-KR", options).replace(/\./g, "-");
-    const finalDate = formattedDate.endsWith("-") ? formattedDate.slice(0, -1) : formattedDate;
+    const formattedDate = randomDate
+      .toLocaleDateString("ko-KR", options)
+      .replace(/\./g, "-");
+    const finalDate = formattedDate.endsWith("-")
+      ? formattedDate.slice(0, -1)
+      : formattedDate;
     return finalDate; // 'yyyy-mm-dd' 형식으로 변환
   };
 
@@ -130,7 +200,11 @@ export default function Modal({ accommodation, onClose }) {
           >
             {accommodation.photo.map((photo, index) => (
               <SwiperSlide key={index}>
-                <img src={`/img/${accommodation.accommodation_num}/${photo}`} alt={`숙소 이미지 ${index + 1}`} className={styles.mainImage} />
+                <img
+                  src={`/img/${accommodation.accommodation_num}/${photo}`}
+                  alt={`숙소 이미지 ${index + 1}`}
+                  className={styles.mainImage}
+                />
               </SwiperSlide>
             ))}
           </Swiper>
@@ -148,11 +222,14 @@ export default function Modal({ accommodation, onClose }) {
               </p>
               <p className={styles.detail}>
                 <img src={icon2} alt="인원 아이콘" className={styles.icon} />
-                기준 {accommodation.person}명 / 최대 {accommodation.max_person} 명
+                기준 {accommodation.person}명 / 최대 {accommodation.max_person}{" "}
+                명
               </p>
             </div>
 
-            <p className={styles.price}>₩ {accommodation.price.toLocaleString()}</p>
+            <p className={styles.price}>
+              ₩ {accommodation.price.toLocaleString()}
+            </p>
           </div>
 
           <div className={styles.reservationSection}>
@@ -160,26 +237,48 @@ export default function Modal({ accommodation, onClose }) {
               <div className={styles.dateSection}>
                 <div className={styles.inputGroup}>
                   <label>체크인</label>
-                  <input type="date" value={checkIn} onChange={(e) => setCheckIn(e.target.value)} />
+                  <input
+                    type="date"
+                    value={checkIn}
+                    onChange={(e) => setCheckIn(e.target.value)}
+                  />
                 </div>
                 <div className={styles.inputGroup}>
                   <label>체크아웃</label>
-                  <input type="date" value={checkOut} onChange={(e) => setCheckOut(e.target.value)} />
+                  <input
+                    type="date"
+                    value={checkOut}
+                    onChange={(e) => setCheckOut(e.target.value)}
+                  />
                 </div>
                 <div className={styles.inputGroup}>
                   <label>인원수</label>
-                  <input type="number" min={1} max={accommodation.max_person} value={guests} onChange={(e) => setGuests(e.target.value)} />
+                  <input
+                    type="number"
+                    min={1}
+                    max={accommodation.max_person}
+                    value={guests}
+                    onChange={(e) => setGuests(e.target.value)}
+                  />
                 </div>
               </div>
               <div>
                 <div className={styles.inputGroup}>
-                  <textarea rows={3} value={requests} onChange={(e) => setRequests(e.target.value)} placeholder="전달사항을 기입해주세요."></textarea>
+                  <textarea
+                    rows={3}
+                    value={requests}
+                    onChange={(e) => setRequests(e.target.value)}
+                    placeholder="전달사항을 기입해주세요."
+                  ></textarea>
                 </div>
               </div>
             </div>
 
             {error && <div className={styles.error}>{error}</div>}
-            <button className={styles.reserveButton} onClick={handleReservation}>
+            <button
+              className={styles.reserveButton}
+              onClick={handleReservation}
+            >
               예약 신청하기
             </button>
           </div>
