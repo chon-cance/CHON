@@ -52,7 +52,6 @@ export default function Modal({ accommodation, onClose }) {
           headers: {
             "Content-Type": "application/json",
           },
-          credentials: "include",
           body: JSON.stringify(reservationData),
         }
       );
