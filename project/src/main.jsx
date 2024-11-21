@@ -6,6 +6,7 @@ import Register from "./pages/Register/Register.jsx";
 import Login from "./pages/Login/Login.jsx";
 import HostResve from "./pages/HostResve/HostResve.jsx";
 import HostResveList from "./pages/HostResveList/HostResveList.jsx";
+import GuestResve from "./pages/GuestResve/GuestResve.jsx";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 
@@ -29,6 +30,10 @@ const router = createBrowserRouter([
   {
     path: "/host/:id",
     element: <HostResveList />,
+  },
+  {
+    path: "/guest/:id",
+    element: <GuestResve />,
   },
 ]);
 

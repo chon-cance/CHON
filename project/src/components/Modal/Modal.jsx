@@ -24,6 +24,66 @@ export default function Modal({ accommodation, onClose }) {
 
   const handlePhotoClick = (index) => setCurrentPhoto(index);
 
+  const guestAlarm = async (reservationData) => {
+    try {
+      const alarmData = {
+        reservationId: reservationData._id,
+        url: `localhost:5173/guest/${reservationData._id}`,
+      };
+
+      const response = await fetch(
+        "http://192.168.0.72:8080/alarm/request_guest",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(alarmData),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("알람 전송에 실패했습니다.");
+      }
+
+      const data = await response.json();
+      console.log("알람 전송 성공:", data);
+      console.log(alarmData);
+    } catch (error) {
+      console.error("알람 전송 실패:", error);
+    }
+  };
+
+  const hostAlarm = async (reservationData) => {
+    try {
+      const alarmData = {
+        reservationId: reservationData._id,
+        url: `localhost:5173/host/${reservationData.accommodationId}`,
+      };
+
+      const response = await fetch(
+        "http://192.168.0.72:8080/alarm/request_host",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(alarmData),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("알람 전송에 실패했습니다.");
+      }
+
+      const data = await response.json();
+      console.log("알람 전송 성공:", data);
+      console.log(alarmData);
+    } catch (error) {
+      console.error("알람 전송 실패:", error);
+    }
+  };
+
   const handleReservation = async () => {
     try {
       if (!user) {
@@ -68,6 +128,8 @@ export default function Modal({ accommodation, onClose }) {
         setGuests(1);
         setRequests("");
         onClose();
+        guestAlarm(data);
+        hostAlarm(data);
       } else {
         throw new Error(data.message || "예약 처리 중 오류가 발생했습니다.");
       }
@@ -174,7 +236,6 @@ export default function Modal({ accommodation, onClose }) {
                 </p>
               </div>
             </div>
-
             <p className={styles.price}>
               ₩ {accommodation.price.toLocaleString()}
             </p>
