@@ -18,7 +18,7 @@ export default function GuestResve() {
   const fetchReservationData = async () => {
     try {
       const response = await fetch(
-        `http://192.168.0.72:8080/reservations/?reservationId=${id}`
+        `http://port-0-chon-m3qz4omzb344e0d7.sel4.cloudtype.app/reservations/?reservationId=${id}`
       );
 
       const data = await response.json();
@@ -75,7 +75,7 @@ export default function GuestResve() {
       // 확인 클릭 시 예약 취소 함수 호출
       try {
         const response = await fetch(
-          `http://192.168.0.72:8080/reservations/delete/${id}`,
+          `http://port-0-chon-m3qz4omzb344e0d7.sel4.cloudtype.app/reservations/delete/${id}`,
           {
             method: "PUT", // 필요한 HTTP 메서드 설정
           }
