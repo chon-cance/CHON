@@ -32,7 +32,7 @@ export default function HostResve() {
     setLoading(true);
     try {
       const response = await fetch(
-        `http://192.168.0.72:8080/reservations/?reservationId=${reservationId}`
+        `http://port-0-chon-m3qz4omzb344e0d7.sel4.cloudtype.app/reservations/?reservationId=${reservationId}`
       );
 
       const data = await response.json();
@@ -81,16 +81,19 @@ export default function HostResve() {
     try {
       const alarmData = {
         reservationId: reservationId,
-        url: `http://192.168.0.72:8080/guest/${reservationId}`,
+        url: `http://port-0-chon-m3qz4omzb344e0d7.sel4.cloudtype.app/guest/${reservationId}`,
       };
 
-      const response = await fetch("http://192.168.0.72:8080/alarm/confirm", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(alarmData),
-      });
+      const response = await fetch(
+        "http://port-0-chon-m3qz4omzb344e0d7.sel4.cloudtype.app/alarm/confirm",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(alarmData),
+        }
+      );
 
       if (!response.ok) {
         throw new Error("알람 전송에 실패했습니다.");
@@ -111,7 +114,7 @@ export default function HostResve() {
 
     try {
       const response = await fetch(
-        `http://192.168.0.72:8080/reservations/confirm/${reservationId}`,
+        `http://port-0-chon-m3qz4omzb344e0d7.sel4.cloudtype.app/reservations/confirm/${reservationId}`,
         {
           method: "PUT",
         }
@@ -142,13 +145,16 @@ export default function HostResve() {
         reservationId: reservationId,
       };
 
-      const response = await fetch("http://192.168.0.72:8080/alarm/decline", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(alarmData),
-      });
+      const response = await fetch(
+        "http://port-0-chon-m3qz4omzb344e0d7.sel4.cloudtype.app/alarm/decline",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(alarmData),
+        }
+      );
 
       if (!response.ok) {
         throw new Error("알람 전송에 실패했습니다.");
@@ -164,7 +170,7 @@ export default function HostResve() {
   async function reservationDecline() {
     try {
       const response = await fetch(
-        `http://192.168.0.72:8080/reservations/decline/${reservationId}`,
+        `http://port-0-chon-m3qz4omzb344e0d7.sel4.cloudtype.app/reservations/decline/${reservationId}`,
         {
           method: "PUT", // 필요한 HTTP 메서드 설정
         }
