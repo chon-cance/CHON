@@ -31,7 +31,9 @@ export default function Modal({ accommodation, onClose }) {
   useEffect(() => {
     const fetchTimeSlots = async () => {
       try {
-        const response = await fetch(`http://port-0-chon-m3qz4omzb344e0d7.sel4.cloudtype.app/accommodations/timeslots?accommodationId=${accommodation._id}`);
+        const response = await fetch(
+          `http://port-0-chon-m3qz4omzb344e0d7.sel4.cloudtype.app/accommodations/timeslots?accommodationId=${accommodation._id}`
+        );
 
         const data = await response.json();
         setTimeSlots(data);
@@ -51,13 +53,16 @@ export default function Modal({ accommodation, onClose }) {
         url: `localhost:5173/guest/${reservationData._id}`,
       };
 
-      const response = await fetch("http://port-0-chon-m3qz4omzb344e0d7.sel4.cloudtype.app/alarm/request_guest", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(alarmData),
-      });
+      const response = await fetch(
+        "http://port-0-chon-m3qz4omzb344e0d7.sel4.cloudtype.app/alarm/request_guest",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(alarmData),
+        }
+      );
 
       if (!response.ok) {
         throw new Error("알람 전송에 실패했습니다.");
@@ -78,13 +83,16 @@ export default function Modal({ accommodation, onClose }) {
         url: `localhost:5173/host/${reservationData.accommodationId}`,
       };
 
-      const response = await fetch("http://port-0-chon-m3qz4omzb344e0d7.sel4.cloudtype.app/alarm/request_host", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(alarmData),
-      });
+      const response = await fetch(
+        "http://port-0-chon-m3qz4omzb344e0d7.sel4.cloudtype.app/alarm/request_host",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(alarmData),
+        }
+      );
 
       if (!response.ok) {
         throw new Error("알람 전송에 실패했습니다.");
@@ -122,13 +130,16 @@ export default function Modal({ accommodation, onClose }) {
 
       console.log("Sending reservation data:", reservationData);
 
-      const response = await fetch("http://port-0-chon-m3qz4omzb344e0d7.sel4.cloudtype.app/reservations/create", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(reservationData),
-      });
+      const response = await fetch(
+        "http://port-0-chon-m3qz4omzb344e0d7.sel4.cloudtype.app/reservations/create",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(reservationData),
+        }
+      );
 
       const data = await response.json();
 
@@ -156,7 +167,9 @@ export default function Modal({ accommodation, onClose }) {
     return Array.from({ length: 5 }, (_, i) => (
       <span
         key={i}
-        className={`${styles.star} ${i < grade ? styles.activeStar : styles.star}`}
+        className={`${styles.star} ${
+          i < grade ? styles.activeStar : styles.star
+        }`}
         style={{ color: i < grade ? "gold" : "#dddddd" }} // 별 색을 노란색과 회색으로 지정
       >
         ★
@@ -187,8 +200,12 @@ export default function Modal({ accommodation, onClose }) {
 
     // const date = new Date(accommodation.create_date);
     // date.setDate(date.getDate() + index); // 임의로 리뷰마다 날짜를 다르게 설정
-    const formattedDate = randomDate.toLocaleDateString("ko-KR", options).replace(/\./g, "-");
-    const finalDate = formattedDate.endsWith("-") ? formattedDate.slice(0, -1) : formattedDate;
+    const formattedDate = randomDate
+      .toLocaleDateString("ko-KR", options)
+      .replace(/\./g, "-");
+    const finalDate = formattedDate.endsWith("-")
+      ? formattedDate.slice(0, -1)
+      : formattedDate;
     return finalDate; // 'yyyy-mm-dd' 형식으로 변환
   };
 
@@ -225,7 +242,11 @@ export default function Modal({ accommodation, onClose }) {
             {accommodation.photo.map((photo, index) => (
               <SwiperSlide key={index}>
                 <div className={styles.imageSection}>
-                  <img src={`/img/${accommodation.accommodation_num}/${photo}`} alt={`숙소 이미지 ${index + 1}`} className={styles.mainImage} />
+                  <img
+                    src={`/img/${accommodation.accommodation_num}/${photo}`}
+                    alt={`숙소 이미지 ${index + 1}`}
+                    className={styles.mainImage}
+                  />
                 </div>
               </SwiperSlide>
             ))}
@@ -247,11 +268,14 @@ export default function Modal({ accommodation, onClose }) {
                 </p>
                 <p className={styles.detail}>
                   <img src={icon2} alt="인원 아이콘" className={styles.icon} />
-                  기준 {accommodation.person}명 / 최대 {accommodation.max_person} 명
+                  기준 {accommodation.person}명 / 최대{" "}
+                  {accommodation.max_person} 명
                 </p>
               </div>
             </div>
-            <p className={styles.price}>₩ {accommodation.price.toLocaleString()}</p>
+            <p className={styles.price}>
+              ₩ {accommodation.price.toLocaleString()}
+            </p>
           </div>
 
           {/* 예약폼 */}
@@ -261,29 +285,42 @@ export default function Modal({ accommodation, onClose }) {
                 <div
                   className={styles.inputGroup}
                   onClick={() => {
-                    setShowCheckInCalendar(true);
-                    setShowCheckOutCalendar(false); // 체크아웃 달력 닫기
+                    setShowCheckInCalendar(!showCheckInCalendar); // 현재 상태의 반대로 토글
+                    setShowCheckOutCalendar(false); // 체크아웃 달력은 항상 닫기
                   }}
                 >
                   <div className={styles.form_category}>체크인</div>
-                  <div className={styles.form_value}>{checkIn ? new Date(checkIn).toLocaleDateString() : "날짜 추가"}</div>
+                  <div className={styles.form_value}>
+                    {checkIn
+                      ? new Date(checkIn).toLocaleDateString()
+                      : "날짜 추가"}
+                  </div>
                 </div>
 
                 {showCheckInCalendar && (
                   <div className={styles.calendar_wrapper}>
-                    <StyledCalender onChange={handleCheckInSelect} value={checkIn ? new Date(checkIn) : null} isCheckIn={true} timeSlots={timeSlots} />
+                    <StyledCalender
+                      onChange={handleCheckInSelect}
+                      value={checkIn ? new Date(checkIn) : null}
+                      isCheckIn={true}
+                      timeSlots={timeSlots}
+                    />
                   </div>
                 )}
 
                 <div
                   className={styles.inputGroup}
                   onClick={() => {
-                    setShowCheckOutCalendar(true);
-                    setShowCheckInCalendar(false); // 체크인 달력 닫기
+                    setShowCheckOutCalendar(!showCheckOutCalendar); // 현재 상태의 반대로 토글
+                    setShowCheckInCalendar(false); // 체크인 달력은 항상 닫기
                   }}
                 >
                   <div className={styles.form_category}>체크아웃</div>
-                  <div className={styles.form_value}>{checkOut ? new Date(checkOut).toLocaleDateString() : "날짜 추가"}</div>
+                  <div className={styles.form_value}>
+                    {checkOut
+                      ? new Date(checkOut).toLocaleDateString()
+                      : "날짜 추가"}
+                  </div>
                 </div>
 
                 {showCheckOutCalendar && (
@@ -310,7 +347,10 @@ export default function Modal({ accommodation, onClose }) {
             </div>
 
             {error && <div className={styles.error}>{error}</div>}
-            <button className={styles.reserveButton} onClick={handleReservation}>
+            <button
+              className={styles.reserveButton}
+              onClick={handleReservation}
+            >
               예약 신청하기
             </button>
           </div>
