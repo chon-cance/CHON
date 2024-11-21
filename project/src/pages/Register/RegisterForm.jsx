@@ -4,9 +4,11 @@ import CheckboxGroup from "./CheckboxGroup";
 import styles from "./Register.module.css";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 
 const RegisterForm = () => {
   const navigate = useNavigate();
+  const { login } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [passwordError, setPasswordError] = useState("");
@@ -86,8 +88,8 @@ const RegisterForm = () => {
         return;
       }
 
-      // 모든 검증을 통과한 경우에만 서버 요청
-      const response = await fetch("http://192.168.0.72:8080/user/join", {
+      // 회원가입 요청
+      const joinResponse = await fetch("http://192.168.0.72:8080/user/join", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -95,13 +97,39 @@ const RegisterForm = () => {
         body: JSON.stringify(formData),
       });
 
-      const data = await response.json();
+      const joinData = await joinResponse.json();
 
-      if (response.ok && data.message === "success") {
-        window.alert("회원가입이 완료되었습니다.");
-        window.location.href = "/";
+      if (
+        joinResponse.ok &&
+        joinData.message === "회원가입이 완료되었습니다."
+      ) {
+        // 회원가입 성공 후 자동 로그인 요청
+        const loginResponse = await fetch(
+          "http://192.168.0.72:8080/user/login",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              id: formData.id,
+              password: formData.password,
+            }),
+          }
+        );
+
+        const loginData = await loginResponse.json();
+
+        if (loginResponse.ok && loginData._id) {
+          login(loginData);
+          window.alert("회원가입이 완료되었습니다.");
+          navigate("/");
+        } else {
+          window.alert("자동 로그인에 실패했습니다. 다시 로그인해주세요.");
+          navigate("/login");
+        }
       } else {
-        window.alert(data.message || "회원가입에 실패했습니다.");
+        window.alert(joinData.message || "회원가입에 실패했습니다.");
       }
     } catch (error) {
       console.error("회원가입 에러:", error);
