@@ -59,7 +59,7 @@
 .contentWrapper {
   display: flex;
   margin-top: 15px;
-  height: 50%;
+  /* height: 50%; */
 }
 
 .infoSection {
@@ -324,10 +324,6 @@ a:hover {
     padding: 12px;
     font-size: 15px;
     border-radius: 8px;
-  }
-
-  .inputGroup input[type="number"] {
-    -moz-appearance: textfield; /* 숫자 입력시 스피너 제거 */
   }
 
   .reserveButton {
