@@ -30,17 +30,14 @@
 
 .closeButton {
   position: absolute;
-  top: 15px;
-  right: 20px;
+  top: 10px;
+  right: 15px;
   background: none;
   border: none;
   font-size: 24px;
   cursor: pointer;
   z-index: 10;
   color: #333;
-}
-
-.headerSection {
 }
 
 .imageSection {
@@ -58,10 +55,14 @@
 .contentWrapper {
   display: flex;
   margin-top: 15px;
+  height: 50%;
 }
 
 .infoSection {
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .infoSection h2 {
@@ -81,7 +82,7 @@
   display: flex;
   flex-direction: column; /* 세로 정렬 */
   gap: 8px; /* 요소 간 간격 */
-  margin-top: 37px;
+  margin-top: 30px;
 }
 
 .detail {
@@ -96,6 +97,7 @@
   font-size: 24px;
   font-weight: bold;
   border-bottom: 1px solid #394a4b;
+  padding-top: 5px;
   padding-bottom: 15px;
 }
 
@@ -117,33 +119,25 @@
 
 .dateSection {
   display: flex;
-  overflow-x: auto; /* 자식 요소가 크기를 초과할 경우 스크롤 */
+  /* overflow-x: auto;  */
   border-bottom: 1px solid #394a4b;
+  width: 100%;
 }
 
 .dateSection .inputGroup {
   flex: 1; /* 가변 너비 */
-  max-width: 34%;
-  height: 55px;
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
   padding: 10px;
   border-right: 1px solid #394a4b;
+  width: 33%;
 }
 
 .dateSection .inputGroup:last-child {
   border-right: 0;
 }
 
-.inputGroup label {
-  display: block;
-  font-size: 12px;
-  font-weight: 500;
-  color: #394a4b;
-}
-
-.inputGroup input,
 .inputGroup textarea {
   width: 100%;
   border: 0;
@@ -151,7 +145,6 @@
   margin-top: 5px;
 }
 
-.inputGroup input:focus,
 .inputGroup textarea:focus {
   border: 0;
   outline: none;
@@ -161,6 +154,22 @@
   padding: 10px;
   resize: none;
   width: 100%;
+  height: 80px;
+  font-size: 14px;
+}
+.inputGroup textarea::placeholder {
+  font-size: 14px;
+  color: #b0b0b0;
+}
+
+.form_category {
+  font-size: 12px;
+  color: #394a4b;
+}
+.form_value {
+  font-size: 14px;
+  color: #b0b0b0;
+  padding-top: 5px;
 }
 
 .reserveButton {
@@ -272,7 +281,7 @@ a:hover {
 
 @media (max-width: 768px) {
   .modalContent {
-    padding: 20px;
+    padding: 40px 0;
     width: 100%;
     height: 100vh;
     max-height: none;
@@ -281,22 +290,24 @@ a:hover {
 
   .contentWrapper {
     flex-direction: column;
+    padding: 0 20px;
   }
-
+  .closeButton {
+    top: 5px;
+    right: 15px;
+  }
   .reservationSection {
     width: 100%;
     max-width: 100%; /* 화면 너비 초과 방지 */
-    padding: 16px;
+    /* padding: 16px; */
+    padding-left: 0;
+
     box-sizing: border-box;
     margin-top: 20px; /* 모바일 화면에서 상단 여백 추가 */
   }
 
   .dateSection {
     flex-wrap: wrap; /* 자식 요소들이 줄 바꿈이 가능하게 설정 */
-    gap: 16px; /* 각 요소 간 여백 추가 */
-    padding: 8px; /* 패딩 조정 */
-    border: 1px solid #ddd;
-    border-radius: 8px;
   }
 
   .inputGroup {
@@ -312,7 +323,6 @@ a:hover {
     margin-bottom: 8px;
   }
 
-  .inputGroup input,
   .inputGroup textarea {
     padding: 12px;
     font-size: 15px;
@@ -328,14 +338,33 @@ a:hover {
     padding: 14px;
     font-size: 16px;
   }
-
+  .reviewSection {
+    padding: 20px 20px 0 20px;
+  }
   .mainImage {
     height: 300px;
+    border-radius: 0;
   }
 
   .thumbnail {
     width: 80px;
     height: 60px;
+  }
+}
+@media (max-width: 420px) {
+  .dateSection .inputGroup:nth-of-type(1),
+  .dateSection .inputGroup:nth-of-type(2) {
+    width: 49%;
+  }
+  .inputGroup:nth-of-type(3) {
+    border-top: 1px solid #394a4b;
+    width: 100%;
+  }
+  .inputGroup:nth-of-type(2) {
+    border-right: 0;
+  }
+  .inputGroup textarea {
+    width: 100%;
   }
 }
 
@@ -350,3 +379,5 @@ a:hover {
   background-color: #cccccc;
   cursor: not-allowed;
 }
+
+/* ---- */
