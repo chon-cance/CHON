@@ -3,6 +3,9 @@ import { createPortal } from "react-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+// Import required modules
+import { Navigation, Pagination } from "swiper/modules";
+import "swiper/css/pagination"; // Pagination 스타일 추가
 
 import "swiper/css";
 import styles from "./Modal.module.css";
@@ -45,13 +48,16 @@ export default function Modal({ accommodation, onClose }) {
 
       console.log("Sending reservation data:", reservationData);
 
-      const response = await fetch("http://192.168.0.72:8080/reservations/create", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(reservationData),
-      });
+      const response = await fetch(
+        "http://192.168.0.72:8080/reservations/create",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(reservationData),
+        }
+      );
 
       const data = await response.json();
 
@@ -77,7 +83,9 @@ export default function Modal({ accommodation, onClose }) {
     return Array.from({ length: 5 }, (_, i) => (
       <span
         key={i}
-        className={`${styles.star} ${i < grade ? styles.activeStar : styles.star}`}
+        className={`${styles.star} ${
+          i < grade ? styles.activeStar : styles.star
+        }`}
         style={{ color: i < grade ? "gold" : "#dddddd" }} // 별 색을 노란색과 회색으로 지정
       >
         ★
@@ -108,8 +116,12 @@ export default function Modal({ accommodation, onClose }) {
 
     // const date = new Date(accommodation.create_date);
     // date.setDate(date.getDate() + index); // 임의로 리뷰마다 날짜를 다르게 설정
-    const formattedDate = randomDate.toLocaleDateString("ko-KR", options).replace(/\./g, "-");
-    const finalDate = formattedDate.endsWith("-") ? formattedDate.slice(0, -1) : formattedDate;
+    const formattedDate = randomDate
+      .toLocaleDateString("ko-KR", options)
+      .replace(/\./g, "-");
+    const finalDate = formattedDate.endsWith("-")
+      ? formattedDate.slice(0, -1)
+      : formattedDate;
     return finalDate; // 'yyyy-mm-dd' 형식으로 변환
   };
 
@@ -120,71 +132,89 @@ export default function Modal({ accommodation, onClose }) {
           ✕
         </button>
 
+        {/* 숙소 이미지 */}
         <div className={styles.headerSection}>
           <Swiper
             pagination={{
               type: "fraction",
             }}
-            modules={[]} // Pagination 모듈 제거
-            className="mySwiper"
+            navigation={true}
+            modules={[Pagination, Navigation]}
+            className={styles.mySwiper}
           >
             {accommodation.photo.map((photo, index) => (
               <SwiperSlide key={index}>
-                <img src={`/img/${accommodation.accommodation_num}/${photo}`} alt={`숙소 이미지 ${index + 1}`} className={styles.mainImage} />
+                <img
+                  src={`/img/${accommodation.accommodation_num}/${photo}`}
+                  alt={`숙소 이미지 ${index + 1}`}
+                  className={styles.mainImage}
+                />
               </SwiperSlide>
             ))}
           </Swiper>
         </div>
 
+        {/* 숙소정보, 예약폼 */}
         <div className={styles.contentWrapper}>
+          {/* 숙소 정보*/}
           <div className={styles.infoSection}>
-            <h2>{accommodation.name}</h2>
-            <p className={styles.description}>{accommodation.explain}</p>
+            <div className={styles.infoSection_warp}>
+              <h2>{accommodation.name}</h2>
+              <p className={styles.description}>{accommodation.explain}</p>
 
-            <div className={styles.locationAndDetails}>
-              <p className={styles.detail}>
-                <img src={icon1} alt="지도 아이콘" className={styles.icon} />
-                {accommodation.address}
-              </p>
-              <p className={styles.detail}>
-                <img src={icon2} alt="인원 아이콘" className={styles.icon} />
-                기준 {accommodation.person}명 / 최대 {accommodation.max_person} 명
-              </p>
+              <div className={styles.locationAndDetails}>
+                <p className={styles.detail}>
+                  <img src={icon1} alt="지도 아이콘" className={styles.icon} />
+                  {accommodation.address}
+                </p>
+                <p className={styles.detail}>
+                  <img src={icon2} alt="인원 아이콘" className={styles.icon} />
+                  기준 {accommodation.person}명 / 최대{" "}
+                  {accommodation.max_person} 명
+                </p>
+              </div>
             </div>
 
-            <p className={styles.price}>₩ {accommodation.price.toLocaleString()}</p>
+            <p className={styles.price}>
+              ₩ {accommodation.price.toLocaleString()}
+            </p>
           </div>
 
+          {/* 예약폼 */}
           <div className={styles.reservationSection}>
             <div className={styles.reser_box}>
               <div className={styles.dateSection}>
                 <div className={styles.inputGroup}>
-                  <label>체크인</label>
-                  <input type="date" value={checkIn} onChange={(e) => setCheckIn(e.target.value)} />
+                  <div className={styles.form_category}>체크인</div>
+                  <div className={styles.form_value}>날짜추가</div>
                 </div>
                 <div className={styles.inputGroup}>
-                  <label>체크아웃</label>
-                  <input type="date" value={checkOut} onChange={(e) => setCheckOut(e.target.value)} />
+                  <div className={styles.form_category}>체크아웃</div>
+                  <div className={styles.form_value}>날짜추가</div>
                 </div>
                 <div className={styles.inputGroup}>
-                  <label>인원수</label>
-                  <input type="number" min={1} max={accommodation.max_person} value={guests} onChange={(e) => setGuests(e.target.value)} />
+                  <div className={styles.form_category}>인원수</div>
+                  <div className={styles.form_value}>게스트 추가</div>
                 </div>
               </div>
               <div>
                 <div className={styles.inputGroup}>
-                  <textarea rows={3} value={requests} onChange={(e) => setRequests(e.target.value)} placeholder="전달사항을 기입해주세요."></textarea>
+                  <textarea placeholder="전달사항을 기입해주세요."></textarea>
                 </div>
               </div>
             </div>
 
             {error && <div className={styles.error}>{error}</div>}
-            <button className={styles.reserveButton} onClick={handleReservation}>
+            <button
+              className={styles.reserveButton}
+              onClick={handleReservation}
+            >
               예약 신청하기
             </button>
           </div>
         </div>
 
+        {/* 리뷰 */}
         <div className={styles.reviewSection}>
           <div className={styles.reviewTitle}>
             <div className={styles.reviewH3}>후기</div>
@@ -203,7 +233,26 @@ export default function Modal({ accommodation, onClose }) {
             slidesPerView={3} // 한 번에 3개 리뷰 표시
             spaceBetween={20} // 리뷰 간 간격 설정
             modules={[]} // Pagination 모듈 제거
-            className="mySwiper"
+            className={styles.mySwiper}
+            breakpoints={{
+              1200: {
+                slidesPerView: 3,
+                spaceBetween: 20,
+              },
+              768: {
+                slidesPerView: 3,
+                spaceBetween: 10,
+              },
+
+              530: {
+                slidesPerView: 2,
+                spaceBetween: 20,
+              },
+              230: {
+                slidesPerView: 1,
+                spaceBetween: 20,
+              },
+            }}
           >
             {accommodation.review.map((review, index) => (
               <SwiperSlide key={index}>
