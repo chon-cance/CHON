@@ -2,17 +2,20 @@ import styles from "./HostResve.module.css";
 import logo3 from "/img/logo3.png";
 import exit from "/img/exit.png";
 import resve from "/img/resve.png";
-import { useParams, useSearchParams } from "react-router-dom";
+
 import { useState, useEffect } from "react";
 import { ShowAlert, ShowConfirm, ShowLoading } from "../../utils/AlertUtils.js";
 import useQueryRemover from "../../hooks/useQueryRemover.js";
 import { useNavigate } from "react-router-dom";
 export default function HostResve() {
-  const [searchParams] = useSearchParams();
-  const id = searchParams.get("id");
   const navigate = useNavigate();
 
-  // accommodationId를 상태로 저장
+  // useQueryRemover에서 반환된 값을 저장
+  const reservationId = useQueryRemover({
+    query: "id",
+    excuteFunc: null,
+  });
+
   const [accommodationId, setAccommodationId] = useState(null);
   const [reservationData, setReservationData] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -24,26 +27,33 @@ export default function HostResve() {
   });
 
   const fetchReservationData = async () => {
+    if (!reservationId) return;
+
+    setLoading(true);
     try {
       const response = await fetch(
-        `http://192.168.0.72:8080/reservations/?reservationId=${id}`
+        `http://192.168.0.72:8080/reservations/?reservationId=${reservationId}`
       );
 
       const data = await response.json();
 
-      if (data.state == "confirm") {
+      if (!response.ok) {
+        throw new Error(data.message || "예약 정보를 불러오는데 실패했습니다.");
+      }
+
+      if (data.state === "confirm") {
         setReservation({
           state: "승인완료",
           color: { color: "#394A4B" },
           view: false,
         });
-      } else if (data.state == "decline") {
+      } else if (data.state === "decline") {
         setReservation({
           state: "승인거절",
           color: { color: "#a6a6a6" },
           view: false,
         });
-      } else if (data.state == "delete") {
+      } else if (data.state === "delete") {
         setReservation({
           state: "취소된 예약",
           color: { color: "red" },
@@ -51,35 +61,41 @@ export default function HostResve() {
         });
       }
 
-      setReservationData(data); // 예약 정보 저장
-      // 숙소 ID 저장
+      setReservationData(data);
       setAccommodationId(data.accommodationId._id);
     } catch (err) {
-      setError("예약 정보를 불러오는 데 실패했습니다."); // 오류 처리
+      setError(err.message || "예약 정보를 불러오는 데 실패했습니다.");
     } finally {
       setLoading(false);
     }
   };
 
-  // 컴포넌트 실행이 완료된 후 useEffect 실행
+  // useEffect로 reservationId 감시
   useEffect(() => {
-    fetchReservationData();
-  }, []);
+    if (reservationId) {
+      fetchReservationData();
+    }
+  }, [reservationId]);
 
   async function reservationConfirm() {
+    if (!reservationId) {
+      ShowAlert("fail", "실패", "예약 ID가 존재하지 않습니다.");
+      return;
+    }
+
     try {
       const response = await fetch(
-        `http://192.168.0.72:8080/reservations/confirm/${id}`,
+        `http://192.168.0.72:8080/reservations/confirm/${reservationId}`,
         {
-          method: "PUT", // 필요한 HTTP 메서드 설정
+          method: "PUT",
         }
       );
 
-      if (!response.ok) {
-        throw new Error("네트워크 응답이 좋지 않습니다.");
-      }
-
       const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "네트워크 응답이 좋지 않습니다.");
+      }
 
       setReservation({
         state: "승인완료",
@@ -87,17 +103,15 @@ export default function HostResve() {
         view: false,
       });
       ShowAlert("success", "성공", data.message);
-      // alert(data.message); // 받은 메시지를 alert로 표시
     } catch (e) {
-      ShowAlert("fail", "실패", "예약 승인 요청에 실패했습니다.");
-      // alert("예약 승인 요청에 실패했습니다."); // 오류 처리
+      ShowAlert("fail", "실패", e.message || "예약 승인 요청에 실패했습니다.");
     }
   }
 
   async function reservationDecline() {
     try {
       const response = await fetch(
-        `http://192.168.0.72:8080/reservations/decline/${id}`,
+        `http://192.168.0.72:8080/reservations/decline/${reservationId}`,
         {
           method: "PUT", // 필요한 HTTP 메서드 설정
         }
@@ -128,13 +142,6 @@ export default function HostResve() {
       navigate(`/host/${accommodationId}`);
     }
   };
-
-  useQueryRemover({
-    query: "id",
-    excuteFunc: () => {
-      fetchReservationData();
-    },
-  });
 
   return (
     <div className={styles.hostResve}>
