@@ -55,7 +55,7 @@
 .contentWrapper {
   display: flex;
   margin-top: 15px;
-  height: 50%;
+  /* height: 50%; */
 }
 
 .infoSection {
