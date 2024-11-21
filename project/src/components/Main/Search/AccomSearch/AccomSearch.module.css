@@ -10,6 +10,15 @@
   gap: 30px;
 }
 
+.empty_text {
+  width: 100%;
+  padding-top: 40px;
+  text-align: center;
+  font-size: 25px;
+  font-weight: bold;
+  color: #394a4b;
+}
+
 @media (max-width: 1200px) {
   .cardContainer {
     grid-template-columns: repeat(4, 1fr);

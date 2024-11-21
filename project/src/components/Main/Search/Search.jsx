@@ -1,6 +1,5 @@
 import { useState } from "react";
-import StyledCalender from "../../StyledCalender/StyledCalender";
-import "../../StyledCalender/StyledCalender.css";
+import SearchCalendar from "../../SearchCalender/SearchCalender";
 import styles from "./Search.module.css";
 import searchIcon from "/img/searchIcon.png";
 import { searchAccommodations } from "../../../api/accommodationSearch";
@@ -154,9 +153,8 @@ export default function Search() {
                 className={styles.calendar_wrapper}
                 onClick={handleCalendarClick}
               >
-                <StyledCalender
+                <SearchCalendar
                   onChange={handleDateChange}
-                  minDate={new Date()}
                   value={dateRange}
                   selectRange={true}
                 />
