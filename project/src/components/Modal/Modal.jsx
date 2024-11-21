@@ -45,17 +45,14 @@ export default function Modal({ accommodation, onClose }) {
 
       console.log("Sending reservation data:", reservationData);
 
-      const response = await fetch(
-        "http://192.168.0.72:8080/reservations/create",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-          body: JSON.stringify(reservationData),
-        }
-      );
+      const response = await fetch("http://192.168.0.72:8080/reservations/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify(reservationData),
+      });
 
       const data = await response.json();
 
@@ -81,8 +78,8 @@ export default function Modal({ accommodation, onClose }) {
     return Array.from({ length: 5 }, (_, i) => (
       <span
         key={i}
-        className={`${styles.star} ${i < grade ? styles.activeStar : ""}`}
-        style={{ color: i < grade ? "gold" : "gray" }} // 별 색을 노란색과 회색으로 지정
+        className={`${styles.star} ${i < grade ? styles.activeStar : styles.star}`}
+        style={{ color: i < grade ? "gold" : "#dddddd" }} // 별 색을 노란색과 회색으로 지정
       >
         ★
       </span>
@@ -97,9 +94,24 @@ export default function Modal({ accommodation, onClose }) {
 
   // 리뷰 날짜 추출 함수 (임의로 날짜 추가)
   const getReviewDate = (index) => {
-    const date = new Date(accommodation.create_date);
-    date.setDate(date.getDate() + index); // 임의로 리뷰마다 날짜를 다르게 설정
-    return date.toLocaleDateString(); // 'yyyy-mm-dd' 형식으로 변환
+    const options = {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    };
+    // 현재 날짜를 가져옵니다.
+    const today = new Date();
+    const randomDays = Math.floor(Math.random() * today.getDate()); // 0부터 오늘 날짜까지의 랜덤한 일수
+
+    // 랜덤한 이전 날짜를 계산합니다.
+    const randomDate = new Date(today);
+    randomDate.setDate(today.getDate() - randomDays);
+
+    // const date = new Date(accommodation.create_date);
+    // date.setDate(date.getDate() + index); // 임의로 리뷰마다 날짜를 다르게 설정
+    const formattedDate = randomDate.toLocaleDateString("ko-KR", options).replace(/\./g, "-");
+    const finalDate = formattedDate.endsWith("-") ? formattedDate.slice(0, -1) : formattedDate;
+    return finalDate; // 'yyyy-mm-dd' 형식으로 변환
   };
 
   return createPortal(
@@ -119,11 +131,7 @@ export default function Modal({ accommodation, onClose }) {
           >
             {accommodation.photo.map((photo, index) => (
               <SwiperSlide key={index}>
-                <img
-                  src={`/img/${accommodation.accommodation_num}/${photo}`}
-                  alt={`숙소 이미지 ${index + 1}`}
-                  className={styles.mainImage}
-                />
+                <img src={`/img/${accommodation.accommodation_num}/${photo}`} alt={`숙소 이미지 ${index + 1}`} className={styles.mainImage} />
               </SwiperSlide>
             ))}
           </Swiper>
@@ -141,14 +149,11 @@ export default function Modal({ accommodation, onClose }) {
               </p>
               <p className={styles.detail}>
                 <img src={icon2} alt="인원 아이콘" className={styles.icon} />
-                기준 {accommodation.person}명 / 최대 {accommodation.max_person}{" "}
-                명
+                기준 {accommodation.person}명 / 최대 {accommodation.max_person} 명
               </p>
             </div>
 
-            <p className={styles.price}>
-              ₩ {accommodation.price.toLocaleString()}
-            </p>
+            <p className={styles.price}>₩ {accommodation.price.toLocaleString()}</p>
           </div>
 
           <div className={styles.reservationSection}>
@@ -156,48 +161,26 @@ export default function Modal({ accommodation, onClose }) {
               <div className={styles.dateSection}>
                 <div className={styles.inputGroup}>
                   <label>체크인</label>
-                  <input
-                    type="date"
-                    value={checkIn}
-                    onChange={(e) => setCheckIn(e.target.value)}
-                  />
+                  <input type="date" value={checkIn} onChange={(e) => setCheckIn(e.target.value)} />
                 </div>
                 <div className={styles.inputGroup}>
                   <label>체크아웃</label>
-                  <input
-                    type="date"
-                    value={checkOut}
-                    onChange={(e) => setCheckOut(e.target.value)}
-                  />
+                  <input type="date" value={checkOut} onChange={(e) => setCheckOut(e.target.value)} />
                 </div>
                 <div className={styles.inputGroup}>
                   <label>인원수</label>
-                  <input
-                    type="number"
-                    min={1}
-                    max={accommodation.max_person}
-                    value={guests}
-                    onChange={(e) => setGuests(e.target.value)}
-                  />
+                  <input type="number" min={1} max={accommodation.max_person} value={guests} onChange={(e) => setGuests(e.target.value)} />
                 </div>
               </div>
               <div>
                 <div className={styles.inputGroup}>
-                  <textarea
-                    rows={3}
-                    value={requests}
-                    onChange={(e) => setRequests(e.target.value)}
-                    placeholder="전달사항을 기입해주세요."
-                  ></textarea>
+                  <textarea rows={3} value={requests} onChange={(e) => setRequests(e.target.value)} placeholder="전달사항을 기입해주세요."></textarea>
                 </div>
               </div>
             </div>
 
             {error && <div className={styles.error}>{error}</div>}
-            <button
-              className={styles.reserveButton}
-              onClick={handleReservation}
-            >
+            <button className={styles.reserveButton} onClick={handleReservation}>
               예약 신청하기
             </button>
           </div>
@@ -205,19 +188,16 @@ export default function Modal({ accommodation, onClose }) {
 
         <div className={styles.reviewSection}>
           <div className={styles.reviewTitle}>
-            <span className={styles.reviewH3}>후기</span>
+            <div className={styles.reviewH3}>후기</div>
             <span className={styles.starAndNumber}>
               {/* 별 하나 표시, 색을 노란색으로 설정 */}
-              <span className={styles.starsWrapper}>
-                <span className={styles.star} style={{ color: "gold" }}>
-                  {"★"}
-                </span>
+              <span className={styles.star} style={{ color: "gold" }}>
+                {"★"}
               </span>
               <span className={styles.averageRating}>
                 {/* 평균 별점 숫자 표시 */}
-                {calculateAverageGrade()}
+                {calculateAverageGrade()} ({accommodation.review.length})
               </span>
-              ({accommodation.review.length})
             </span>
           </div>
           <Swiper
@@ -234,10 +214,10 @@ export default function Modal({ accommodation, onClose }) {
                       {/* 별점 표시 (여전히 별점 개수 표시) */}
                       {renderStars(accommodation.grade)}
                     </div>
-                    <span className={styles.reviewDate}>
+                    <div className={styles.reviewDate}>
                       {/* 별점 옆에 등록일 표시 */}
                       {getReviewDate(index)} {/* 리뷰 날짜 표시 */}
-                    </span>
+                    </div>
                   </div>
                   <p>{review}</p>
                 </div>
