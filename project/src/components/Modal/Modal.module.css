@@ -322,10 +322,6 @@ a:hover {
     border-radius: 8px;
   }
 
-  .inputGroup input[type="number"] {
-    -moz-appearance: textfield; /* 숫자 입력시 스피너 제거 */
-  }
-
   .reserveButton {
     width: 100%;
     padding: 14px;
