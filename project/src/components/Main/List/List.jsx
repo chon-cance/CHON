@@ -7,12 +7,16 @@ export default function List() {
   const [topGradeAccommodations, setTopGradeAccommodations] = useState([]);
 
   useEffect(() => {
-    fetch("http://port-0-chon-m3qz4omzb344e0d7.sel4.cloudtype.app/accommodations/top_date")
+    fetch(
+      "https://port-0-chon-m3qz4omzb344e0d7.sel4.cloudtype.app/accommodations/top_date"
+    )
       .then((res) => res.json())
       .then((data) => setRecentAccommodations(data));
 
     // 평점 높은 숙소 API 호출
-    fetch("http://port-0-chon-m3qz4omzb344e0d7.sel4.cloudtype.app/accommodations/top_grade")
+    fetch(
+      "https://port-0-chon-m3qz4omzb344e0d7.sel4.cloudtype.app/accommodations/top_grade"
+    )
       .then((res) => res.json())
       .then((data) => setTopGradeAccommodations(data));
 
