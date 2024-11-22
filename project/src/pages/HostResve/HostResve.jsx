@@ -212,8 +212,8 @@ export default function HostResve() {
         </div>
         <div className={styles.exit}>
           <div onClick={handleGoBack} className={styles.exit_btn}>
-            <p>예약목록</p>
             <img src={exit} alt="" />
+            <p> 예약목록</p>
           </div>
         </div>
       </div>
