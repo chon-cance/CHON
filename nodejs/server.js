@@ -17,27 +17,11 @@ const url = `mongodb+srv://choncance:tmakxmdnpqdoq5!@choncance.nr4zf.mongodb.net
 // 몽구스 라이브러리를 이용하여 몽고DB 연결
 mongoose.connect(url);
 
-// 기존 미들웨어
+// 미들웨어 설정
+app.use(cors());
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-
-// 기존 CORS 미들웨어 제거 또는 수정
-app.use((req, res, next) => {
-  console.log("cors 에러 해결?");
-  res.setHeader(
-    "Access-Control-Allow-Origin",
-    "https://chonslove.netlify.app/"
-  ); // 모든 출처 허용
-  response.setHeader(
-    "Access-Control-Allow-Methods",
-    "GET, POST, OPTIONS, PUT, PATCH, DELETE"
-  ); // 모든 HTTP 메서드 허용
-
-  res.setHeader("Access-Control-Allow-Credentials", "true"); // 모든 출처 허용
-
-  next();
-});
 
 // Solapi 라우트
 app.use("/alarm", solapiRoutes);
@@ -64,5 +48,5 @@ app.use((err, req, res, next) => {
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+  console.log(`Server is running on port ${PORT}, http://localhost:${PORT}`);
 });

@@ -44,12 +44,9 @@ const LoginForm = () => {
 
       if (response.ok) {
         if (data.id) {
-          console.log("✅ Login successful:", data);
           login(data);
           navigate("/");
-          console.log("🏠 Redirected to home page");
         } else {
-          console.error("❌ Login failed:", data.message);
           setError(data.message);
         }
       } else {
