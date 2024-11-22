@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { createPortal } from "react-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { useNavigate } from "react-router-dom";
@@ -18,7 +18,7 @@ export default function Modal({ accommodation, onClose }) {
   const [currentPhoto, setCurrentPhoto] = useState(0);
   const [checkIn, setCheckIn] = useState("");
   const [checkOut, setCheckOut] = useState("");
-  const [guests, setGuests] = useState(1);
+  const [guests, setGuests] = useState(0);
   const [requests, setRequests] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
@@ -119,8 +119,13 @@ export default function Modal({ accommodation, onClose }) {
         return;
       }
 
-      if (!checkIn || !checkOut || !guests) {
-        alert("모든 필수 항목을 입력해주세요.");
+      if (guests === 0) {
+        alert("인원수를 선택해주세요.");
+        return;
+      }
+
+      if (!checkIn || !checkOut) {
+        alert("체크인/체크아웃 날짜를 선택해주세요.");
         return;
       }
 
@@ -152,7 +157,7 @@ export default function Modal({ accommodation, onClose }) {
         alert("예약이 완료되었습니다.");
         setCheckIn("");
         setCheckOut("");
-        setGuests(1);
+        setGuests(0);
         setRequests("");
         onClose();
         guestAlarm(data);
@@ -188,30 +193,25 @@ export default function Modal({ accommodation, onClose }) {
     return grade.toFixed(1); // 소수점 첫째 자리까지 계산
   };
 
-  // 리뷰 날짜 추출 함수 (임의로 날짜 추가)
+  // 리뷰 날짜를 메모이제이션
+  const reviewDates = useMemo(() => {
+    return accommodation.review.map((_, index) => {
+      const today = new Date();
+      const randomDays = Math.floor(Math.random() * 30); // 최근 30일 내의 랜덤한 날짜
+      const reviewDate = new Date(today);
+      reviewDate.setDate(today.getDate() - randomDays);
+
+      return reviewDate.toLocaleDateString("ko-KR", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+      });
+    });
+  }, []); // 리뷰 개수가 변경될 때만 재계산
+
+  // getReviewDate 함수 수정
   const getReviewDate = (index) => {
-    const options = {
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-    };
-    // 현재 날짜를 가져옵니다.
-    const today = new Date();
-    const randomDays = Math.floor(Math.random() * today.getDate()); // 0부터 오늘 날짜까지의 랜덤한 일수
-
-    // 랜덤한 이전 날짜를 계산합니다.
-    const randomDate = new Date(today);
-    randomDate.setDate(today.getDate() - randomDays);
-
-    // const date = new Date(accommodation.create_date);
-    // date.setDate(date.getDate() + index); // 임의로 리뷰마다 날짜를 다르게 설정
-    const formattedDate = randomDate
-      .toLocaleDateString("ko-KR", options)
-      .replace(/\./g, "-");
-    const finalDate = formattedDate.endsWith("-")
-      ? formattedDate.slice(0, -1)
-      : formattedDate;
-    return finalDate; // 'yyyy-mm-dd' 형식으로 변환
+    return reviewDates[index];
   };
 
   // 체크인 날짜 선택 핸들러
@@ -366,7 +366,7 @@ export default function Modal({ accommodation, onClose }) {
                 >
                   <div className={styles.form_category}>인원수</div>
                   <div className={styles.form_value}>
-                    {guests === 1 ? "게스트 추가" : `${guests}명`}
+                    {guests === 0 ? "게스트 추가" : `${guests}명`}
                   </div>
 
                   {showGuestToggle && (
