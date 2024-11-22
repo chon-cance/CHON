@@ -32,7 +32,7 @@ export default function HostResve() {
     setLoading(true);
     try {
       const response = await fetch(
-        `http://port-0-chon-m3qz4omzb344e0d7.sel4.cloudtype.app/reservations/?reservationId=${reservationId}`
+        `https://port-0-chon-m3qz4omzb344e0d7.sel4.cloudtype.app/reservations/?reservationId=${reservationId}`
       );
 
       const data = await response.json();
@@ -81,11 +81,11 @@ export default function HostResve() {
     try {
       const alarmData = {
         reservationId: reservationId,
-        url: `http://port-0-chon-m3qz4omzb344e0d7.sel4.cloudtype.app/guest/${reservationId}`,
+        url: `https://port-0-chon-m3qz4omzb344e0d7.sel4.cloudtype.app/guest/${reservationId}`,
       };
 
       const response = await fetch(
-        "http://port-0-chon-m3qz4omzb344e0d7.sel4.cloudtype.app/alarm/confirm",
+        "https://port-0-chon-m3qz4omzb344e0d7.sel4.cloudtype.app/alarm/confirm",
         {
           method: "POST",
           headers: {
@@ -114,7 +114,7 @@ export default function HostResve() {
 
     try {
       const response = await fetch(
-        `http://port-0-chon-m3qz4omzb344e0d7.sel4.cloudtype.app/reservations/confirm/${reservationId}`,
+        `https://port-0-chon-m3qz4omzb344e0d7.sel4.cloudtype.app/reservations/confirm/${reservationId}`,
         {
           method: "PUT",
         }
@@ -146,7 +146,7 @@ export default function HostResve() {
       };
 
       const response = await fetch(
-        "http://port-0-chon-m3qz4omzb344e0d7.sel4.cloudtype.app/alarm/decline",
+        "https://port-0-chon-m3qz4omzb344e0d7.sel4.cloudtype.app/alarm/decline",
         {
           method: "POST",
           headers: {
@@ -170,7 +170,7 @@ export default function HostResve() {
   async function reservationDecline() {
     try {
       const response = await fetch(
-        `http://port-0-chon-m3qz4omzb344e0d7.sel4.cloudtype.app/reservations/decline/${reservationId}`,
+        `https://port-0-chon-m3qz4omzb344e0d7.sel4.cloudtype.app/reservations/decline/${reservationId}`,
         {
           method: "PUT", // 필요한 HTTP 메서드 설정
         }

@@ -34,7 +34,7 @@ export default function Modal({ accommodation, onClose }) {
     const fetchTimeSlots = async () => {
       try {
         const response = await fetch(
-          `http://port-0-chon-m3qz4omzb344e0d7.sel4.cloudtype.app/accommodations/timeslots?accommodationId=${accommodation._id}`
+          `https://port-0-chon-m3qz4omzb344e0d7.sel4.cloudtype.app/accommodations/timeslots?accommodationId=${accommodation._id}`
         );
 
         const data = await response.json();
@@ -56,7 +56,7 @@ export default function Modal({ accommodation, onClose }) {
       };
 
       const response = await fetch(
-        "http://port-0-chon-m3qz4omzb344e0d7.sel4.cloudtype.app/alarm/request_guest",
+        "https://port-0-chon-m3qz4omzb344e0d7.sel4.cloudtype.app/alarm/request_guest",
         {
           method: "POST",
           headers: {
@@ -86,7 +86,7 @@ export default function Modal({ accommodation, onClose }) {
       };
 
       const response = await fetch(
-        "http://port-0-chon-m3qz4omzb344e0d7.sel4.cloudtype.app/alarm/request_host",
+        "https://port-0-chon-m3qz4omzb344e0d7.sel4.cloudtype.app/alarm/request_host",
         {
           method: "POST",
           headers: {
@@ -133,7 +133,7 @@ export default function Modal({ accommodation, onClose }) {
       console.log("Sending reservation data:", reservationData);
 
       const response = await fetch(
-        "http://port-0-chon-m3qz4omzb344e0d7.sel4.cloudtype.app/reservations/create",
+        "https://port-0-chon-m3qz4omzb344e0d7.sel4.cloudtype.app/reservations/create",
         {
           method: "POST",
           headers: {
