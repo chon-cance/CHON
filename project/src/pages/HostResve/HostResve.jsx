@@ -81,7 +81,7 @@ export default function HostResve() {
     try {
       const alarmData = {
         reservationId: reservationId,
-        url: `port-0-chon-m3qz4omzb344e0d7.sel4.cloudtype.app/guest/${reservationId}`,
+        url: `chonslove.netlify.app/guest/${reservationId}`,
       };
 
       const response = await fetch(
