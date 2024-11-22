@@ -52,7 +52,7 @@ export default function Modal({ accommodation, onClose }) {
     try {
       const alarmData = {
         reservationId: reservationData._id,
-        url: `localhost:5173/guest/${reservationData._id}`,
+        url: `https://chonslove.netlify.app/guest/${reservationData._id}`,
       };
 
       const response = await fetch(
@@ -82,7 +82,7 @@ export default function Modal({ accommodation, onClose }) {
     try {
       const alarmData = {
         reservationId: reservationData._id,
-        url: `localhost:5173/host/${reservationData.accommodationId}`,
+        url: `https://chonslove.netlify.app/host/${reservationData.accommodationId}`,
       };
 
       const response = await fetch(
