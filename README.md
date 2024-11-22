@@ -112,6 +112,92 @@
 <br>
 
 ## 🖥 프로젝트 구조
+```
+📦src
+ ┣ 📂api
+ ┃ ┣ 📜accommodationReservation.js
+ ┃ ┗ 📜accommodationSearch.js
+ ┣ 📂assets
+ ┃ ┗ 📜react.svg
+ ┣ 📂components
+ ┃ ┣ 📂Footer
+ ┃ ┃ ┣ 📜Footer.jsx
+ ┃ ┃ ┗ 📜Footer.module.css
+ ┃ ┣ 📂Header
+ ┃ ┃ ┣ 📜Header.jsx
+ ┃ ┃ ┗ 📜Header.module.css
+ ┃ ┣ 📂Main
+ ┃ ┃ ┣ 📂Faq
+ ┃ ┃ ┃ ┣ 📜Faq.jsx
+ ┃ ┃ ┃ ┗ 📜Faq.module.css
+ ┃ ┃ ┣ 📂List
+ ┃ ┃ ┃ ┣ 📂SwiperChonList
+ ┃ ┃ ┃ ┃ ┣ 📂ChonCard
+ ┃ ┃ ┃ ┃ ┃ ┣ 📜ChonCard.jsx
+ ┃ ┃ ┃ ┃ ┃ ┗ 📜ChonCard.module.css
+ ┃ ┃ ┃ ┃ ┣ 📜SwiperChonList.jsx
+ ┃ ┃ ┃ ┃ ┗ 📜SwiperChonList.module.css
+ ┃ ┃ ┃ ┣ 📜List.jsx
+ ┃ ┃ ┃ ┗ 📜List.module.css
+ ┃ ┃ ┣ 📂Search
+ ┃ ┃ ┃ ┣ 📂AccomSearch
+ ┃ ┃ ┃ ┃ ┣ 📜AccomSearch.jsx
+ ┃ ┃ ┃ ┃ ┗ 📜AccomSearch.module.css
+ ┃ ┃ ┃ ┣ 📜Search.jsx
+ ┃ ┃ ┃ ┗ 📜Search.module.css
+ ┃ ┃ ┗ 📜Main.jsx
+ ┃ ┣ 📂Modal
+ ┃ ┃ ┣ 📂icon
+ ┃ ┃ ┃ ┣ 📜map-pin.png
+ ┃ ┃ ┃ ┗ 📜users.png
+ ┃ ┃ ┣ 📜customSwiper.css
+ ┃ ┃ ┣ 📜Modal.jsx
+ ┃ ┃ ┗ 📜Modal.module.css
+ ┃ ┣ 📂ModalCalender
+ ┃ ┃ ┣ 📜StyledCalender.css
+ ┃ ┃ ┗ 📜StyledCalender.jsx
+ ┃ ┣ 📂SearchCalender
+ ┃ ┃ ┣ 📜SearchCalender.css
+ ┃ ┃ ┗ 📜SearchCalender.jsx
+ ┃ ┗ 📂TopButton
+ ┃ ┃ ┣ 📜TopButton.jsx
+ ┃ ┃ ┗ 📜TopButton.module.css
+ ┣ 📂context
+ ┃ ┗ 📜AuthContext.jsx
+ ┣ 📂hooks
+ ┃ ┗ 📜useQueryRemover.js
+ ┣ 📂pages
+ ┃ ┣ 📂GuestResve
+ ┃ ┃ ┣ 📜GuestResve.jsx
+ ┃ ┃ ┗ 📜GuestResve.module.css
+ ┃ ┣ 📂HostResve
+ ┃ ┃ ┣ 📜HostResve.jsx
+ ┃ ┃ ┗ 📜HostResve.module.css
+ ┃ ┣ 📂HostResveList
+ ┃ ┃ ┣ 📂ReservationItem
+ ┃ ┃ ┃ ┗ 📜ReservationItem.jsx
+ ┃ ┃ ┣ 📜HostResveList.jsx
+ ┃ ┃ ┗ 📜HostResveList.module.css
+ ┃ ┣ 📂Login
+ ┃ ┃ ┣ 📜FormGroup.jsx
+ ┃ ┃ ┣ 📜FormHeader.jsx
+ ┃ ┃ ┣ 📜Login.jsx
+ ┃ ┃ ┣ 📜Login.module.css
+ ┃ ┃ ┣ 📜LoginForm.jsx
+ ┃ ┃ ┗ 📜ResisterTag.jsx
+ ┃ ┗ 📂Register
+ ┃ ┃ ┣ 📜CheckboxGroup.jsx
+ ┃ ┃ ┣ 📜FormGroup.jsx
+ ┃ ┃ ┣ 📜Register.jsx
+ ┃ ┃ ┣ 📜Register.module.css
+ ┃ ┃ ┣ 📜RegisterForm.jsx
+ ┃ ┃ ┗ 📜RegisterFormHeader.jsx
+ ┣ 📂utils
+ ┃ ┗ 📜AlertUtils.js
+ ┣ 📜App.jsx
+ ┣ 📜index.css
+ ┗ 📜main.jsx
+```
 
 <br>
 <br>
