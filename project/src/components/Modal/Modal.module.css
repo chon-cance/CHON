@@ -434,7 +434,7 @@ a:hover {
 }
 
 .inputGroup:hover {
-  background-color: #777;
+  background-color: #ddd;
 }
 
 .guestToggleMenu {
@@ -481,7 +481,7 @@ a:hover {
 }
 
 .true {
-  background-color: #888 !important;
+  background-color: #ddd !important;
 }
 
 /* ---- */
