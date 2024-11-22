@@ -4,7 +4,7 @@ import exit from "/img/exit.png";
 import resve from "/img/resve.png";
 
 import { useState, useEffect } from "react";
-import { ShowAlert, ShowConfirm, ShowLoading } from "../../utils/AlertUtils.js";
+import { ShowAlert } from "../../utils/AlertUtils.js";
 import useQueryRemover from "../../hooks/useQueryRemover.js";
 import { useNavigate } from "react-router-dom";
 export default function HostResve() {
@@ -31,9 +31,7 @@ export default function HostResve() {
 
     setLoading(true);
     try {
-      const response = await fetch(
-        `https://port-0-chon-m3qz4omzb344e0d7.sel4.cloudtype.app/reservations/?reservationId=${reservationId}`
-      );
+      const response = await fetch(`https://port-0-chon-m3qz4omzb344e0d7.sel4.cloudtype.app/reservations/?reservationId=${reservationId}`);
 
       const data = await response.json();
 
@@ -84,16 +82,13 @@ export default function HostResve() {
         url: `chonslove.netlify.app/guest/${reservationId}`,
       };
 
-      const response = await fetch(
-        "https://port-0-chon-m3qz4omzb344e0d7.sel4.cloudtype.app/alarm/confirm",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(alarmData),
-        }
-      );
+      const response = await fetch("https://port-0-chon-m3qz4omzb344e0d7.sel4.cloudtype.app/alarm/confirm", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(alarmData),
+      });
 
       if (!response.ok) {
         throw new Error("알람 전송에 실패했습니다.");
@@ -113,12 +108,9 @@ export default function HostResve() {
     }
 
     try {
-      const response = await fetch(
-        `https://port-0-chon-m3qz4omzb344e0d7.sel4.cloudtype.app/reservations/confirm/${reservationId}`,
-        {
-          method: "PUT",
-        }
-      );
+      const response = await fetch(`https://port-0-chon-m3qz4omzb344e0d7.sel4.cloudtype.app/reservations/confirm/${reservationId}`, {
+        method: "PUT",
+      });
 
       const data = await response.json();
 
@@ -145,16 +137,13 @@ export default function HostResve() {
         reservationId: reservationId,
       };
 
-      const response = await fetch(
-        "https://port-0-chon-m3qz4omzb344e0d7.sel4.cloudtype.app/alarm/decline",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(alarmData),
-        }
-      );
+      const response = await fetch("https://port-0-chon-m3qz4omzb344e0d7.sel4.cloudtype.app/alarm/decline", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(alarmData),
+      });
 
       if (!response.ok) {
         throw new Error("알람 전송에 실패했습니다.");
@@ -169,12 +158,9 @@ export default function HostResve() {
 
   async function reservationDecline() {
     try {
-      const response = await fetch(
-        `https://port-0-chon-m3qz4omzb344e0d7.sel4.cloudtype.app/reservations/decline/${reservationId}`,
-        {
-          method: "PUT", // 필요한 HTTP 메서드 설정
-        }
-      );
+      const response = await fetch(`https://port-0-chon-m3qz4omzb344e0d7.sel4.cloudtype.app/reservations/decline/${reservationId}`, {
+        method: "PUT", // 필요한 HTTP 메서드 설정
+      });
 
       if (!response.ok) {
         throw new Error("네트워크 응답이 좋지 않습니다.");
@@ -190,10 +176,8 @@ export default function HostResve() {
         view: false,
       });
       ShowAlert("success", "성공", data.message);
-      // alert(data.message); // 받은 메시지를 alert로 표시
     } catch (e) {
       ShowAlert("fail", "실패", "예약 거절 요청에 실패했습니다.");
-      // alert("예약 거절 요청에 실패했습니다."); // 오류 처리
     }
   }
 
@@ -234,9 +218,7 @@ export default function HostResve() {
           <div className={styles.hostResve_box}>
             <div className={styles.guest_info}>
               <div>게스트</div>
-              {reservation.state == "승인완료" && !reservation.view && (
-                <div>전화번호</div>
-              )}
+              {reservation.state == "승인완료" && !reservation.view && <div>전화번호</div>}
               <div>체크인</div>
               <div>체크아웃</div>
               <div>인원수</div>
@@ -244,14 +226,7 @@ export default function HostResve() {
             </div>
             <div className={styles.guest_infoValue}>
               <div>{reservationData.userId.name}</div>
-              {reservation.state == "승인완료" && !reservation.view && (
-                <div>
-                  {reservationData.userId.phone.replace(
-                    /(\d{3})(\d{4})(\d{4})/,
-                    "$1-$2-$3"
-                  )}
-                </div>
-              )}
+              {reservation.state == "승인완료" && !reservation.view && <div>{reservationData.userId.phone.replace(/(\d{3})(\d{4})(\d{4})/, "$1-$2-$3")}</div>}
               <div>{reservationData.startDate.split("T")[0]}</div>
               <div>{reservationData.endDate.split("T")[0]}</div>
               <div>{reservationData.person}</div>

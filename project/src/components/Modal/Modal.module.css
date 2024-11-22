@@ -385,7 +385,6 @@ a:hover {
   background: white;
 
   border-radius: 16px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 /* 달력 크기 조정 */
@@ -433,9 +432,10 @@ a:hover {
   border-radius: 4px;
 }
 
+/* 체크인, 체크아웃, 인원수 hover 색상
 .inputGroup:hover {
   background-color: #ddd;
-}
+} */
 
 .guestToggleMenu {
   position: absolute;
@@ -444,8 +444,8 @@ a:hover {
   right: 0;
   background: white;
   border: 1px solid #ddd;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 16px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
   z-index: 10;
   padding: 15px;
   cursor: default;
@@ -481,7 +481,7 @@ a:hover {
 }
 
 .true {
-  background-color: #ddd !important;
+  background-color: #eee !important;
 }
 
 /* ---- */

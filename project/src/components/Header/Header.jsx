@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import gsap from "gsap";
 import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { ShowAlert } from "../../utils/AlertUtils.js";
 
 export default function Header() {
   const { user, logout } = useAuth();
@@ -13,7 +14,7 @@ export default function Header() {
 
   const handleLogout = () => {
     logout();
-    window.alert("로그아웃 되었습니다.");
+    ShowAlert("info", "", "로그아웃 되었습니다.");
     window.location.reload();
     navigate("/"); // 로그아웃 후 메인 페이지로 이동
   };
@@ -112,8 +113,7 @@ export default function Header() {
           <div className={styles.main_headLine}>
             <p>자연 속 힐링 여행</p>
             <p>
-              <span className={styles.main_headLine_color}>촌캉스</span> 숙소
-              예약하기
+              <span className={styles.main_headLine_color}>촌캉스</span> 숙소 예약하기
             </p>
           </div>
           <div className={styles.sub_headLine}>

@@ -4,6 +4,7 @@ import styles from "./Search.module.css";
 import searchIcon from "/img/searchIcon.png";
 import { searchAccommodations } from "../../../api/accommodationSearch";
 import AccomSearch from "./AccomSearch/AccomSearch";
+import { ShowAlert } from "../../../utils/AlertUtils.js";
 
 // 지역 데이터
 const REGIONS = ["전체", "강원", "경기", "경남", "경북", "대구", "전남", "전북", "충남", "충북", "제주", "서울", "대전", "부산", "울산"];
@@ -52,7 +53,7 @@ export default function Search() {
     } catch (error) {
       console.error("검색 오류:", error);
       setError(error.message || "검색 중 오류가 발생했습니다.");
-      window.alert(error.message || "검색 중 오류가 발생했습니다.");
+      ShowAlert("info", "", error.message || "검색 중 오류가 발생했습니다.");
     }
   };
 
