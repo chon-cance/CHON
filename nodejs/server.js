@@ -17,16 +17,6 @@ const url = `mongodb+srv://choncance:tmakxmdnpqdoq5!@choncance.nr4zf.mongodb.net
 // 몽구스 라이브러리를 이용하여 몽고DB 연결
 mongoose.connect(url);
 
-// CORS 설정 수정
-app.use(
-  cors({
-    origin: ["http://localhost:5173", "https://localhost:5173"],
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-  })
-);
-
 // 기존 미들웨어
 app.use(morgan("dev"));
 app.use(express.json());
