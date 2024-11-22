@@ -18,30 +18,49 @@ const url = `mongodb+srv://choncance:tmakxmdnpqdoq5!@choncance.nr4zf.mongodb.net
 mongoose.connect(url);
 
 // 미들웨어 설정
-app.use(cors());
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5175",
+      "http://localhost:5173",
+      "https://chonslove.netlify.app",
+    ],
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    preflightContinue: false, // preflight 요청 처리 방식 변경
+    optionsSuccessStatus: 204, // OPTIONS 요청에 대한 성공 상태 코드
+  })
+);
+
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-<<<<<<< HEAD
-=======
 app.get("*.js", (req, res, next) => {
   res.setHeader("Content-Type", "application/javascript");
   next();
 });
 
-// 기존 CORS 미들웨어 제거 또는 수정
+// 추가 CORS 헤더 설정
 app.use((req, res, next) => {
-  console.log("cors 에러 해결?");
+  const origin = req.headers.origin;
+  if (origin) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+  }
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "GET, POST, OPTIONS, PUT, DELETE"
+  );
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  res.setHeader("Access-Control-Allow-Credentials", "true");
 
-  res.setHeader("Access-Control-Allow-Origin", "*"); // 모든 출처 허용 https://chonslove.netlify.app
-  res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, PATCH, DELETE"); // 모든 HTTP 메서드 허용
-  res.setHeader("Access-Control-Allow-Credentials", "true"); // 모든 출처 허용
-
+  if (req.method === "OPTIONS") {
+    return res.status(204).end();
+  }
   next();
 });
 
->>>>>>> ab3ea5dfbe7fdd4c1d293322c55a4fef96ab2add
 // Solapi 라우트
 app.use("/alarm", solapiRoutes);
 
