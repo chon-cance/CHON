@@ -90,7 +90,7 @@ const RegisterForm = () => {
 
       // 회원가입 요청
       const joinResponse = await fetch(
-        "http://port-0-chon-m3qz4omzb344e0d7.sel4.cloudtype.app/user/join",
+        "https://port-0-chon-m3qz4omzb344e0d7.sel4.cloudtype.app/user/join",
         {
           method: "POST",
           headers: {
@@ -108,7 +108,7 @@ const RegisterForm = () => {
       ) {
         // 회원가입 성공 후 자동 로그인 요청
         const loginResponse = await fetch(
-          "http://port-0-chon-m3qz4omzb344e0d7.sel4.cloudtype.app/user/login",
+          "https://port-0-chon-m3qz4omzb344e0d7.sel4.cloudtype.app/user/login",
           {
             method: "POST",
             headers: {
