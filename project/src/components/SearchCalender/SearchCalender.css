@@ -88,9 +88,17 @@
   gap: 40px;
 }
 
-.react-calendar--doubleView .react-calendar__viewContainer > * {
-  width: 50%;
-  margin: 0;
+@media screen and (max-width: 1000px) {
+  .react-calendar--doubleView .react-calendar__viewContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+  }
+
+  .react-calendar__month-view {
+    width: 100%;
+    margin: 0;
+  }
 }
 
 /* 이전/다음 달의 날짜 숨기기 */
@@ -101,5 +109,5 @@
 
 /* 각 달력의 타일 크기 조정 (선택사항) */
 .react-calendar--doubleView .react-calendar__month-view__days__day {
-  padding: 8px; /* 날짜 타일 크기 조정 */
+  padding: 5px; /* 날짜 타일 크기 조정 */
 }

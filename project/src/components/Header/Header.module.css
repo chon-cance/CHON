@@ -11,11 +11,11 @@ header {
   color: white;
 }
 
-@media (max-width: 1000px) {
+/* @media (max-width: 1000px) {
   header {
     height: 70vh;
   }
-}
+} */
 
 /*======================*/
 /* nav */
@@ -107,7 +107,7 @@ nav ul li a:hover {
 /* 모바일 반응형 */
 @media (max-width: 1000px) {
   .logo_conteiner {
-    padding: 50px 0;
+    padding: 50px 0 200px 0;
   }
   .logo_wrap {
     width: 80px;
