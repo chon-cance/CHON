@@ -285,8 +285,8 @@ export default function Modal({ accommodation, onClose }) {
                 <div
                   className={styles.inputGroup}
                   onClick={() => {
-                    setShowCheckInCalendar(true);
-                    setShowCheckOutCalendar(false); // 체크아웃 달력 닫기
+                    setShowCheckInCalendar(!showCheckInCalendar); // 현재 상태의 반대로 토글
+                    setShowCheckOutCalendar(false); // 체크아웃 달력은 항상 닫기
                   }}
                 >
                   <div className={styles.form_category}>체크인</div>
@@ -311,8 +311,8 @@ export default function Modal({ accommodation, onClose }) {
                 <div
                   className={styles.inputGroup}
                   onClick={() => {
-                    setShowCheckOutCalendar(true);
-                    setShowCheckInCalendar(false); // 체크인 달력 닫기
+                    setShowCheckOutCalendar(!showCheckOutCalendar); // 현재 상태의 반대로 토글
+                    setShowCheckInCalendar(false); // 체크인 달력은 항상 닫기
                   }}
                 >
                   <div className={styles.form_category}>체크아웃</div>
