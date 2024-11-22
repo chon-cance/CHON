@@ -27,7 +27,7 @@ app.use((req, res, next) => {
   console.log("cors 에러 해결?");
   res.setHeader(
     "Access-Control-Allow-Origin",
-    "https://chonslove.netlify.app/"
+    "*"
   ); // 모든 출처 허용
   response.setHeader(
     "Access-Control-Allow-Methods",
