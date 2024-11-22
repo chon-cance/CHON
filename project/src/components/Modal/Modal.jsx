@@ -28,6 +28,9 @@ export default function Modal({ accommodation, onClose }) {
   const [showCheckOutCalendar, setShowCheckOutCalendar] = useState(false);
   const [timeSlots, setTimeSlots] = useState({});
   const [showGuestToggle, setShowGuestToggle] = useState(false);
+  const [checkInClass, setCheckInClass] = useState("");
+  const [checkOutClass, setCheckOutClass] = useState("");
+  const [guestClass, setGuestClass] = useState("");
 
   // TimeSlots 데이터 가져오기
   useEffect(() => {
@@ -225,6 +228,19 @@ export default function Modal({ accommodation, onClose }) {
     setShowCheckOutCalendar(false);
   };
 
+  // useEffect로 달력 상태 변경 감지
+  useEffect(() => {
+    setCheckInClass(showCheckInCalendar ? styles.true : "");
+  }, [showCheckInCalendar]);
+
+  useEffect(() => {
+    setCheckOutClass(showCheckOutCalendar ? styles.true : "");
+  }, [showCheckOutCalendar]);
+
+  useEffect(() => {
+    setGuestClass(showGuestToggle ? styles.true : "");
+  }, [showGuestToggle]);
+
   return createPortal(
     <div className={styles.modalOverlay}>
       <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
@@ -286,17 +302,12 @@ export default function Modal({ accommodation, onClose }) {
             <div className={styles.reser_box}>
               <div className={styles.dateSection}>
                 <div
-                  className={styles.inputGroup}
                   onClick={() => {
-                    if (showCheckInCalendar) {
-                      setShowCheckInCalendar(false);
-                      setShowCheckOutCalendar(true);
-                    } else {
-                      setShowCheckInCalendar(true);
-                      setShowCheckOutCalendar(false);
-                    }
+                    setShowCheckInCalendar(!showCheckInCalendar);
+                    setShowCheckOutCalendar(false);
                     setShowGuestToggle(false);
                   }}
+                  className={`${styles.inputGroup} ${styles.checkIn} ${checkInClass}`}
                 >
                   <div className={styles.form_category}>체크인</div>
                   <div className={styles.form_value}>
@@ -318,12 +329,12 @@ export default function Modal({ accommodation, onClose }) {
                 )}
 
                 <div
-                  className={styles.inputGroup}
                   onClick={() => {
-                    setShowCheckOutCalendar(!showCheckOutCalendar); // 현재 상태의 반대로 토글
+                    setShowCheckOutCalendar(!showCheckOutCalendar);
+                    setShowCheckInCalendar(false);
                     setShowGuestToggle(false);
-                    setShowCheckInCalendar(false); // 체크인 달력은 항상 닫기
                   }}
+                  className={`${styles.inputGroup} ${styles.checkOut} ${checkOutClass}`}
                 >
                   <div className={styles.form_category}>체크아웃</div>
                   <div className={styles.form_value}>
@@ -346,7 +357,7 @@ export default function Modal({ accommodation, onClose }) {
                 )}
 
                 <div
-                  className={styles.inputGroup}
+                  className={`${styles.inputGroup} ${guestClass}`}
                   onClick={() => {
                     setShowGuestToggle(!showGuestToggle);
                     setShowCheckInCalendar(false);
@@ -398,7 +409,7 @@ export default function Modal({ accommodation, onClose }) {
                 </div>
               </div>
 
-              <div className={styles.inputGroup}>
+              <div className={styles.inputText}>
                 <textarea placeholder="전달사항을 기입해주세요."></textarea>
               </div>
             </div>
