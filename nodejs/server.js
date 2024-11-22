@@ -34,24 +34,10 @@ app.use(express.urlencoded({ extended: false }));
 
 // 기존 CORS 미들웨어 제거 또는 수정
 app.use((req, res, next) => {
-  // HTTP와 HTTPS 모두 허용
-  const allowedOrigins = ["http://localhost:5173", "https://localhost:5173"];
-  const origin = req.headers.origin;
-
-  if (allowedOrigins.includes(origin)) {
-    res.setHeader("Access-Control-Allow-Origin", origin);
-  }
-
-  res.setHeader(
-    "Access-Control-Allow-Methods",
-    "GET, POST, OPTIONS, PUT, PATCH, DELETE"
-  );
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-  res.setHeader("Access-Control-Allow-Credentials", "true");
-
-  if (req.method === "OPTIONS") {
-    return res.status(200).end();
-  }
+  console.log("cors 에러 해결?");
+  res.setHeader("Access-Control-Allow-Origin", "*"); // 모든 출처 허용
+  response.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, PATCH, DELETE"); // 모든 HTTP 메서드 허용
+  res.setHeader("Access-Control-Allow-Credentials", "true"); // 모든 출처 허용
 
   next();
 });
