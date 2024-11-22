@@ -26,7 +26,7 @@ app.use(express.urlencoded({ extended: false }));
 // cors에러 해결 코드
 app.use((req, res, next) => {
   console.log("cors 에러 해결?");
-  res.setHeader("Access-Control-Allow-Origin", "http://localhost:5173"); // 모든 출처 허용
+  res.setHeader("Access-Control-Allow-Origin", "*"); // 모든 출처 허용
   response.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, PATCH, DELETE"); // 모든 HTTP 메서드 허용
   res.setHeader("Access-Control-Allow-Credentials", "true"); // 모든 출처 허용
   next();
