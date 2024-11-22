@@ -20,7 +20,12 @@ mongoose.connect(url);
 // 미들웨어 설정
 app.use(
   cors({
-    origin: ["http://localhost:5175", "http://localhost:5173", "https://chonslove.netlify.app"],
+    origin: [
+      "http://localhost:5175",
+      "http://localhost:5173",
+      "https://chonslove.netlify.app",
+      "https://chonslove.netlify.app/",
+    ],
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
@@ -44,11 +49,17 @@ app.use((req, res, next) => {
   if (origin) {
     res.setHeader("Access-Control-Allow-Origin", origin);
   }
-  res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, DELETE");
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "GET, POST, OPTIONS, PUT, DELETE"
+  );
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
   res.setHeader("Access-Control-Allow-Credentials", "true");
   // 허용할 요청 헤더 설정
-  res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+  );
 
   if (req.method === "OPTIONS") {
     return res.status(204).end();
