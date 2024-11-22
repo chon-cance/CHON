@@ -22,18 +22,17 @@ app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+app.get("*.js", (req, res, next) => {
+  res.setHeader("Content-Type", "application/javascript");
+  next();
+});
+
 // 기존 CORS 미들웨어 제거 또는 수정
 app.use((req, res, next) => {
   console.log("cors 에러 해결?");
-  res.setHeader(
-    "Access-Control-Allow-Origin",
-    "*"
-  ); // 모든 출처 허용
-  response.setHeader(
-    "Access-Control-Allow-Methods",
-    "GET, POST, OPTIONS, PUT, PATCH, DELETE"
-  ); // 모든 HTTP 메서드 허용
 
+  res.setHeader("Access-Control-Allow-Origin", "*"); // 모든 출처 허용 https://chonslove.netlify.app
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, PATCH, DELETE"); // 모든 HTTP 메서드 허용
   res.setHeader("Access-Control-Allow-Credentials", "true"); // 모든 출처 허용
 
   next();
