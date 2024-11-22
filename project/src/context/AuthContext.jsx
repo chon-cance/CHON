@@ -9,20 +9,17 @@ export function AuthProvider({ children }) {
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
       setUser(JSON.parse(storedUser));
-      console.log("🔵 Loaded user from localStorage:", storedUser);
     }
   }, []);
 
   const login = (userData) => {
     setUser(userData);
     localStorage.setItem("user", JSON.stringify(userData));
-    console.log("🟢 User logged in:", userData);
   };
 
   const logout = () => {
     setUser(null);
     localStorage.removeItem("user");
-    console.log("🔴 User logged out");
   };
 
   return (

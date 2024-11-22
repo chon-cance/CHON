@@ -1,5 +1,4 @@
 import Calendar from "react-calendar";
-
 import "./StyledCalender.css";
 
 export default function StyledCalender({
@@ -21,12 +20,27 @@ export default function StyledCalender({
     const koreaDate = new Date(date.getTime() + 9 * 60 * 60 * 1000);
     const dateStr = koreaDate.toISOString().split("T")[0];
 
+    const todayEnd = new Date();
+    todayEnd.setHours(23, 59, 59, 999);
+    todayEnd.setHours(todayEnd.getHours() + 9);
+
     if (isCheckIn) {
       return (
-        koreaDate < today || (timeSlots[dateStr] && !timeSlots[dateStr].checkIn)
+        koreaDate <= todayEnd ||
+        (timeSlots[dateStr] && !timeSlots[dateStr].checkIn)
       );
     } else {
-      if (!selectedCheckIn || koreaDate <= selectedCheckIn) {
+      if (!selectedCheckIn) {
+        return true;
+      }
+
+      const checkInStart = new Date(selectedCheckIn);
+      checkInStart.setHours(0, 0, 0, 0);
+
+      const compareDate = new Date(koreaDate);
+      compareDate.setHours(0, 0, 0, 0);
+
+      if (compareDate <= checkInStart) {
         return true;
       }
 
@@ -61,6 +75,7 @@ export default function StyledCalender({
       onChange={onChange}
       minDate={minDate || today}
       value={value}
+      className="styledCalender"
       tileDisabled={tileDisabled}
     />
   );
