@@ -53,7 +53,6 @@
 .mainImage {
   width: 100%;
   object-fit: cover; /* 이미지 비율 유지하면서 컨테이너에 맞추기 */
-  border-radius: 12px;
 }
 
 .contentWrapper {
@@ -345,7 +344,7 @@ a:hover {
   .reviewSection {
     padding: 20px 20px 0 20px;
   }
-  .mainImage {
+  .imageSection {
     border-radius: 0;
   }
 }
