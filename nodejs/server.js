@@ -17,13 +17,22 @@ const url = `mongodb+srv://choncance:tmakxmdnpqdoq5!@choncance.nr4zf.mongodb.net
 // 몽구스 라이브러리를 이용하여 몽고DB 연결
 mongoose.connect(url);
 
-// 미들웨어 설정
-app.use(cors());
+// CORS 설정 수정
+app.use(
+  cors({
+    origin: ["http://localhost:5173", "https://localhost:5173"],
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
+
+// 기존 미들웨어
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-// cors에러 해결 코드
+// 기존 CORS 미들웨어 제거 또는 수정
 app.use((req, res, next) => {
   console.log("cors 에러 해결?");
   res.setHeader(
@@ -34,7 +43,9 @@ app.use((req, res, next) => {
     "Access-Control-Allow-Methods",
     "GET, POST, OPTIONS, PUT, PATCH, DELETE"
   ); // 모든 HTTP 메서드 허용
+
   res.setHeader("Access-Control-Allow-Credentials", "true"); // 모든 출처 허용
+
   next();
 });
 

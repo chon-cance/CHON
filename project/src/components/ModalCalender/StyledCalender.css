@@ -9,20 +9,6 @@
   line-height: 1.125em;
 }
 
-.styledCalender .react-calendar--doubleView {
-  width: 700px;
-}
-
-.styledCalender .react-calendar--doubleView .react-calendar__viewContainer {
-  display: flex;
-  gap: 40px;
-}
-
-.styledCalender .react-calendar--doubleView .react-calendar__viewContainer > * {
-  width: 50%;
-  margin: 0;
-}
-
 .styledCalender,
 .styledCalender *,
 .styledCalender *:before,
