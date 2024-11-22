@@ -12,12 +12,12 @@
 }
 
 /* 달력 내비게이션 */
-.searchCalendar__navigation {
+.searchCalendar .react-calendar__navigation {
   display: flex;
   margin-bottom: 20px;
 }
 
-.searchCalendar__navigation button {
+.searchCalendar .react-calendar__navigation button {
   min-width: 44px;
   background: none;
   border: none;
@@ -28,7 +28,7 @@
 }
 
 /* 요일 헤더 */
-.searchCalendar__month-view__weekdays {
+.searchCalendar .react-calendar__month-view__weekdays {
   text-align: center;
   text-transform: uppercase;
   font-weight: bold;
@@ -37,7 +37,7 @@
 }
 
 /* 날짜 타일 기본 스타일 */
-.searchCalendar__tile {
+.searchCalendar .react-calendar__tile {
   max-width: 100%;
   padding: 10px;
   background: none;
@@ -49,13 +49,13 @@
 }
 
 /* hover 효과 */
-.searchCalendar__tile:enabled:hover {
+.searchCalendar .react-calendar__tile:enabled:hover {
   background-color: #f8f8f8;
   border-radius: none !important;
 }
 
 /* 오늘 날짜 */
-.searchCalendar__tile--now {
+.searchCalendar .react-calendar__tile--now {
   background: #ffeb3b33;
   font-weight: bold;
   color: inherit;
@@ -64,17 +64,42 @@
 /* 체크인/체크아웃 날짜 범위 스타일 */
 
 /* 주말 색상 */
-.searchCalendar__month-view__days__day--weekend {
+.searchCalendar .react-calendar__month-view__days__day--weekend {
   color: #d10000;
 }
 
-.searchCalendar__tile--active {
+.searchCalendar .react-calendar__tile--active {
   background-color: #6f8c8d !important;
 }
 
-.searchCalendar__tile--rangeStart,
-.searchCalendar__tile--rangeEnd {
+.searchCalendar .react-calendar__tile--rangeStart,
+.searchCalendar .react-calendar__tile--rangeEnd {
   background: #394a4b !important;
   color: white !important;
   border-radius: 0 !important;
+}
+
+.react-calendar--doubleView {
+  width: 700px;
+}
+
+.react-calendar--doubleView .react-calendar__viewContainer {
+  display: flex;
+  gap: 40px;
+}
+
+.react-calendar--doubleView .react-calendar__viewContainer > * {
+  width: 50%;
+  margin: 0;
+}
+
+/* 이전/다음 달의 날짜 숨기기 */
+.searchCalendar .react-calendar__month-view__days__day--neighboringMonth {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* 각 달력의 타일 크기 조정 (선택사항) */
+.react-calendar--doubleView .react-calendar__month-view__days__day {
+  padding: 8px; /* 날짜 타일 크기 조정 */
 }
