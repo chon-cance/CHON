@@ -59,6 +59,7 @@
 
 .host_info,
 .guest_info div {
+  width: 75px;
   color: #394a4b;
   font-size: 18px;
   margin-right: 10px;

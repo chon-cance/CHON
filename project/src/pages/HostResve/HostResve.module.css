@@ -73,10 +73,8 @@
   padding: 20px;
 }
 
-.guest_info {
-  min-width: 73px;
-}
 .guest_info div {
+  width: 75px;
   color: #394a4b;
   font-size: 18px;
   margin-right: 10px;
