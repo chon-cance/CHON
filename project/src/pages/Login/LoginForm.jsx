@@ -29,7 +29,7 @@ const LoginForm = () => {
 
     try {
       const response = await fetch(
-        "http://port-0-chon-m3qz4omzb344e0d7.sel4.cloudtype.app/user/login",
+        "https://port-0-chon-m3qz4omzb344e0d7.sel4.cloudtype.app/user/login",
         {
           method: "POST",
           headers: {
