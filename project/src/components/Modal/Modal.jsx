@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 // Import required modules
 import { Navigation, Pagination } from "swiper/modules";
+import { FaMinus, FaPlus } from "react-icons/fa";
 
 import "swiper/css";
 import styles from "./Modal.module.css";
@@ -26,6 +27,7 @@ export default function Modal({ accommodation, onClose }) {
   const [showCheckInCalendar, setShowCheckInCalendar] = useState(false);
   const [showCheckOutCalendar, setShowCheckOutCalendar] = useState(false);
   const [timeSlots, setTimeSlots] = useState({});
+  const [showGuestToggle, setShowGuestToggle] = useState(false);
 
   // TimeSlots 데이터 가져오기
   useEffect(() => {
@@ -214,6 +216,7 @@ export default function Modal({ accommodation, onClose }) {
     setCheckInDate(date);
     setCheckIn(date.toISOString());
     setShowCheckInCalendar(false);
+    setShowCheckOutCalendar(true);
   };
 
   // 체크아웃 날짜 선택 핸들러
@@ -285,8 +288,14 @@ export default function Modal({ accommodation, onClose }) {
                 <div
                   className={styles.inputGroup}
                   onClick={() => {
-                    setShowCheckInCalendar(!showCheckInCalendar); // 현재 상태의 반대로 토글
-                    setShowCheckOutCalendar(false); // 체크아웃 달력은 항상 닫기
+                    if (showCheckInCalendar) {
+                      setShowCheckInCalendar(false);
+                      setShowCheckOutCalendar(true);
+                    } else {
+                      setShowCheckInCalendar(true);
+                      setShowCheckOutCalendar(false);
+                    }
+                    setShowGuestToggle(false);
                   }}
                 >
                   <div className={styles.form_category}>체크인</div>
@@ -312,6 +321,7 @@ export default function Modal({ accommodation, onClose }) {
                   className={styles.inputGroup}
                   onClick={() => {
                     setShowCheckOutCalendar(!showCheckOutCalendar); // 현재 상태의 반대로 토글
+                    setShowGuestToggle(false);
                     setShowCheckInCalendar(false); // 체크인 달력은 항상 닫기
                   }}
                 >
@@ -335,9 +345,56 @@ export default function Modal({ accommodation, onClose }) {
                   </div>
                 )}
 
-                <div className={styles.inputGroup}>
+                <div
+                  className={styles.inputGroup}
+                  onClick={() => {
+                    setShowGuestToggle(!showGuestToggle);
+                    setShowCheckInCalendar(false);
+                    setShowCheckOutCalendar(false);
+                  }}
+                >
                   <div className={styles.form_category}>인원수</div>
-                  <div className={styles.form_value}>게스트 추가</div>
+                  <div className={styles.form_value}>
+                    {guests === 1 ? "게스트 추가" : `${guests}명`}
+                  </div>
+
+                  {showGuestToggle && (
+                    <div className={styles.guestToggleMenu}>
+                      <div className={styles.guestToggleContent}>
+                        <span>성인</span>
+                        <div className={styles.guestsToggle}>
+                          <button
+                            className={styles.toggleBtn}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setGuests((prev) => Math.max(1, prev - 1));
+                            }}
+                            disabled={guests <= 1}
+                          >
+                            -
+                          </button>
+                          <span className={styles.guestCount}>{guests}명</span>
+                          <button
+                            className={styles.toggleBtn}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setGuests((prev) =>
+                                Math.min(accommodation.max_person, prev + 1)
+                              );
+                            }}
+                            disabled={guests >= accommodation.max_person}
+                          >
+                            +
+                          </button>
+                        </div>
+                      </div>
+                      <div className={styles.guestToggleFooter}>
+                        <span className={styles.maxGuests}>
+                          최대 {accommodation.max_person}명
+                        </span>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
 

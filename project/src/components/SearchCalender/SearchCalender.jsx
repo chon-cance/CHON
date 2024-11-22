@@ -33,6 +33,7 @@ export default function SearchCalendar({ onChange, value }) {
       showDoubleView={true}
       showNeighboringMonth={false}
       tileDisabled={tileDisabled}
+      className="searchCalendar"
     />
   );
 }

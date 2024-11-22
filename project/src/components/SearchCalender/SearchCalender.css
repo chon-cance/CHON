@@ -1,5 +1,5 @@
 /* 달력 전체 컨테이너 */
-.react-calendar {
+.searchCalendar {
   width: 800px;
   max-width: 100%;
   background: white;
@@ -12,12 +12,12 @@
 }
 
 /* 달력 내비게이션 */
-.react-calendar__navigation {
+.searchCalendar__navigation {
   display: flex;
   margin-bottom: 20px;
 }
 
-.react-calendar__navigation button {
+.searchCalendar__navigation button {
   min-width: 44px;
   background: none;
   border: none;
@@ -28,7 +28,7 @@
 }
 
 /* 요일 헤더 */
-.react-calendar__month-view__weekdays {
+.searchCalendar__month-view__weekdays {
   text-align: center;
   text-transform: uppercase;
   font-weight: bold;
@@ -37,7 +37,7 @@
 }
 
 /* 날짜 타일 기본 스타일 */
-.react-calendar__tile {
+.searchCalendar__tile {
   max-width: 100%;
   padding: 10px;
   background: none;
@@ -49,31 +49,31 @@
 }
 
 /* hover 효과 */
-.react-calendar__tile:enabled:hover {
+.searchCalendar__tile:enabled:hover {
   background-color: #f8f8f8;
   border-radius: none !important;
 }
 
 /* 오늘 날짜 */
-.react-calendar .react-calendar__tile--now {
-  background: #ffeb3b33 !important;
+.searchCalendar__tile--now {
+  background: #ffeb3b33;
   font-weight: bold;
-  color: inherit !important;
+  color: inherit;
 }
 
 /* 체크인/체크아웃 날짜 범위 스타일 */
 
 /* 주말 색상 */
-.react-calendar__month-view__days__day--weekend {
+.searchCalendar__month-view__days__day--weekend {
   color: #d10000;
 }
 
-.react-calendar__tile--active {
+.searchCalendar__tile--active {
   background-color: #6f8c8d !important;
 }
 
-.react-calendar__tile--rangeStart,
-.react-calendar__tile--rangeEnd {
+.searchCalendar__tile--rangeStart,
+.searchCalendar__tile--rangeEnd {
   background: #394a4b !important;
   color: white !important;
   border-radius: 0 !important;
