@@ -3,32 +3,45 @@ import { useState, useEffect } from "react";
 import SwiperChonList from "./SwiperChonList/SwiperChonList";
 
 export default function List() {
-  const [recentAccommodations, setRecentAccommodations] = useState([]);
-  const [topGradeAccommodations, setTopGradeAccommodations] = useState([]);
+  const [recentAccommodations, setRecentAccommodations] = useState(null);
+  const [topGradeAccommodations, setTopGradeAccommodations] = useState(null);
   const [isLoadingRecent, setIsLoadingRecent] = useState(true);
   const [isLoadingTop, setIsLoadingTop] = useState(true);
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
+
+  useEffect(() => {
+    setIsInitialLoad(true);
+    const timer = setTimeout(() => {
+      setIsInitialLoad(false);
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [recentAccommodations, topGradeAccommodations]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         setIsLoadingRecent(true);
         setIsLoadingTop(true);
+        setRecentAccommodations(null);
+        setTopGradeAccommodations(null);
 
-        // 모든 환경에서 3초 지연 적용
-        await new Promise((resolve) => setTimeout(resolve, 3000));
-
-        // 최신 숙소 API 호출
         const recentResponse = await fetch(
           "https://port-0-chon-m3qz4omzb344e0d7.sel4.cloudtype.app/accommodations/top_date"
         );
+        if (!recentResponse.ok) {
+          throw new Error("Recent accommodations fetch failed");
+        }
         const recentData = await recentResponse.json();
         setRecentAccommodations(recentData);
         setIsLoadingRecent(false);
 
-        // 평점 높은 숙소 API 호출
         const topResponse = await fetch(
           "https://port-0-chon-m3qz4omzb344e0d7.sel4.cloudtype.app/accommodations/top_grade"
         );
+        if (!topResponse.ok) {
+          throw new Error("Top grade accommodations fetch failed");
+        }
         const topData = await topResponse.json();
         setTopGradeAccommodations(topData);
         setIsLoadingTop(false);
@@ -40,6 +53,13 @@ export default function List() {
     };
 
     fetchData();
+
+    return () => {
+      setIsLoadingRecent(true);
+      setIsLoadingTop(true);
+      setRecentAccommodations(null);
+      setTopGradeAccommodations(null);
+    };
   }, []);
 
   return (
@@ -53,7 +73,9 @@ export default function List() {
           <div className={styles.card_conteiner}>
             <SwiperChonList
               accommodations={recentAccommodations}
-              isLoading={isLoadingRecent}
+              isLoading={
+                isInitialLoad || isLoadingRecent || !recentAccommodations
+              }
             />
           </div>
         </div>
@@ -65,7 +87,9 @@ export default function List() {
           <div className={styles.card_conteiner}>
             <SwiperChonList
               accommodations={topGradeAccommodations}
-              isLoading={isLoadingTop}
+              isLoading={
+                isInitialLoad || isLoadingTop || !topGradeAccommodations
+              }
             />
           </div>
         </div>
