@@ -73,6 +73,8 @@ export default function AccomSearch({ accommodations, isLoading }) {
         previousLabel={null}
         nextLabel={null}
         pageCount={pageCount}
+        pageRangeDisplayed={3}
+        marginPagesDisplayed={1}
         onPageChange={handlePageChange}
         containerClassName={styles.pagination}
         activeClassName={styles.active}
