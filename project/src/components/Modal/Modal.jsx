@@ -133,8 +133,8 @@ export default function Modal({ accommodation, onClose }) {
       const reservationData = {
         accommodationId: accommodation._id,
         userId: user._id,
-        startDate: new Date(checkIn).toISOString(),
-        endDate: new Date(checkOut).toISOString(),
+        startDate: new Date(checkIn).toLocaleDateString(),
+        endDate: new Date(checkOut).toLocaleDateString(),
         person: parseInt(guests),
         message: requests || "",
       };
