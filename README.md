@@ -126,6 +126,9 @@
  ┣ 📂assets
  ┃ ┗ 📜react.svg
  ┣ 📂components
+ ┃ ┣ 📂CardSkeleton
+ ┃ ┃ ┣ 📜CardSkeleton.jsx
+ ┃ ┃ ┗ 📜CardSkeleton.module.css
  ┃ ┣ 📂Footer
  ┃ ┃ ┣ 📜Footer.jsx
  ┃ ┃ ┗ 📜Footer.module.css
