@@ -14,6 +14,9 @@ export default function List() {
         setIsLoadingRecent(true);
         setIsLoadingTop(true);
 
+        // 모든 환경에서 3초 지연 적용
+        await new Promise((resolve) => setTimeout(resolve, 3000));
+
         // 최신 숙소 API 호출
         const recentResponse = await fetch(
           "https://port-0-chon-m3qz4omzb344e0d7.sel4.cloudtype.app/accommodations/top_date"
