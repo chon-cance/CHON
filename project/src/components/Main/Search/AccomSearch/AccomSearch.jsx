@@ -2,8 +2,10 @@ import { useState, useEffect } from "react";
 import ReactPaginate from "react-paginate";
 import ChonCard from "../../List/SwiperChonList/ChonCard/ChonCard";
 import styles from "./AccomSearch.module.css";
+import CardSkeleton from "../../../CardSkeleton/CardSkeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
-export default function AccomSearch({ accommodations }) {
+export default function AccomSearch({ accommodations, isLoading }) {
   const [currentPage, setCurrentPage] = useState(0);
   const [itemsPerPage, setItemsPerPage] = useState(4);
 
@@ -36,13 +38,34 @@ export default function AccomSearch({ accommodations }) {
   const pageCount = Math.ceil(accommodations?.length / itemsPerPage);
 
   // 현재 페이지에 표시할 숙소 데이터
-  const currentAccommodations = accommodations?.slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage);
+  const currentAccommodations = accommodations?.slice(
+    currentPage * itemsPerPage,
+    (currentPage + 1) * itemsPerPage
+  );
 
   const handlePageChange = ({ selected }) => {
     setCurrentPage(selected);
   };
 
-  if (!accommodations || accommodations.length === 0) return <div className={styles.empty_text}>검색된 숙소가 없습니다.</div>;
+  if (isLoading) {
+    return (
+      <div className={styles.skeleton_container}>
+        <div className={styles.container}>
+          <div className={styles.cardContainer}>
+            {Array(itemsPerPage)
+              .fill(null)
+              .map((_, index) => (
+                <CardSkeleton key={`skeleton-${index}`} />
+              ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!accommodations || accommodations.length === 0) {
+    return <div className={styles.empty_text}>검색된 숙소가 없습니다.</div>;
+  }
 
   return (
     <div className={styles.container}>

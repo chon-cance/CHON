@@ -5,22 +5,38 @@ import SwiperChonList from "./SwiperChonList/SwiperChonList";
 export default function List() {
   const [recentAccommodations, setRecentAccommodations] = useState([]);
   const [topGradeAccommodations, setTopGradeAccommodations] = useState([]);
+  const [isLoadingRecent, setIsLoadingRecent] = useState(true);
+  const [isLoadingTop, setIsLoadingTop] = useState(true);
 
   useEffect(() => {
-    fetch(
-      "https://port-0-chon-m3qz4omzb344e0d7.sel4.cloudtype.app/accommodations/top_date"
-    )
-      .then((res) => res.json())
-      .then((data) => setRecentAccommodations(data));
+    const fetchData = async () => {
+      try {
+        setIsLoadingRecent(true);
+        setIsLoadingTop(true);
 
-    // 평점 높은 숙소 API 호출
-    fetch(
-      "https://port-0-chon-m3qz4omzb344e0d7.sel4.cloudtype.app/accommodations/top_grade"
-    )
-      .then((res) => res.json())
-      .then((data) => setTopGradeAccommodations(data));
+        // 최신 숙소 API 호출
+        const recentResponse = await fetch(
+          "https://port-0-chon-m3qz4omzb344e0d7.sel4.cloudtype.app/accommodations/top_date"
+        );
+        const recentData = await recentResponse.json();
+        setRecentAccommodations(recentData);
+        setIsLoadingRecent(false);
 
-    // 최신 숙소 API 호출
+        // 평점 높은 숙소 API 호출
+        const topResponse = await fetch(
+          "https://port-0-chon-m3qz4omzb344e0d7.sel4.cloudtype.app/accommodations/top_grade"
+        );
+        const topData = await topResponse.json();
+        setTopGradeAccommodations(topData);
+        setIsLoadingTop(false);
+      } catch (error) {
+        console.error("데이터 로딩 중 오류 발생:", error);
+        setIsLoadingRecent(false);
+        setIsLoadingTop(false);
+      }
+    };
+
+    fetchData();
   }, []);
 
   return (
@@ -32,7 +48,10 @@ export default function List() {
             <p>촌스럽게 신규 입점한 숙소를 만나보세요.</p>
           </div>
           <div className={styles.card_conteiner}>
-            <SwiperChonList accommodations={recentAccommodations} />
+            <SwiperChonList
+              accommodations={recentAccommodations}
+              isLoading={isLoadingRecent}
+            />
           </div>
         </div>
         <div className={styles.chon_list}>
@@ -41,7 +60,10 @@ export default function List() {
             <p>이벤트 진행중인 숙소를 만나보세요.</p>
           </div>
           <div className={styles.card_conteiner}>
-            <SwiperChonList accommodations={topGradeAccommodations} />
+            <SwiperChonList
+              accommodations={topGradeAccommodations}
+              isLoading={isLoadingTop}
+            />
           </div>
         </div>
       </div>
