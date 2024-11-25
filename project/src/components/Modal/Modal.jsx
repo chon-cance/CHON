@@ -411,7 +411,10 @@ export default function Modal({ accommodation, onClose }) {
               </div>
 
               <div className={styles.inputText}>
-                <textarea placeholder="전달사항이 있으시면 입력해주세요."></textarea>
+                <textarea
+                  placeholder="전달사항이 있으시면 입력해주세요."
+                  onChange={(e) => setRequests(e.target.value)}
+                ></textarea>
               </div>
             </div>
 

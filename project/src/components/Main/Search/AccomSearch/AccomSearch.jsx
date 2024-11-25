@@ -9,6 +9,7 @@ export default function AccomSearch({ accommodations, isLoading }) {
   const [currentPage, setCurrentPage] = useState(0);
   const [itemsPerPage, setItemsPerPage] = useState(4);
   const [isInitialLoad, setIsInitialLoad] = useState(true);
+  const [loadingImages, setLoadingImages] = useState(true);
 
   useEffect(() => {
     const handleResize = () => {
@@ -43,6 +44,11 @@ export default function AccomSearch({ accommodations, isLoading }) {
     setCurrentPage(0);
   }, [accommodations]);
 
+  useEffect(() => {
+    // 페이지가 변경될 때마다 isLoading을 true로 설정
+    setLoadingImages(true);
+  }, [currentPage]);
+
   const pageCount = Math.ceil((accommodations?.length || 0) / itemsPerPage);
   const currentAccommodations = accommodations?.slice(
     currentPage * itemsPerPage,
@@ -55,7 +61,7 @@ export default function AccomSearch({ accommodations, isLoading }) {
   };
 
   // 로딩 중이거나 초기 로딩 상태일 때 스켈레톤 표시
-  if (isLoading || isInitialLoad) {
+  if (isLoading || isInitialLoad || loadingImages) {
     return (
       <div className={styles.skeleton_container}>
         <div className={styles.container}>
