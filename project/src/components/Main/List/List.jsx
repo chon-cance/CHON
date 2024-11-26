@@ -27,7 +27,7 @@ export default function List() {
         setTopGradeAccommodations(null);
 
         const recentResponse = await fetch(
-          "http://152.69.234.13:8080/accommodations/top_date"
+          "http://152.69.234.13:8080/api/accommodations/top_date"
         );
         if (!recentResponse.ok) {
           throw new Error("Recent accommodations fetch failed");
@@ -37,7 +37,7 @@ export default function List() {
         setIsLoadingRecent(false);
 
         const topResponse = await fetch(
-          "http://152.69.234.13:8080/accommodations/top_grade"
+          "http://152.69.234.13:8080/api/accommodations/top_grade"
         );
         if (!topResponse.ok) {
           throw new Error("Top grade accommodations fetch failed");

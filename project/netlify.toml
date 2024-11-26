@@ -10,13 +10,6 @@
   to = "/index.html"
   status = 200
 
-[[redirects]]
-  from = "/api/*"
-  to = "http://152.69.234.13:8080/:splat"
-  status = 200
-  force = true
-  headers = {X-From = "Netlify"}
-
 [[headers]]
   for = "/*.js"
   [headers.values]

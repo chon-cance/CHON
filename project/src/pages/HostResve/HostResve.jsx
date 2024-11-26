@@ -84,13 +84,16 @@ export default function HostResve() {
         url: `chonslove.netlify.app/guest/${reservationId}`,
       };
 
-      const response = await fetch("http://152.69.234.13:8080/alarm/confirm", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(alarmData),
-      });
+      const response = await fetch(
+        "http://152.69.234.13:8080/api/api/alarm/confirm",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(alarmData),
+        }
+      );
 
       if (!response.ok) {
         throw new Error("알람 전송에 실패했습니다.");
@@ -142,13 +145,16 @@ export default function HostResve() {
         reservationId: reservationId,
       };
 
-      const response = await fetch("http://152.69.234.13:8080/alarm/decline", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(alarmData),
-      });
+      const response = await fetch(
+        "http://152.69.234.13:8080/api/api/alarm/decline",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(alarmData),
+        }
+      );
 
       if (!response.ok) {
         throw new Error("알람 전송에 실패했습니다.");

@@ -39,13 +39,16 @@ const LoginForm = () => {
         return;
       }
 
-      const response = await fetch("http://152.69.234.13:8080/user/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
+      const response = await fetch(
+        "http://152.69.234.13:8080/api/api/user/login",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
 
       const data = await response.json();
       console.log("📡 Server response:", data);

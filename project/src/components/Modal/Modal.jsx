@@ -60,7 +60,7 @@ export default function Modal({ accommodation, onClose }) {
       };
 
       const response = await fetch(
-        "http://152.69.234.13:8080/alarm/request_guest",
+        "http://152.69.234.13:8080/api/alarm/request_guest",
         {
           method: "POST",
           headers: {
@@ -90,7 +90,7 @@ export default function Modal({ accommodation, onClose }) {
       };
 
       const response = await fetch(
-        "http://152.69.234.13:8080/alarm/request_host",
+        "http://152.69.234.13:8080/api/alarm/request_host",
         {
           method: "POST",
           headers: {
@@ -142,7 +142,7 @@ export default function Modal({ accommodation, onClose }) {
       console.log("Sending reservation data:", reservationData);
 
       const response = await fetch(
-        "http://152.69.234.13:8080/reservations/create",
+        "http://152.69.234.13:8080/api/reservations/create",
         {
           method: "POST",
           headers: {
