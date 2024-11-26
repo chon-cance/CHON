@@ -15,6 +15,7 @@
   to = "http://152.69.234.13:8080/:splat"
   status = 200
   force = true
+  headers = {X-From = "Netlify"}
 
 [[headers]]
   for = "/*.js"
@@ -32,8 +33,3 @@
     Access-Control-Allow-Origin = "*"
     Access-Control-Allow-Methods = "GET, POST, PUT, DELETE, OPTIONS"
     Access-Control-Allow-Headers = "Content-Type, Authorization"
-
-[[headers]]
-  for = "/*"
-  [headers.values]
-    Content-Security-Policy = "upgrade-insecure-requests"
