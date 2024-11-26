@@ -1,4 +1,3 @@
-![image](https://github.com/user-attachments/assets/28c9e315-4481-4335-a508-351ea156adab)<br>
 
 # 👩‍🌾 촌캉스 연결 플랫폼 '촌스럽게'👨‍🌾
 
