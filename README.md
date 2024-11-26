@@ -3,7 +3,7 @@
 
 ![목업](https://github.com/user-attachments/assets/d413a1a6-822d-4672-8940-dda9ff94c2a7)
 
-[  [촌스럽게URL](https://chonslove.netlify.app/)  ] [  [촌스럽게PPT](https://drive.google.com/file/d/1gJ7x70AnW27xYnbHnLPc0jtE7IRDAZ6g/view?usp=drive_link)  ]
+[  [촌스럽게 URL](https://chonslove.netlify.app/)  ] [  [촌스럽게 PPT](https://drive.google.com/file/d/1gJ7x70AnW27xYnbHnLPc0jtE7IRDAZ6g/view?usp=drive_link)  ]  [  [촌스럽게 시연영상](https://drive.google.com/file/d/1m98kwnF0T9HfE_G33Uvys3gwNPbBnhrf/view?usp=drive_link)  ]
 
 
 <br>
