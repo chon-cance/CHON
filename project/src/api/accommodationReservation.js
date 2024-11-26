@@ -1,7 +1,7 @@
 export const createReservation = async (reservationData) => {
   try {
     const response = await fetch(
-      `https://port-0-chon-m3qz4omzb344e0d7.sel4.cloudtype.app/reservations/create`,
+      `http://152.69.234.13:8080/reservations/create`,
       {
         method: "POST",
         headers: {
