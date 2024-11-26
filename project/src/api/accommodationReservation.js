@@ -1,15 +1,12 @@
 export const createReservation = async (reservationData) => {
   try {
-    const response = await fetch(
-      `http://152.69.234.13:8080/api/reservations/create`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(reservationData),
-      }
-    );
+    const response = await fetch(`api/reservations/create`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(reservationData),
+    });
 
     if (!response.ok) {
       throw new Error("예약 생성 실패");

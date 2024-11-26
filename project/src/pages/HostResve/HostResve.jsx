@@ -32,7 +32,7 @@ export default function HostResve() {
     setLoading(true);
     try {
       const response = await fetch(
-        `http://152.69.234.13:8080/reservations/?reservationId=${reservationId}`
+        `api/reservations/?reservationId=${reservationId}`
       );
 
       const data = await response.json();
@@ -84,16 +84,13 @@ export default function HostResve() {
         url: `chonslove.netlify.app/guest/${reservationId}`,
       };
 
-      const response = await fetch(
-        "http://152.69.234.13:8080/api/api/alarm/confirm",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(alarmData),
-        }
-      );
+      const response = await fetch("api/api/alarm/confirm", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(alarmData),
+      });
 
       if (!response.ok) {
         throw new Error("알람 전송에 실패했습니다.");
@@ -114,7 +111,7 @@ export default function HostResve() {
 
     try {
       const response = await fetch(
-        `http://152.69.234.13:8080/reservations/confirm/${reservationId}`,
+        `api/reservations/confirm/${reservationId}`,
         {
           method: "PUT",
         }
@@ -145,16 +142,13 @@ export default function HostResve() {
         reservationId: reservationId,
       };
 
-      const response = await fetch(
-        "http://152.69.234.13:8080/api/api/alarm/decline",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(alarmData),
-        }
-      );
+      const response = await fetch("api/api/alarm/decline", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(alarmData),
+      });
 
       if (!response.ok) {
         throw new Error("알람 전송에 실패했습니다.");
@@ -170,7 +164,7 @@ export default function HostResve() {
   async function reservationDecline() {
     try {
       const response = await fetch(
-        `http://152.69.234.13:8080/reservations/decline/${reservationId}`,
+        `api/reservations/decline/${reservationId}`,
         {
           method: "PUT", // 필요한 HTTP 메서드 설정
         }

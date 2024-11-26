@@ -90,16 +90,13 @@ const RegisterForm = () => {
       }
 
       // 회원가입 요청
-      const joinResponse = await fetch(
-        "http://152.69.234.13:8080/api/api/user/join",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
-        }
-      );
+      const joinResponse = await fetch("api/api/user/join", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
 
       const joinData = await joinResponse.json();
 
@@ -108,19 +105,16 @@ const RegisterForm = () => {
         joinData.message === "회원가입이 완료되었습니다."
       ) {
         // 회원가입 성공 후 자동 로그인 요청
-        const loginResponse = await fetch(
-          "http://152.69.234.13:8080/api/user/login",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              id: formData.id,
-              password: formData.password,
-            }),
-          }
-        );
+        const loginResponse = await fetch("api/user/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            id: formData.id,
+            password: formData.password,
+          }),
+        });
 
         const loginData = await loginResponse.json();
 
