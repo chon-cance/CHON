@@ -70,7 +70,7 @@ app.use((req, res, next) => {
 app.use("/alarm", solapiRoutes);
 
 // User 라우트
-app.use("/user", userRoutes);
+app.use("/users", userRoutes);
 
 // accommodation 라우트
 app.use("/accommodations", accommodationRoutes);
