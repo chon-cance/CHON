@@ -21,10 +21,21 @@ export const accommodationAPI = {
   },
 
   // 숙소별 타임슬롯 조회 추가
-  getAccommodationTimeSlots: (accommodationId) => {
-    return apiClient.get(
-      `/accommodations/timeslots?accommodationId=${accommodationId}`
-    );
+  getAccommodationTimeSlots: async (accommodationId) => {
+    try {
+      const response = await apiClient.get(
+        `/accommodations/timeslots?accommodationId=${accommodationId}`
+      );
+      return response || {}; // 예약 정보가 없으면 빈 객체 반환
+    } catch (error) {
+      if (
+        error.response?.status === 500 &&
+        error.response?.data?.message === "예약 정보가 없습니다."
+      ) {
+        return {}; // 예약 정보가 없는 경우 빈 객체 반환
+      }
+      throw new Error(error.message || "타임슬롯 조회 중 오류가 발생했습니다.");
+    }
   },
 
   // 숙소 상세 정보 조회

@@ -37,7 +37,7 @@ export default function Modal({ accommodation, onClose }) {
   // TimeSlots 데이터 가져오기
   useEffect(() => {
     const fetchTimeSlots = async () => {
-      if (!accommodation?._id) return; // accommodation이나 _id가 없으면 리턴
+      if (!accommodation?._id) return;
 
       try {
         const data = await accommodationAPI.getAccommodationTimeSlots(
@@ -50,7 +50,7 @@ export default function Modal({ accommodation, onClose }) {
     };
 
     fetchTimeSlots();
-  }, [accommodation]); // accommodation 전체를 의존성으로 추가
+  }, [accommodation]);
 
   const handlePhotoClick = (index) => setCurrentPhoto(index);
 
