@@ -70,7 +70,7 @@ export default function Modal({ accommodation, onClose }) {
     try {
       const alarmData = {
         reservationId: reservationData._id,
-        url: `chonslove.netlify.app/host/?id=${reservationData._id}`,
+        url: `chonslove.netlify.app/host/resve/?id=${reservationData._id}`,
       };
       await solapiAPI.sendRequestHost(alarmData);
     } catch (error) {
