@@ -8,17 +8,45 @@ import styles from "./AccomSearch.module.css";
 import "react-loading-skeleton/dist/skeleton.css";
 
 export default function AccomSearch({ accommodations, isLoading }) {
+  const [imagesLoaded, setImagesLoaded] = useState(false);
+  const [showSkeleton, setShowSkeleton] = useState(true);
   const [currentPage, setCurrentPage] = useState(0);
   const [itemsPerPage, setItemsPerPage] = useState(4);
-  const [isInitialLoad, setIsInitialLoad] = useState(true);
 
   useEffect(() => {
-    setIsInitialLoad(true);
-    const timer = setTimeout(() => {
-      setIsInitialLoad(false);
-    }, 1000);
+    if (!accommodations) return;
 
-    return () => clearTimeout(timer);
+    setImagesLoaded(false);
+    setShowSkeleton(true);
+
+    const loadImages = async () => {
+      try {
+        const imagePromises = accommodations.map((accommodation) => {
+          return new Promise((resolve, reject) => {
+            const img = new Image();
+            img.onload = () => resolve();
+            img.onerror = () => reject();
+            img.src = `/img/${accommodation.accommodation_num}/${accommodation.photo[0]}`;
+          });
+        });
+
+        await Promise.all(imagePromises);
+        setImagesLoaded(true);
+
+        // 이미지 로딩 완료 후 300ms 후에 스켈레톤을 숨김
+        setTimeout(() => {
+          setShowSkeleton(false);
+        }, 300);
+      } catch (error) {
+        console.error("이미지 로딩 실패:", error);
+        setImagesLoaded(true);
+        setTimeout(() => {
+          setShowSkeleton(false);
+        }, 300);
+      }
+    };
+
+    loadImages();
   }, [accommodations]);
 
   // 화면 크기에 따라 itemsPerPage 조절
@@ -59,7 +87,8 @@ export default function AccomSearch({ accommodations, isLoading }) {
     setCurrentPage(selected);
   };
 
-  if (isLoading || isInitialLoad) {
+  // 로딩 중이거나 이미지가 로드되지 않았을 때 스켈레톤 표시
+  if (isLoading || showSkeleton) {
     return (
       <div className={styles.skeleton_container}>
         <div className={styles.container}>

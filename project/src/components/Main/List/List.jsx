@@ -10,24 +10,12 @@ export default function List() {
   const [topGradeAccommodations, setTopGradeAccommodations] = useState(null);
   const [isLoadingRecent, setIsLoadingRecent] = useState(true);
   const [isLoadingTop, setIsLoadingTop] = useState(true);
-  const [isInitialLoad, setIsInitialLoad] = useState(true);
-
-  useEffect(() => {
-    setIsInitialLoad(true);
-    const timer = setTimeout(() => {
-      setIsInitialLoad(false);
-    }, 500);
-
-    return () => clearTimeout(timer);
-  }, [recentAccommodations, topGradeAccommodations]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         setIsLoadingRecent(true);
         setIsLoadingTop(true);
-        setRecentAccommodations(null);
-        setTopGradeAccommodations(null);
 
         const [recentData, topData] = await Promise.all([
           accommodationAPI.getRecentAccommodations(),
@@ -45,13 +33,6 @@ export default function List() {
     };
 
     fetchData();
-
-    return () => {
-      setIsLoadingRecent(true);
-      setIsLoadingTop(true);
-      setRecentAccommodations(null);
-      setTopGradeAccommodations(null);
-    };
   }, []);
 
   return (
@@ -64,9 +45,7 @@ export default function List() {
         <div className={styles.card_conteiner}>
           <SwiperChonList
             accommodations={recentAccommodations}
-            isLoading={
-              isInitialLoad || isLoadingRecent || !recentAccommodations
-            }
+            isLoading={isLoadingRecent}
           />
         </div>
       </div>
@@ -78,7 +57,7 @@ export default function List() {
         <div className={styles.card_conteiner}>
           <SwiperChonList
             accommodations={topGradeAccommodations}
-            isLoading={isInitialLoad || isLoadingTop || !topGradeAccommodations}
+            isLoading={isLoadingTop}
           />
         </div>
       </div>

@@ -12,7 +12,45 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 
 export default function SwiperChonList({ accommodations, isLoading }) {
+  const [imagesLoaded, setImagesLoaded] = useState(false);
+  const [showSkeleton, setShowSkeleton] = useState(true);
   const [skeletonCount, setSkeletonCount] = useState(4);
+
+  useEffect(() => {
+    if (!accommodations) return;
+
+    setImagesLoaded(false);
+    setShowSkeleton(true);
+
+    const loadImages = async () => {
+      try {
+        const imagePromises = accommodations.map((accommodation) => {
+          return new Promise((resolve, reject) => {
+            const img = new Image();
+            img.onload = () => resolve();
+            img.onerror = () => reject();
+            img.src = `/img/${accommodation.accommodation_num}/${accommodation.photo[0]}`;
+          });
+        });
+
+        await Promise.all(imagePromises);
+        setImagesLoaded(true);
+
+        // 이미지 로딩 완료 후 300ms 후에 스켈레톤을 숨김
+        setTimeout(() => {
+          setShowSkeleton(false);
+        }, 300);
+      } catch (error) {
+        console.error("이미지 로딩 실패:", error);
+        setImagesLoaded(true);
+        setTimeout(() => {
+          setShowSkeleton(false);
+        }, 300);
+      }
+    };
+
+    loadImages();
+  }, [accommodations]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -37,7 +75,7 @@ export default function SwiperChonList({ accommodations, isLoading }) {
 
   const skeletonArray = Array(skeletonCount).fill(null);
 
-  if (isLoading) {
+  if (isLoading || showSkeleton) {
     return (
       <div className={Styles.skeletonContainer}>
         {skeletonArray.map((_, index) => (
