@@ -37,6 +37,8 @@ export default function Modal({ accommodation, onClose }) {
   // TimeSlots 데이터 가져오기
   useEffect(() => {
     const fetchTimeSlots = async () => {
+      if (!accommodation?._id) return; // accommodation이나 _id가 없으면 리턴
+
       try {
         const data = await accommodationAPI.getAccommodationTimeSlots(
           accommodation._id
@@ -47,8 +49,9 @@ export default function Modal({ accommodation, onClose }) {
         ShowAlert("error", "", "예약 가능 시간 조회에 실패했습니다.");
       }
     };
+
     fetchTimeSlots();
-  }, [accommodation._id]);
+  }, [accommodation]); // accommodation 전체를 의존성으로 추가
 
   const handlePhotoClick = (index) => setCurrentPhoto(index);
 
