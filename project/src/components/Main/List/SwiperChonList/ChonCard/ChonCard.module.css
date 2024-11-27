@@ -1,9 +1,17 @@
 .card {
-  /* width: 262px; */
-  /* border: 1px solid black; */
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
   overflow: hidden;
   margin: 15px 0;
   cursor: pointer;
+}
+
+.card.visible {
+  opacity: 1;
+}
+
+.card.hidden {
+  display: none;
 }
 
 .card_img,
