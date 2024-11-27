@@ -11,7 +11,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 
-export default function SwiperChonList({ accommodations, isLoading }) {
+export default function SwiperChonList({ accommodations }) {
   const [skeletonCount, setSkeletonCount] = useState(4);
 
   useEffect(() => {
@@ -29,76 +29,72 @@ export default function SwiperChonList({ accommodations, isLoading }) {
     };
 
     handleResize();
-
     window.addEventListener("resize", handleResize);
-
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const skeletonArray = Array(skeletonCount).fill(null);
-
-  if (isLoading) {
+  if (!accommodations) {
     return (
       <div className={Styles.skeletonContainer}>
-        {skeletonArray.map((_, index) => (
-          <div key={`skeleton-${index}`} className={Styles.skeletonItem}>
-            <CardSkeleton />
-          </div>
-        ))}
+        {Array(skeletonCount)
+          .fill(null)
+          .map((_, index) => (
+            <div key={`skeleton-${index}`} className={Styles.skeletonItem}>
+              <CardSkeleton />
+            </div>
+          ))}
       </div>
     );
   }
 
   return (
-    <>
-      <Swiper
-        slidesPerView={4}
-        spaceBetween={30}
-        loop={false}
-        navigation={true}
-        modules={[Pagination, Navigation]}
-        className={Styles.mySwiper}
-        breakpoints={{
-          1200: {
-            slidesPerView: 4,
-            spaceBetween: 30,
-          },
-          1000: {
-            slidesPerView: 4,
-            spaceBetween: 20,
-          },
-          868: {
-            slidesPerView: 3,
-            spaceBetween: 40,
-          },
-          710: {
-            slidesPerView: 3,
-            spaceBetween: 20,
-          },
-          630: {
-            slidesPerView: 2,
-            spaceBetween: 40,
-          },
-          530: {
-            slidesPerView: 2,
-            spaceBetween: 30,
-          },
-          400: {
-            slidesPerView: 2,
-            spaceBetween: 10,
-          },
-          180: {
-            slidesPerView: 1,
-            spaceBetween: 70,
-          },
-        }}
-      >
-        {accommodations?.map((accommodation) => (
-          <SwiperSlide key={accommodation._id}>
-            <ChonCard accommodations={accommodation} />
-          </SwiperSlide>
-        ))}
-      </Swiper>
-    </>
+    <Swiper
+      slidesPerView={4}
+      spaceBetween={30}
+      loop={false}
+      navigation={true}
+      modules={[Pagination, Navigation]}
+      className={Styles.mySwiper}
+      breakpoints={{
+        1200: {
+          slidesPerView: 4,
+          spaceBetween: 30,
+        },
+        1000: {
+          slidesPerView: 4,
+          spaceBetween: 20,
+        },
+        868: {
+          slidesPerView: 3,
+          spaceBetween: 40,
+        },
+        710: {
+          slidesPerView: 3,
+          spaceBetween: 20,
+        },
+        630: {
+          slidesPerView: 2,
+          spaceBetween: 40,
+        },
+        530: {
+          slidesPerView: 2,
+          spaceBetween: 30,
+        },
+        400: {
+          slidesPerView: 2,
+          spaceBetween: 10,
+        },
+        180: {
+          slidesPerView: 1,
+          spaceBetween: 70,
+        },
+      }}
+    >
+      {accommodations.map((accommodation) => (
+        <SwiperSlide key={accommodation._id}>
+          <ChonCard accommodations={accommodation} />
+        </SwiperSlide>
+      ))}
+    </Swiper>
   );
 }

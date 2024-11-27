@@ -10,16 +10,6 @@ import "react-loading-skeleton/dist/skeleton.css";
 export default function AccomSearch({ accommodations, isLoading }) {
   const [currentPage, setCurrentPage] = useState(0);
   const [itemsPerPage, setItemsPerPage] = useState(4);
-  const [isInitialLoad, setIsInitialLoad] = useState(true);
-
-  useEffect(() => {
-    setIsInitialLoad(true);
-    const timer = setTimeout(() => {
-      setIsInitialLoad(false);
-    }, 500);
-
-    return () => clearTimeout(timer);
-  }, [accommodations]);
 
   // 화면 크기에 따라 itemsPerPage 조절
   useEffect(() => {
@@ -59,7 +49,7 @@ export default function AccomSearch({ accommodations, isLoading }) {
     setCurrentPage(selected);
   };
 
-  if (isLoading || isInitialLoad) {
+  if (isLoading) {
     return (
       <div className={styles.skeleton_container}>
         <div className={styles.container}>
