@@ -4,7 +4,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { Navigation, Pagination } from "swiper/modules";
-import { ShowAlert } from "../../utils/AlertUtils.js";
+import { ShowAlert, ShowConfirm } from "../../utils/AlertUtils.js";
 
 import "swiper/css";
 import styles from "./Modal.module.css";
@@ -107,38 +107,48 @@ export default function Modal({ accommodation, onClose }) {
         return;
       }
 
-      const reservationData = {
-        accommodationId: accommodation._id,
-        userId: user._id,
-        startDate: new Date(checkIn).toLocaleDateString(),
-        endDate: new Date(checkOut).toLocaleDateString(),
-        person: parseInt(guests),
-        message: requests || "",
-      };
+      if (user && guests !== 0 && checkIn && checkOut) {
+        const reservationConfirm = await ShowConfirm(
+          "question",
+          `${accommodation.name}<br>예약 하시겠습니까?`,
+          `체크인 : ${new Date(checkIn).toLocaleDateString().split("T")[0]}<br> 체크아웃 : ${new Date(checkOut).toLocaleDateString().split("T")[0]}<br> 인원수 : ${guests}명`
+        );
 
-      console.log("Sending reservation data:", reservationData);
+        if (reservationConfirm.isConfirmed) {
+          const reservationData = {
+            accommodationId: accommodation._id,
+            userId: user._id,
+            startDate: new Date(checkIn).toLocaleDateString(),
+            endDate: new Date(checkOut).toLocaleDateString(),
+            person: parseInt(guests),
+            message: requests || "",
+          };
 
-      const response = await fetch("api/reservations/create", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(reservationData),
-      });
+          console.log("Sending reservation data:", reservationData);
 
-      const data = await response.json();
+          const response = await fetch("api/reservations/create", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(reservationData),
+          });
 
-      if (response.ok) {
-        ShowAlert("success", "", "예약이 완료되었습니다.");
-        setCheckIn("");
-        setCheckOut("");
-        setGuests(0);
-        setRequests("");
-        onClose();
-        guestAlarm(data);
-        hostAlarm(data);
-      } else {
-        throw new Error(data.message || "예약 처리 중 오류가 발생했습니다.");
+          const data = await response.json();
+
+          if (response.ok) {
+            ShowAlert("success", "", "예약이 완료되었습니다.");
+            setCheckIn("");
+            setCheckOut("");
+            setGuests(0);
+            setRequests("");
+            onClose();
+            guestAlarm(data);
+            hostAlarm(data);
+          } else {
+            throw new Error(data.message || "예약 처리 중 오류가 발생했습니다.");
+          }
+        }
       }
     } catch (error) {
       console.error("Reservation error:", error);
