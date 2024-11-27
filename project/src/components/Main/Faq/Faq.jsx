@@ -3,8 +3,6 @@ import styles from "./Faq.module.css";
 import faqIcon from "/img/chevron-down.png";
 
 export default function Faq() {
-  const [opened, setOpened] = useState(new Array(faqData.length).fill(false));
-
   const faqData = [
     {
       question: "촌스럽게는 어떤 사이트 인가요?",
@@ -32,6 +30,8 @@ export default function Faq() {
         "숙소마다 규정이 다르며, 각 숙소의 상세페이지에서 확인할 수 있고 더 자세한 내용은 호스트에게 문의하세요.",
     },
   ];
+
+  const [opened, setOpened] = useState(new Array(faqData.length).fill(false));
 
   const toggleAnswer = (index) => {
     const updatedOpened = [...opened];
