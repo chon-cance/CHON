@@ -25,6 +25,13 @@ const REGIONS = [
   "울산",
 ];
 
+// 날짜 형식 변환 유틸리티 함수
+const formatDate = (date) => {
+  if (!date) return "";
+  const kstDate = new Date(date.getTime() + 9 * 60 * 60 * 1000);
+  return kstDate.toISOString().split("T")[0];
+};
+
 export default forwardRef(function Search(props, searchRef) {
   // 상태 관리
   const [activeField, setActiveField] = useState(null); // 현재 활성화된 필드
@@ -41,16 +48,36 @@ export default forwardRef(function Search(props, searchRef) {
     setIsLoading(true);
 
     try {
-      setError("");
+      // 유효성 검사
+      if (!guests || guests <= 0) {
+        ShowAlert("info", "", "인원 수를 입력해주세요.");
+        return;
+      }
 
+      if (!selectedRegion) {
+        ShowAlert("info", "", "지역을 선택해주세요.");
+        return;
+      }
+
+      if (!dateRange[0] || !dateRange[1]) {
+        ShowAlert("info", "", "날짜를 선택해주세요.");
+        return;
+      }
+
+      // 검색 파라미터 정제
       const searchParams = {
-        region: selectedRegion,
-        checkIn: dateRange[0],
-        checkOut: dateRange[1],
-        person: guests,
+        region: selectedRegion === "전체" ? "" : selectedRegion,
+        person: guests.toString(),
+        checkIn: formatDate(dateRange[0]),
+        checkOut: formatDate(dateRange[1]),
       };
 
-      const results = await accommodationAPI.search(searchParams);
+      // URLSearchParams에서 빈 값("") 제거
+      const queryString = new URLSearchParams(
+        Object.entries(searchParams).filter(([_, value]) => value !== "")
+      ).toString();
+
+      const results = await accommodationAPI.search(queryString);
       setSearchResults(results);
     } catch (error) {
       console.error("검색 오류:", error);
