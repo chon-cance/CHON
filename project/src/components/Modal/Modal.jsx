@@ -4,20 +4,19 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { Navigation, Pagination } from "swiper/modules";
-import { ShowAlert, ShowConfirm } from "../../utils/AlertUtils.js";
 
-import "swiper/css";
-import styles from "./Modal.module.css";
+import { solapiAPI } from "../../api/solapiAPI.js";
+import { accommodationAPI } from "../../api/accommodationAPI";
+import { ShowAlert, ShowConfirm } from "../../utils/AlertUtils.js";
+import StyledCalender from "../ModalCalender/StyledCalender";
+
 import icon1 from "./icon/map-pin.png";
 import icon2 from "./icon/users.png";
 import "./customSwiper.css";
-import StyledCalender from "../ModalCalender/StyledCalender";
-import { reservationAPI } from "../../api/reservationAPI.js";
-import { solapiAPI } from "../../api/solapiAPI.js";
-import { accommodationAPI } from "../../api/accommodationAPI";
+import "swiper/css";
+import styles from "./Modal.module.css";
 
 export default function Modal({ accommodation, onClose }) {
-  const [currentPhoto, setCurrentPhoto] = useState(0);
   const [checkIn, setCheckIn] = useState("");
   const [checkOut, setCheckOut] = useState("");
   const [guests, setGuests] = useState(0);
@@ -40,7 +39,9 @@ export default function Modal({ accommodation, onClose }) {
       if (!accommodation?._id) return;
 
       try {
-        const data = await accommodationAPI.getAccommodationTimeSlots(accommodation._id);
+        const data = await accommodationAPI.getAccommodationTimeSlots(
+          accommodation._id
+        );
         setTimeSlots(data);
       } catch (error) {
         console.error("TimeSlots 조회 실패:", error);
@@ -62,8 +63,6 @@ export default function Modal({ accommodation, onClose }) {
       window.scrollTo(0, parseInt(scrollY || "0", 10) * -1);
     };
   }, []);
-
-  const handlePhotoClick = (index) => setCurrentPhoto(index);
 
   const guestAlarm = async (reservationData) => {
     try {
@@ -111,7 +110,11 @@ export default function Modal({ accommodation, onClose }) {
         const reservationConfirm = await ShowConfirm(
           "question",
           `${accommodation.name}<br>예약 하시겠습니까?`,
-          `체크인 : ${new Date(checkIn).toLocaleDateString().split("T")[0]}<br> 체크아웃 : ${new Date(checkOut).toLocaleDateString().split("T")[0]}<br> 인원수 : ${guests}명`
+          `체크인 : ${
+            new Date(checkIn).toLocaleDateString().split("T")[0]
+          }<br> 체크아웃 : ${
+            new Date(checkOut).toLocaleDateString().split("T")[0]
+          }<br> 인원수 : ${guests}명`
         );
 
         if (reservationConfirm.isConfirmed) {
@@ -146,7 +149,9 @@ export default function Modal({ accommodation, onClose }) {
             guestAlarm(data);
             hostAlarm(data);
           } else {
-            throw new Error(data.message || "예약 처리 중 오류가 발생했습니다.");
+            throw new Error(
+              data.message || "예약 처리 중 오류가 발생했습니다."
+            );
           }
         }
       }
@@ -157,30 +162,30 @@ export default function Modal({ accommodation, onClose }) {
     }
   };
 
-  // 별점 렌더링 함수 (노란색으로 색상 지정)
   const renderStars = (grade) => {
     return Array.from({ length: 5 }, (_, i) => (
       <span
         key={i}
-        className={`${styles.star} ${i < grade ? styles.activeStar : styles.star}`}
-        style={{ color: i < grade ? "gold" : "#dddddd" }} // 별 색을 노란색과 회색으로 지정
+        className={`${styles.star} ${
+          i < grade ? styles.activeStar : styles.star
+        }`}
+        style={{ color: i < grade ? "gold" : "#dddddd" }}
       >
         ★
       </span>
     ));
   };
 
-  // 평균 별점 계산
   const calculateAverageGrade = () => {
-    const grade = accommodation.grade; // accommodation의 grade를 별점으로 사용
-    return grade.toFixed(1); // 소수점 첫째 자리까지 계산
+    const grade = accommodation.grade;
+    return grade.toFixed(1);
   };
 
   // 리뷰 날짜를 메모이제이션
   const reviewDates = useMemo(() => {
     return accommodation.review.map((_, index) => {
       const today = new Date();
-      const randomDays = Math.floor(Math.random() * 30); // 최근 30일 내의 랜덤한 날짜
+      const randomDays = Math.floor(Math.random() * 30);
       const reviewDate = new Date(today);
       reviewDate.setDate(today.getDate() - randomDays);
 
@@ -197,7 +202,6 @@ export default function Modal({ accommodation, onClose }) {
     return reviewDates[index];
   };
 
-  // 체크인 날짜 선택 핸들러
   const handleCheckInSelect = (date) => {
     setCheckInDate(date);
     setCheckIn(date.toISOString());
@@ -205,7 +209,6 @@ export default function Modal({ accommodation, onClose }) {
     setShowCheckOutCalendar(true);
   };
 
-  // 체크아웃 날짜 선택 핸들러
   const handleCheckOutSelect = (date) => {
     setCheckOut(date.toISOString());
     setShowCheckOutCalendar(false);
@@ -231,7 +234,6 @@ export default function Modal({ accommodation, onClose }) {
           ✕
         </button>
 
-        {/* 숙소 이미지 */}
         <div className={styles.headerSection}>
           <Swiper
             pagination={{
@@ -244,7 +246,11 @@ export default function Modal({ accommodation, onClose }) {
             {accommodation.photo.map((photo, index) => (
               <SwiperSlide key={index}>
                 <div className={styles.imageSection}>
-                  <img src={`/img/${accommodation.accommodation_num}/${photo}`} alt={`숙소 이미지 ${index + 1}`} className={styles.mainImage} />
+                  <img
+                    src={`/img/${accommodation.accommodation_num}/${photo}`}
+                    alt={`숙소 이미지 ${index + 1}`}
+                    className={styles.mainImage}
+                  />
                 </div>
               </SwiperSlide>
             ))}
@@ -253,7 +259,6 @@ export default function Modal({ accommodation, onClose }) {
 
         {/* 숙소정보, 예약폼 */}
         <div className={styles.contentWrapper}>
-          {/* 숙소 정보*/}
           <div className={styles.infoSection}>
             <div className={styles.infoSection_warp}>
               <h2>{accommodation.name}</h2>
@@ -266,11 +271,14 @@ export default function Modal({ accommodation, onClose }) {
                 </p>
                 <p className={styles.detail}>
                   <img src={icon2} alt="인원 아이콘" className={styles.icon} />
-                  기준 {accommodation.person}명 / 최대 {accommodation.max_person} 명
+                  기준 {accommodation.person}명 / 최대{" "}
+                  {accommodation.max_person} 명
                 </p>
               </div>
             </div>
-            <p className={styles.price}>₩ {accommodation.price.toLocaleString()}</p>
+            <p className={styles.price}>
+              ₩ {accommodation.price.toLocaleString()}
+            </p>
           </div>
 
           {/* 예약폼 */}
@@ -286,12 +294,21 @@ export default function Modal({ accommodation, onClose }) {
                   className={`${styles.inputGroup} ${styles.checkIn} ${checkInClass}`}
                 >
                   <div className={styles.form_category}>체크인</div>
-                  <div className={styles.form_value}>{checkIn ? new Date(checkIn).toLocaleDateString() : "날짜 추가"}</div>
+                  <div className={styles.form_value}>
+                    {checkIn
+                      ? new Date(checkIn).toLocaleDateString()
+                      : "날짜 추가"}
+                  </div>
                 </div>
 
                 {showCheckInCalendar && (
                   <div className={styles.calendar_wrapper}>
-                    <StyledCalender onChange={handleCheckInSelect} value={checkIn ? new Date(checkIn) : null} isCheckIn={true} timeSlots={timeSlots} />
+                    <StyledCalender
+                      onChange={handleCheckInSelect}
+                      value={checkIn ? new Date(checkIn) : null}
+                      isCheckIn={true}
+                      timeSlots={timeSlots}
+                    />
                   </div>
                 )}
 
@@ -304,7 +321,11 @@ export default function Modal({ accommodation, onClose }) {
                   className={`${styles.inputGroup} ${styles.checkOut} ${checkOutClass}`}
                 >
                   <div className={styles.form_category}>체크아웃</div>
-                  <div className={styles.form_value}>{checkOut ? new Date(checkOut).toLocaleDateString() : "날짜 추가"}</div>
+                  <div className={styles.form_value}>
+                    {checkOut
+                      ? new Date(checkOut).toLocaleDateString()
+                      : "날짜 추가"}
+                  </div>
                 </div>
 
                 {showCheckOutCalendar && (
@@ -328,7 +349,9 @@ export default function Modal({ accommodation, onClose }) {
                   }}
                 >
                   <div className={styles.form_category}>인원수</div>
-                  <div className={styles.form_value}>{guests === 0 ? "게스트 추가" : `${guests}명`}</div>
+                  <div className={styles.form_value}>
+                    {guests === 0 ? "게스트 추가" : `${guests}명`}
+                  </div>
 
                   {showGuestToggle && (
                     <div className={styles.guestToggleMenu}>
@@ -350,7 +373,9 @@ export default function Modal({ accommodation, onClose }) {
                             className={styles.toggleBtn}
                             onClick={(e) => {
                               e.stopPropagation();
-                              setGuests((prev) => Math.min(accommodation.max_person, prev + 1));
+                              setGuests((prev) =>
+                                Math.min(accommodation.max_person, prev + 1)
+                              );
                             }}
                             disabled={guests >= accommodation.max_person}
                           >
@@ -359,7 +384,9 @@ export default function Modal({ accommodation, onClose }) {
                         </div>
                       </div>
                       <div className={styles.guestToggleFooter}>
-                        <span className={styles.maxGuests}>최대 {accommodation.max_person}명</span>
+                        <span className={styles.maxGuests}>
+                          최대 {accommodation.max_person}명
+                        </span>
                       </div>
                     </div>
                   )}
@@ -367,12 +394,18 @@ export default function Modal({ accommodation, onClose }) {
               </div>
 
               <div className={styles.inputText}>
-                <textarea placeholder="전달사항이 있으시면 입력해주세요." onChange={(e) => setRequests(e.target.value)}></textarea>
+                <textarea
+                  placeholder="전달사항이 있으시면 입력해주세요."
+                  onChange={(e) => setRequests(e.target.value)}
+                ></textarea>
               </div>
             </div>
 
             {error && <div className={styles.error}>{error}</div>}
-            <button className={styles.reserveButton} onClick={handleReservation}>
+            <button
+              className={styles.reserveButton}
+              onClick={handleReservation}
+            >
               예약 신청하기
             </button>
           </div>

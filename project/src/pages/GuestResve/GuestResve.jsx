@@ -1,9 +1,10 @@
-import styles from "./GuestResve.module.css";
-import logo3 from "/img/logo3.png";
 import { useState, useEffect } from "react";
 import { ShowAlert, ShowConfirm } from "../../utils/AlertUtils.js";
 import { useParams } from "react-router-dom";
 import { reservationAPI } from "../../api/reservationAPI";
+
+import logo3 from "/img/logo3.png";
+import styles from "./GuestResve.module.css";
 
 export default function GuestResve() {
   const { id } = useParams();

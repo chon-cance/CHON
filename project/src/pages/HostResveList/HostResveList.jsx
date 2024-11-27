@@ -1,11 +1,13 @@
-import styles from "./HostResveList.module.css";
-import logo3 from "/img/logo3.png";
-import resve from "/img/resve.png";
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
+
 import ReservationItem from "./ReservationItem/ReservationItem";
 import { accommodationAPI } from "../../api/accommodationAPI";
 import { ShowAlert } from "../../utils/AlertUtils";
+
+import styles from "./HostResveList.module.css";
+import logo3 from "/img/logo3.png";
+import resve from "/img/resve.png";
 
 export default function HostResveList() {
   const { id } = useParams();
@@ -16,11 +18,9 @@ export default function HostResveList() {
 
   const fetchReservation = async () => {
     try {
-      // 숙소 상세 정보 조회
       const accData = await accommodationAPI.getAccommodationDetail(id);
       setAccommodationName(accData.name);
 
-      // 예약 목록 조회
       const reservationsResponse =
         await accommodationAPI.getAccommodationReservations(id);
       setReservationData(reservationsResponse.reservationData);

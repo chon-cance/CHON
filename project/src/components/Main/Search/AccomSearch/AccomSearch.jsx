@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
 import ReactPaginate from "react-paginate";
+
 import ChonCard from "../../List/SwiperChonList/ChonCard/ChonCard";
-import styles from "./AccomSearch.module.css";
 import CardSkeleton from "../../../CardSkeleton/CardSkeleton";
+
+import styles from "./AccomSearch.module.css";
 import "react-loading-skeleton/dist/skeleton.css";
 
 export default function AccomSearch({ accommodations, isLoading }) {

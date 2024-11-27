@@ -1,4 +1,5 @@
 import { useState } from "react";
+
 import styles from "./Faq.module.css";
 import faqIcon from "/img/chevron-down.png";
 

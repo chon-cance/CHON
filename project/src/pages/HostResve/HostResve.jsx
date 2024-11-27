@@ -1,14 +1,15 @@
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+
+import { reservationAPI } from "../../api/reservationAPI";
+import { solapiAPI } from "../../api/solapiAPI";
+import { ShowAlert } from "../../utils/AlertUtils.js";
+import useQueryRemover from "../../hooks/useQueryRemover.js";
+
 import styles from "./HostResve.module.css";
 import logo3 from "/img/logo3.png";
 import exit from "/img/exit.png";
 import resve from "/img/resve.png";
-
-import { useState, useEffect } from "react";
-import { ShowAlert } from "../../utils/AlertUtils.js";
-import useQueryRemover from "../../hooks/useQueryRemover.js";
-import { useNavigate } from "react-router-dom";
-import { reservationAPI } from "../../api/reservationAPI";
-import { solapiAPI } from "../../api/solapiAPI";
 
 export default function HostResve() {
   const navigate = useNavigate();
