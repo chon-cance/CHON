@@ -17,7 +17,7 @@
   border-radius: 16px;
   width: 95%;
   max-width: 900px;
-  max-height: 900px;
+  max-height: 100vh;
   position: relative;
   overflow-y: scroll;
   scrollbar-width: none;
