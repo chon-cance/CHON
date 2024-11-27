@@ -13,15 +13,6 @@ export default function List() {
   const [isInitialLoad, setIsInitialLoad] = useState(true);
 
   useEffect(() => {
-    setIsInitialLoad(true);
-    const timer = setTimeout(() => {
-      setIsInitialLoad(false);
-    }, 500);
-
-    return () => clearTimeout(timer);
-  }, [recentAccommodations, topGradeAccommodations]);
-
-  useEffect(() => {
     const fetchData = async () => {
       try {
         setIsLoadingRecent(true);
