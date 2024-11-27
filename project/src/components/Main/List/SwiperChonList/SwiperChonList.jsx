@@ -17,6 +17,25 @@ export default function SwiperChonList({ accommodations, isLoading }) {
   const [skeletonCount, setSkeletonCount] = useState(4);
 
   useEffect(() => {
+    const handleResize = () => {
+      const width = window.innerWidth;
+      if (width > 1000) {
+        setSkeletonCount(4);
+      } else if (width > 710) {
+        setSkeletonCount(3);
+      } else if (width > 400) {
+        setSkeletonCount(2);
+      } else {
+        setSkeletonCount(1);
+      }
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  useEffect(() => {
     if (!accommodations) return;
 
     setImagesLoaded(false);
@@ -36,7 +55,6 @@ export default function SwiperChonList({ accommodations, isLoading }) {
         await Promise.all(imagePromises);
         setImagesLoaded(true);
 
-        // 이미지 로딩 완료 후 300ms 후에 스켈레톤을 숨김
         setTimeout(() => {
           setShowSkeleton(false);
         }, 300);
@@ -51,27 +69,6 @@ export default function SwiperChonList({ accommodations, isLoading }) {
 
     loadImages();
   }, [accommodations]);
-
-  useEffect(() => {
-    const handleResize = () => {
-      const width = window.innerWidth;
-      if (width > 1000) {
-        setSkeletonCount(4);
-      } else if (width > 710) {
-        setSkeletonCount(3);
-      } else if (width > 400) {
-        setSkeletonCount(2);
-      } else {
-        setSkeletonCount(1);
-      }
-    };
-
-    handleResize();
-
-    window.addEventListener("resize", handleResize);
-
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
 
   const skeletonArray = Array(skeletonCount).fill(null);
 
