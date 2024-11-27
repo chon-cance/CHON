@@ -8,10 +8,27 @@ import styles from "./List.module.css";
 export default function List() {
   const [recentAccommodations, setRecentAccommodations] = useState(null);
   const [topGradeAccommodations, setTopGradeAccommodations] = useState(null);
+  const [isLoadingRecent, setIsLoadingRecent] = useState(true);
+  const [isLoadingTop, setIsLoadingTop] = useState(true);
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
+
+  useEffect(() => {
+    setIsInitialLoad(true);
+    const timer = setTimeout(() => {
+      setIsInitialLoad(false);
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [recentAccommodations, topGradeAccommodations]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setIsLoadingRecent(true);
+        setIsLoadingTop(true);
+        setRecentAccommodations(null);
+        setTopGradeAccommodations(null);
+
         const [recentData, topData] = await Promise.all([
           accommodationAPI.getRecentAccommodations(),
           accommodationAPI.getTopGradeAccommodations(),
@@ -21,12 +38,17 @@ export default function List() {
         setTopGradeAccommodations(topData);
       } catch (error) {
         console.error("데이터 로딩 중 오류 발생:", error);
+      } finally {
+        setIsLoadingRecent(false);
+        setIsLoadingTop(false);
       }
     };
 
     fetchData();
 
     return () => {
+      setIsLoadingRecent(true);
+      setIsLoadingTop(true);
       setRecentAccommodations(null);
       setTopGradeAccommodations(null);
     };
@@ -40,7 +62,12 @@ export default function List() {
           <p>촌스럽게 신규 입점한 숙소를 만나보세요.</p>
         </div>
         <div className={styles.card_conteiner}>
-          <SwiperChonList accommodations={recentAccommodations} />
+          <SwiperChonList
+            accommodations={recentAccommodations}
+            isLoading={
+              isInitialLoad || isLoadingRecent || !recentAccommodations
+            }
+          />
         </div>
       </div>
       <div className={styles.chon_list}>
@@ -49,7 +76,10 @@ export default function List() {
           <p>이벤트 진행중인 숙소를 만나보세요.</p>
         </div>
         <div className={styles.card_conteiner}>
-          <SwiperChonList accommodations={topGradeAccommodations} />
+          <SwiperChonList
+            accommodations={topGradeAccommodations}
+            isLoading={isInitialLoad || isLoadingTop || !topGradeAccommodations}
+          />
         </div>
       </div>
     </div>

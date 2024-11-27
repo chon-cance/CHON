@@ -1,42 +1,33 @@
 import { useState } from "react";
 
 import Modal from "../../../../Modal/Modal";
-import CardSkeleton from "../../../../CardSkeleton/CardSkeleton";
 
 import styles from "./ChonCard.module.css";
 
 export default function ChonCard({ accommodations }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isImageLoaded, setIsImageLoaded] = useState(false);
-
   if (!accommodations) return null;
 
-  const handleImageLoad = () => {
-    setIsImageLoaded(true);
+  const backgroundStyle = {
+    backgroundImage: `url(/img/${accommodations.accommodation_num}/${accommodations.photo[0]})`,
+    backgroundSize: "cover",
+    backgroundPosition: "center center",
   };
 
-  const handleImageError = () => {
-    setIsImageLoaded(true);
+  const handleImageError = (e) => {
+    const element = e.target;
+    element.style.backgroundImage = "url(/img/default.jpg)";
+    console.log("이미지 로드 실패");
   };
 
   return (
     <>
-      {!isImageLoaded && <CardSkeleton />}
-
-      <div
-        className={`${styles.card} ${
-          isImageLoaded ? styles.visible : styles.hidden
-        }`}
-        onClick={() => setIsModalOpen(true)}
-      >
-        <div className={styles.card_img}>
-          <img
-            src={`/img/${accommodations.accommodation_num}/${accommodations.photo[0]}`}
-            alt={`${accommodations.name}`}
-            onLoad={handleImageLoad}
-            onError={handleImageError}
-          />
-        </div>
+      <div className={styles.card} onClick={() => setIsModalOpen(true)}>
+        <div
+          className={styles.card_img}
+          style={backgroundStyle}
+          onError={handleImageError}
+        ></div>
         <div className={styles.chon_address}>
           <div className={styles.address}>{accommodations.address}</div>
           <div>
