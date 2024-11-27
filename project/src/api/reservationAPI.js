@@ -23,7 +23,7 @@ export const reservationAPI = {
 
   // 예약 취소 (삭제)
   deleteReservation: (reservationId) => {
-    return apiClient.delete(`/reservations/${reservationId}`);
+    return apiClient.put(`/reservations/delete/${reservationId}`);
   },
 
   // 예약 수정
