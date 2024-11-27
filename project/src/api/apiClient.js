@@ -1,6 +1,6 @@
 const BASE_URL = import.meta.env.PROD
-  ? "/api" // 프로덕션 환경: Netlify의 _redirects 규칙을 따르도록
-  : "http://152.69.234.13:8080/api"; // 개발 환경: API 경로 추가
+  ? "/api" // 프로덕션 환경
+  : "http://152.69.234.13:8080"; // 개발 환경
 
 // 기본 fetch 함수 래퍼
 export const apiClient = {
