@@ -16,7 +16,7 @@ export default function List() {
     setIsInitialLoad(true);
     const timer = setTimeout(() => {
       setIsInitialLoad(false);
-    }, 1000);
+    }, 500);
 
     return () => clearTimeout(timer);
   }, [recentAccommodations, topGradeAccommodations]);
