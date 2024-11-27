@@ -230,6 +230,11 @@
   border: 1px solid #394a4b;
   flex-direction: column;
   gap: 8px;
+  cursor: grab;
+}
+
+.reviewItem:active {
+  cursor: grabbing;
 }
 
 .starRating {
