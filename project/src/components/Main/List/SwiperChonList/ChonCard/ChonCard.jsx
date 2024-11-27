@@ -25,9 +25,11 @@ export default function ChonCard({ accommodations }) {
       <div className={styles.card} onClick={() => setIsModalOpen(true)}>
         <div
           className={styles.card_img}
-          style={backgroundStyle}
+          // style={backgroundStyle}
           onError={handleImageError}
-        ></div>
+        >
+          <img src={`/img/${accommodations.accommodation_num}/${accommodations.photo[0]}`} alt={`${accommodations.name}`} />
+        </div>
         <div className={styles.chon_address}>
           <div className={styles.address}>{accommodations.address}</div>
           <div>
@@ -42,12 +44,7 @@ export default function ChonCard({ accommodations }) {
         <div className={styles.chon_name}>{accommodations.name}</div>
       </div>
 
-      {isModalOpen && (
-        <Modal
-          accommodation={accommodations}
-          onClose={() => setIsModalOpen(false)}
-        />
-      )}
+      {isModalOpen && <Modal accommodation={accommodations} onClose={() => setIsModalOpen(false)} />}
     </>
   );
 }
