@@ -67,24 +67,9 @@ export default function Modal({ accommodation, onClose }) {
     try {
       const alarmData = {
         reservationId: reservationData._id,
-        url: `chonslove.netlify.app/host/resve?id=${reservationData._id}`,
+        url: `chonslove.netlify.app/host/${reservationData._id}`,
       };
-
-      const response = await fetch("api/alarm/request_host", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(alarmData),
-      });
-
-      if (!response.ok) {
-        throw new Error("알람 전송에 실패했습니다.");
-      }
-
-      const data = await response.json();
-      console.log("알람 전송 성공:", data);
-      console.log(alarmData);
+      await solapiAPI.sendRequestHost(alarmData);
     } catch (error) {
       console.error("알람 전송 실패:", error);
     }
