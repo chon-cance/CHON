@@ -34,15 +34,7 @@ export default function HostResve() {
 
     setLoading(true);
     try {
-      const response = await fetch(
-        `api/reservations/?reservationId=${reservationId}`
-      );
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || "예약 정보를 불러오는데 실패했습니다.");
-      }
+      const data = await reservationAPI.getReservation(reservationId);
 
       if (data.state === "confirm") {
         setReservation({
@@ -68,6 +60,11 @@ export default function HostResve() {
       setAccommodationId(data.accommodationId._id);
     } catch (err) {
       setError(err.message || "예약 정보를 불러오는 데 실패했습니다.");
+      ShowAlert(
+        "error",
+        "",
+        err.message || "예약 정보를 불러오는 데 실패했습니다."
+      );
     } finally {
       setLoading(false);
     }
@@ -92,7 +89,7 @@ export default function HostResve() {
     }
   };
 
-  async function reservationConfirm() {
+  const reservationConfirm = async () => {
     if (!reservationId) {
       ShowAlert("fail", "실패", "예약 ID가 존재하지 않습니다.");
       return;
@@ -110,7 +107,7 @@ export default function HostResve() {
     } catch (e) {
       ShowAlert("fail", "실패", e.message || "예약 승인 요청에 실패했습니다.");
     }
-  }
+  };
 
   const declineAlarm = async () => {
     try {
@@ -121,23 +118,10 @@ export default function HostResve() {
     }
   };
 
-  async function reservationDecline() {
+  const reservationDecline = async () => {
     try {
-      const response = await fetch(
-        `api/reservations/decline/${reservationId}`,
-        {
-          method: "PUT", // 필요한 HTTP 메서드 설정
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error("네트워크 응답이 좋지 않습니다.");
-      }
-
-      const data = await response.json();
-
-      declineAlarm();
-
+      const data = await reservationAPI.declineReservation(reservationId);
+      await declineAlarm();
       setReservation({
         state: "승인거절",
         color: { color: "#a6a6a6" },
@@ -145,9 +129,9 @@ export default function HostResve() {
       });
       ShowAlert("success", "성공", data.message);
     } catch (e) {
-      ShowAlert("fail", "실패", "예약 거절 요청에 실패했습니다.");
+      ShowAlert("fail", "실패", e.message || "예약 거절 요청에 실패했습니다.");
     }
-  }
+  };
 
   const handleGoBack = () => {
     // 이전 페이지로 이동할 때 직접 경로 지정

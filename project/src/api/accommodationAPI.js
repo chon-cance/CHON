@@ -26,4 +26,18 @@ export const accommodationAPI = {
       `/accommodations/timeslots?accommodationId=${accommodationId}`
     );
   },
+
+  // 숙소 상세 정보 조회
+  getAccommodationDetail: (accommodationId) => {
+    return apiClient.get(
+      `/accommodations/detail?accommodationId=${accommodationId}`
+    );
+  },
+
+  // 숙소의 예약 목록 조회
+  getAccommodationReservations: (accommodationId) => {
+    return apiClient.get(
+      `/accommodations/reservations?accommodationId=${accommodationId}`
+    );
+  },
 };
