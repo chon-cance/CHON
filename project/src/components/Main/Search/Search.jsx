@@ -2,7 +2,7 @@ import { useState, forwardRef } from "react";
 import SearchCalendar from "../../SearchCalender/SearchCalender";
 import styles from "./Search.module.css";
 import searchIcon from "/img/searchIcon.png";
-import { searchAccommodations } from "../../../api/accommodationSearch";
+import { accommodationAPI } from "../../../api/accommodationAPI";
 import AccomSearch from "./AccomSearch/AccomSearch";
 import { ShowAlert } from "../../../utils/AlertUtils.js";
 
@@ -62,7 +62,7 @@ export default forwardRef(function Search(props, searchRef) {
       console.log("검색 파라미터:", searchParams); // 디버깅용
 
       // API 호출
-      const results = await searchAccommodations(searchParams);
+      const results = await accommodationAPI.search(searchParams);
       setSearchResults(results); // 검색 결과 저장
       console.log("검색 결과:", results);
 

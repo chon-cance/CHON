@@ -14,8 +14,8 @@ import icon1 from "./icon/map-pin.png";
 import icon2 from "./icon/users.png";
 import "./customSwiper.css";
 import StyledCalender from "../ModalCalender/StyledCalender";
-import { reservationAPI } from "../../api/reservationAPI";
-import { solapiAPI } from "../../api/solapiAPI";
+import { reservationAPI } from "../../api/reservationAPI.js";
+import { solapiAPI } from "../../api/solapiAPI.js";
 
 export default function Modal({ accommodation, onClose }) {
   const [currentPhoto, setCurrentPhoto] = useState(0);
