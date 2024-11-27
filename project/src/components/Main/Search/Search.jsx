@@ -38,41 +38,26 @@ export default forwardRef(function Search(props, searchRef) {
   // 검색 처리
   const handleSearch = async () => {
     setActiveField(null);
-    setIsLoading(true); // 검색 시작 시 로딩 시작
+    setIsLoading(true);
 
     try {
       setError("");
 
-      // 날짜 형식 변환 (YYYY-MM-DD) - 한국 시간 기준
-      const formatDate = (date) => {
-        if (!date) return null;
-        // 한국 시간으로 변환 (UTC+9)
-        const kstDate = new Date(date.getTime() + 9 * 60 * 60 * 1000);
-        return kstDate.toISOString().split("T")[0];
-      };
-
-      // 검색 파라미터 구성
       const searchParams = {
-        region: selectedRegion === "전체" ? "" : selectedRegion,
-        checkIn: formatDate(dateRange[0]),
-        checkOut: formatDate(dateRange[1]),
+        region: selectedRegion,
+        checkIn: dateRange[0],
+        checkOut: dateRange[1],
         person: guests,
       };
 
-      console.log("검색 파라미터:", searchParams); // 디버깅용
-
-      // API 호출
       const results = await accommodationAPI.search(searchParams);
-      setSearchResults(results); // 검색 결과 저장
-      console.log("검색 결과:", results);
-
-      // 여기서 검색 결과를 처리 (예: 상태 업데이트 또는 페이지 이동)
+      setSearchResults(results);
     } catch (error) {
       console.error("검색 오류:", error);
-      setError(error.message || "검색 중 오류가 발생했습니다.");
-      ShowAlert("info", "", error.message || "검색 중 오류가 발생했습니다.");
+      setError(error.message);
+      ShowAlert("info", "", error.message);
     } finally {
-      setIsLoading(false); // 검색 완료 (성공/실패 모두) 후 로딩 종료
+      setIsLoading(false);
     }
   };
 

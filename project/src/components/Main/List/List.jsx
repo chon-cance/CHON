@@ -1,7 +1,7 @@
 import styles from "./List.module.css";
 import { useState, useEffect } from "react";
 import SwiperChonList from "./SwiperChonList/SwiperChonList";
-import { accommodationAPI } from "../../../api/accommodationAPI";
+import { accommodationAPI } from "../../../api/accommodationAPI.js";
 
 export default function List() {
   const [recentAccommodations, setRecentAccommodations] = useState(null);

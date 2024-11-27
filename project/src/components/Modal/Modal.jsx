@@ -3,9 +3,7 @@ import { createPortal } from "react-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-// Import required modules
 import { Navigation, Pagination } from "swiper/modules";
-import { FaMinus, FaPlus } from "react-icons/fa";
 import { ShowAlert } from "../../utils/AlertUtils.js";
 
 import "swiper/css";
