@@ -46,7 +46,6 @@ export default function Modal({ accommodation, onClose }) {
         setTimeSlots(data);
       } catch (error) {
         console.error("TimeSlots 조회 실패:", error);
-        ShowAlert("error", "", "예약 가능 시간 조회에 실패했습니다.");
       }
     };
 
