@@ -19,4 +19,11 @@ export const accommodationAPI = {
   getTopGradeAccommodations: () => {
     return apiClient.get("/accommodations/top_grade");
   },
+
+  // 숙소별 타임슬롯 조회 추가
+  getAccommodationTimeSlots: (accommodationId) => {
+    return apiClient.get(
+      `/accommodations/timeslots?accommodationId=${accommodationId}`
+    );
+  },
 };

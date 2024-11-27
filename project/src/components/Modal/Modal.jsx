@@ -12,22 +12,19 @@ import icon1 from "./icon/map-pin.png";
 import icon2 from "./icon/users.png";
 import "./customSwiper.css";
 import StyledCalender from "../ModalCalender/StyledCalender";
-import { timeSlotAPI } from "../../api/timeSlotAPI";
-import { reservationAPI } from "../../api/reservationAPI";
-import { solapiAPI } from "../../api/solapiAPI";
-import { formatDate } from "../../utils/dateUtils";
-import { useCalendarState } from "../../hooks/useCalendarState";
-import { useReservation } from "../../hooks/useReservation";
+import { reservationAPI } from "../../api/reservationAPI.js";
+import { solapiAPI } from "../../api/solapiAPI.js";
+import { accommodationAPI } from "../../api/accommodationAPI";
 
 export default function Modal({ accommodation, onClose }) {
   const [currentPhoto, setCurrentPhoto] = useState(0);
-  const { checkIn, checkOut, handleCheckInSelect, handleCheckOutSelect } =
-    useCalendarState();
-
-  const { handleReservation, error, isLoading } = useReservation();
-
+  const [checkIn, setCheckIn] = useState("");
+  const [checkOut, setCheckOut] = useState("");
   const [guests, setGuests] = useState(0);
   const [requests, setRequests] = useState("");
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
+  const { user } = useAuth();
   const [checkInDate, setCheckInDate] = useState(null);
   const [showCheckInCalendar, setShowCheckInCalendar] = useState(false);
   const [showCheckOutCalendar, setShowCheckOutCalendar] = useState(false);
@@ -41,7 +38,7 @@ export default function Modal({ accommodation, onClose }) {
   useEffect(() => {
     const fetchTimeSlots = async () => {
       try {
-        const data = await timeSlotAPI.getTimeSlotsByAccommodation(
+        const data = await accommodationAPI.getAccommodationTimeSlots(
           accommodation._id
         );
         setTimeSlots(data);
@@ -76,6 +73,64 @@ export default function Modal({ accommodation, onClose }) {
       await solapiAPI.sendRequestHost(alarmData);
     } catch (error) {
       console.error("알람 전송 실패:", error);
+    }
+  };
+
+  const handleReservation = async () => {
+    try {
+      if (!user) {
+        ShowAlert("info", "", "로그인이 필요한 서비스입니다.");
+        navigate("/login");
+        return;
+      }
+
+      if (guests === 0) {
+        ShowAlert("info", "", "인원수를 선택해주세요.");
+        return;
+      }
+
+      if (!checkIn || !checkOut) {
+        ShowAlert("info", "", "체크인/체크아웃 날짜를 선택해주세요.");
+        return;
+      }
+
+      const reservationData = {
+        accommodationId: accommodation._id,
+        userId: user._id,
+        startDate: new Date(checkIn).toLocaleDateString(),
+        endDate: new Date(checkOut).toLocaleDateString(),
+        person: parseInt(guests),
+        message: requests || "",
+      };
+
+      console.log("Sending reservation data:", reservationData);
+
+      const response = await fetch("api/reservations/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(reservationData),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        ShowAlert("success", "", "예약이 완료되었습니다.");
+        setCheckIn("");
+        setCheckOut("");
+        setGuests(0);
+        setRequests("");
+        onClose();
+        guestAlarm(data);
+        hostAlarm(data);
+      } else {
+        throw new Error(data.message || "예약 처리 중 오류가 발생했습니다.");
+      }
+    } catch (error) {
+      console.error("Reservation error:", error);
+      setError(error.message);
+      ShowAlert("info", "", error.message);
     }
   };
 
@@ -119,6 +174,20 @@ export default function Modal({ accommodation, onClose }) {
   // getReviewDate 함수 수정
   const getReviewDate = (index) => {
     return reviewDates[index];
+  };
+
+  // 체크인 날짜 선택 핸들러
+  const handleCheckInSelect = (date) => {
+    setCheckInDate(date);
+    setCheckIn(date.toISOString());
+    setShowCheckInCalendar(false);
+    setShowCheckOutCalendar(true);
+  };
+
+  // 체크아웃 날짜 선택 핸들러
+  const handleCheckOutSelect = (date) => {
+    setCheckOut(date.toISOString());
+    setShowCheckOutCalendar(false);
   };
 
   // useEffect로 달력 상태 변경 감지
