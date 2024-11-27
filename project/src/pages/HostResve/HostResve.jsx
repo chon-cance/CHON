@@ -7,6 +7,9 @@ import { useState, useEffect } from "react";
 import { ShowAlert } from "../../utils/AlertUtils.js";
 import useQueryRemover from "../../hooks/useQueryRemover.js";
 import { useNavigate } from "react-router-dom";
+import { reservationAPI } from "../../api/reservationAPI";
+import { solapiAPI } from "../../api/solapiAPI";
+
 export default function HostResve() {
   const navigate = useNavigate();
 
@@ -83,21 +86,7 @@ export default function HostResve() {
         reservationId: reservationId,
         url: `chonslove.netlify.app/guest/${reservationId}`,
       };
-
-      const response = await fetch("api/api/alarm/confirm", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(alarmData),
-      });
-
-      if (!response.ok) {
-        throw new Error("알람 전송에 실패했습니다.");
-      }
-
-      const data = await response.json();
-      console.log("알람 전송 성공:", data);
+      await solapiAPI.sendConfirm(alarmData);
     } catch (error) {
       console.error("알람 전송 실패:", error);
     }
@@ -110,21 +99,8 @@ export default function HostResve() {
     }
 
     try {
-      const response = await fetch(
-        `api/reservations/confirm/${reservationId}`,
-        {
-          method: "PUT",
-        }
-      );
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || "네트워크 응답이 좋지 않습니다.");
-      }
-
-      confirmAlarm();
-
+      const data = await reservationAPI.confirmReservation(reservationId);
+      await confirmAlarm();
       setReservation({
         state: "승인완료",
         color: { color: "#394A4B" },
@@ -138,24 +114,8 @@ export default function HostResve() {
 
   const declineAlarm = async () => {
     try {
-      const alarmData = {
-        reservationId: reservationId,
-      };
-
-      const response = await fetch("api/api/alarm/decline", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(alarmData),
-      });
-
-      if (!response.ok) {
-        throw new Error("알람 전송에 실패했습니다.");
-      }
-
-      const data = await response.json();
-      console.log("알람 전송 성공:", data);
+      const alarmData = { reservationId: reservationId };
+      await solapiAPI.sendDecline(alarmData);
     } catch (error) {
       console.error("알람 전송 실패:", error);
     }

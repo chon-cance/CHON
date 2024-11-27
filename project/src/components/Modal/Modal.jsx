@@ -14,6 +14,8 @@ import icon1 from "./icon/map-pin.png";
 import icon2 from "./icon/users.png";
 import "./customSwiper.css";
 import StyledCalender from "../ModalCalender/StyledCalender";
+import { reservationAPI } from "../../api/reservationAPI";
+import { solapiAPI } from "../../api/solapiAPI";
 
 export default function Modal({ accommodation, onClose }) {
   const [currentPhoto, setCurrentPhoto] = useState(0);
@@ -37,10 +39,9 @@ export default function Modal({ accommodation, onClose }) {
   useEffect(() => {
     const fetchTimeSlots = async () => {
       try {
-        const response = await fetch(
-          `api/accommodations/timeslots?accommodationId=${accommodation._id}`
+        const response = await reservationAPI.get(
+          `/accommodations/timeslots?accommodationId=${accommodation._id}`
         );
-
         const data = await response.json();
         setTimeSlots(data);
       } catch (error) {
@@ -58,22 +59,7 @@ export default function Modal({ accommodation, onClose }) {
         reservationId: reservationData._id,
         url: `chonslove.netlify.app/guest/${reservationData._id}`,
       };
-
-      const response = await fetch("api/alarm/request_guest", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(alarmData),
-      });
-
-      if (!response.ok) {
-        throw new Error("알람 전송에 실패했습니다.");
-      }
-
-      const data = await response.json();
-      console.log("알람 전송 성공:", data);
-      console.log(alarmData);
+      await solapiAPI.sendRequestGuest(alarmData);
     } catch (error) {
       console.error("알람 전송 실패:", error);
     }

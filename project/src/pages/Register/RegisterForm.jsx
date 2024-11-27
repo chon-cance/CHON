@@ -6,6 +6,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { ShowAlert } from "../../utils/AlertUtils.js";
+import { userAPI } from "../../api/userAPI";
 
 const RegisterForm = () => {
   const navigate = useNavigate();
@@ -90,35 +91,16 @@ const RegisterForm = () => {
       }
 
       // 회원가입 요청
-      const joinResponse = await fetch("api/api/user/join", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
+      const joinData = await userAPI.join(formData);
 
-      const joinData = await joinResponse.json();
-
-      if (
-        joinResponse.ok &&
-        joinData.message === "회원가입이 완료되었습니다."
-      ) {
-        // 회원가입 성공 후 자동 로그인 요청
-        const loginResponse = await fetch("api/user/login", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            id: formData.id,
-            password: formData.password,
-          }),
+      if (joinData.message === "회원가입이 완료되었습니다.") {
+        // 로그인 요청
+        const loginData = await userAPI.login({
+          id: formData.id,
+          password: formData.password,
         });
 
-        const loginData = await loginResponse.json();
-
-        if (loginResponse.ok && loginData._id) {
+        if (loginData._id) {
           login(loginData);
           ShowAlert("info", "", "회원가입이 완료되었습니다.");
           navigate("/");
