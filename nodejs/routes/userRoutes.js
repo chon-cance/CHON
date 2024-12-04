@@ -35,9 +35,7 @@ router.post("/login", async (req, res) => {
 
       if (!isPasswordValid) {
         console.log("비밀번호가 일치하지 않습니다.");
-        return res
-          .status(401)
-          .json({ success: false, message: "비밀번호가 일치하지 않습니다." });
+        return res.json({ success: false, message: "비밀번호가 일치하지 않습니다." });
       } else {
         res.json({
           _id: user._id,
