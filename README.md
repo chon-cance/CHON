@@ -26,19 +26,16 @@
       <td align="center"><b>손근영</b> 팀장</td>
        <td align="center"><b>권혜진</b> 팀원</td>
        <td align="center"><b>박정선</b> 팀원</td>
-       <td align="center"><b>이승현</b> 팀원</td>
     </tr>
     <tr>
       <td align="center"><a href="https://github.com/daabaat"><img src="https://avatars.githubusercontent.com/u/174779886?v=4" width="150px" alt=""/><br />@daabaat</a></td>
       <td align="center"><a href="https://github.com/zinee81"><img src="https://avatars.githubusercontent.com/u/174780546?v=4" width="150px" alt=""/><br />@zinee81</a></td>
       <td align="center"><a href="https://github.com/jeongsun-park"><img src="https://avatars.githubusercontent.com/u/175993255?v=4" width="150px" alt=""/><br />@jeongsun-park</a></td>
-      <td align="center"><a href="https://github.com/heun9912"><img src="https://avatars.githubusercontent.com/u/175993225?v=4" width="150px" alt=""/><br />@heun9912</a></td>
      <tr/>
        <tr>
          <td align="center">프론트 엔드</td>
          <td align="center">백 엔드</td>
          <td align="center">UI/UX 설계 및 디자인<br/>웹 퍼블리싱</td>
-         <td align="center">웹 퍼블리싱</td>
        </tr>
   </tbody>
 </table>
@@ -305,15 +302,6 @@ React를 활용한 첫 프로젝트를 진행하면서 다양한 라이브러리
 #### 소감
 첫 프로젝트보다 기획 단계에서 많은 고민을 했던 것 같습니다. 기획의 중요성을 깨닫고, 팀원들과 머리를 맞대어 다양한 고민과 토론을 거쳤습니다. 예상보다 시간이 소요되었지만, 덕분에 디자인과 기능 개발이 차질 없이 진행될 수 있었던 것 같습니다. 프로젝트 일정이 이전보다 타이트했기에 걱정도 많았지만, 팀원들과 지속적으로 소통하며 각자 맡은 일을 성실히 수행해 주셨기에 예정된 시간보다 빠르게 프로젝트를 마칠 수 있었습니다.
 
-<br>
-
-### 📗 이승현
-#### 자체평가
-랜딩페이지를 처음 만들어 보았는데, 랜딩페이지는 기존 페이지와 달리 한 페이지에 모든 내용을 다 보여줘야 되는 점이 있었습니다.
-그래서 CSS를 진행할 때 어려움이 있었지만, 시간을 들여 조금씩 해보니 그래도 무언가를 할 수가 있었습니다.
-#### 소감
-react로 홈페이지를 제작했습니다. 오랜만에 react를 하다 보니 막히는 부분이 많았습니다. 그래도 검색과 AI을 사용하여 어찌어찌 해냈습니다.
-그리고 팀원들도 맡은 일을 열심히 해주어서 완성하게 되었습니다. 이번 프로젝트를 통해 협력의 중요성을 다시 한번 느끼게 되었습니다.
 
 
 <br>
